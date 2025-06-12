@@ -169,12 +169,12 @@ export default [
 
       'react/prop-types': 0,
 
-      // 'react-refresh/only-export-components': [
-      //   'warn',
-      //   {
-      //     allowConstantExport: true,
-      //   },
-      // ],
+      'react-refresh/only-export-components': [
+        'warn',
+        {
+          allowConstantExport: true,
+        },
+      ],
     },
   },
 ]
