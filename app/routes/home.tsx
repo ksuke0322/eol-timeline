@@ -8,7 +8,6 @@ export function meta() {
 export const clientLoader = async (): Promise<any[]> => {
   const response = await fetch('https://endoflife.date/api/nodejs.json')
   const data = await response.json()
-  console.log(data)
 
   return data
 }
