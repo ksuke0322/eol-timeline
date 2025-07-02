@@ -11,6 +11,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
+import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -22,24 +23,6 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['.husky/**/*'],
-  },
-  ...fixupConfigRules(
-    compat.extends('eslint:recommended', 'plugin:prettier/recommended'),
-  ),
-  ...fixupConfigRules(
-    compat.extends(
-      'plugin:react-hooks/recommended',
-      'plugin:react/recommended',
-      'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended',
-    ),
-  ).map((config) => ({
-    ...config,
-    files: ['**/*.{ts,tsx}'],
-  })),
-  {
     ignores: [
       'eslint.config.mjs',
       'postcss.config.cjs',
@@ -48,14 +31,8 @@ export default [
       'vite.config.ts',
       'build/**/*',
       '.react-router/**/*',
+      '.husky/**/*',
     ],
-
-    plugins: {
-      'unused-imports': unusedImports,
-      'react-refresh': reactRefresh,
-      react: fixupPluginRules(react),
-      'jsx-a11y': fixupPluginRules(jsxA11Y),
-    },
 
     languageOptions: {
       globals: {
@@ -76,7 +53,15 @@ export default [
     },
   },
   ...fixupConfigRules(
+    compat.extends('eslint:recommended', 'plugin:prettier/recommended'),
+  ),
+  ...fixupConfigRules(
     compat.extends(
+      'plugin:react-hooks/recommended',
+      'plugin:react/recommended',
+      'plugin:react/jsx-runtime',
+      'plugin:react-hooks/recommended',
+      'plugin:jsx-a11y/recommended',
       'plugin:@typescript-eslint/recommended',
       'plugin:import/recommended',
       'plugin:import/typescript',
@@ -89,13 +74,13 @@ export default [
     files: ['**/*.{ts,tsx}'],
 
     plugins: {
+      'unused-imports': unusedImports,
+      'react-refresh': reactRefresh,
+      react: fixupPluginRules(react),
+      'jsx-a11y': fixupPluginRules(jsxA11Y),
       '@typescript-eslint': fixupPluginRules(typescriptEslint),
       import: fixupPluginRules(_import),
-      'unused-imports': unusedImports,
-    },
-
-    languageOptions: {
-      parser: tsParser,
+      'better-tailwindcss': eslintPluginBetterTailwindcss,
     },
 
     settings: {
@@ -134,6 +119,11 @@ export default [
     },
 
     rules: {
+      // enable all recommended rules to report a warning
+      ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
+      // enable all recommended rules to report an error
+      ...eslintPluginBetterTailwindcss.configs['recommended-error'].rules,
+
       'unused-imports/no-unused-imports': 'warn',
 
       'import/order': [
