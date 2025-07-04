@@ -17,7 +17,7 @@ export default function Home({ loaderData }: { loaderData: any[] }) {
   return (
     <div>
       {/* <Welcome /> */}
-      <p>{JSON.stringify(loaderData, null, 2)}</p>
+      <pre data-testid="loader-data">{JSON.stringify(loaderData, null, 2)}</pre>
     </div>
   )
 }
