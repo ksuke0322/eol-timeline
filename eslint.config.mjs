@@ -31,6 +31,9 @@ export default [
       'build/**/*',
       '.react-router/**/*',
       '.husky/**/*',
+      'jest.config.cjs',
+      '.lintstagedrc.cjs',
+      'jest.setup.ts',
     ],
   },
   {
@@ -99,6 +102,7 @@ export default [
 
         typescript: {
           alwaysTryTypes: true,
+          project: './tsconfig.json',
         },
       },
 

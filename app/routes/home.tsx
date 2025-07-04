@@ -1,3 +1,5 @@
+import { ProductSidebar } from '~/components/ui/product-sidebar'
+
 export function meta() {
   return [
     { title: '<New React Router App>' },
@@ -12,12 +14,13 @@ export const clientLoader = async (): Promise<any[]> => {
   return data
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function Home({ loaderData }: { loaderData: any[] }) {
+const Home = () => {
   return (
-    <div>
-      {/* <Welcome /> */}
-      <pre data-testid="loader-data">{JSON.stringify(loaderData, null, 2)}</pre>
+    <div className="flex">
+      <ProductSidebar />
+      <main className="flex-1">main content</main>
     </div>
   )
 }
+
+export default Home
