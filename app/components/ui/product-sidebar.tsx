@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react'
 
+import { SearchInputWithDebounce } from './search-input-with-debounce'
+
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +19,6 @@ import {
   SidebarProvider,
   SidebarMenuSub,
   SidebarMenuSubItem,
-  SidebarInput,
 } from '~/components/ui/sidebar'
 import { useProducts } from '~/hooks/use-products'
 import { useSelectedProducts } from '~/hooks/use-selected-products'
@@ -26,19 +27,19 @@ export const ProductSidebar = () => {
   const { products, loading, error } = useProducts()
   const { selectedProducts, toggleProduct, selectAll, deselectAll } =
     useSelectedProducts(products)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const filteredProducts = useMemo(() => {
-    if (!searchTerm) {
+    if (!debouncedSearchTerm) {
       return products
     }
-    const lowerCaseSearchTerm = searchTerm.toLowerCase()
+    const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase()
     return Object.fromEntries(
       Object.entries(products).filter(([productName]) =>
         productName.toLowerCase().includes(lowerCaseSearchTerm),
       ),
     )
-  }, [products, searchTerm])
+  }, [products, debouncedSearchTerm])
 
   const handleAllCheckedChange = (checked: boolean) => {
     if (checked) {
@@ -53,11 +54,7 @@ export const ProductSidebar = () => {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <SidebarInput
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <SearchInputWithDebounce onDebouncedChange={setDebouncedSearchTerm} />
           <div className="flex items-center space-x-2">
             <Checkbox
               id="all"
