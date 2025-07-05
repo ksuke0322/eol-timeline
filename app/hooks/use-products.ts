@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 
 import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
 
+const CACHE_KEY = 'eol_products_cache'
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000 // 1 day in milliseconds
+
 export const useProducts = () => {
   const [products, setProducts] = useState<ProductDetails>({})
   const [loading, setLoading] = useState(true)
@@ -10,6 +13,18 @@ export const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        // 1. Try to load from cache
+        const cachedData = localStorage.getItem(CACHE_KEY)
+        if (cachedData) {
+          const { data, timestamp } = JSON.parse(cachedData)
+          if (Date.now() - timestamp < ONE_DAY_IN_MS) {
+            setProducts(data)
+            setLoading(false)
+            return // Use cached data
+          }
+        }
+
+        // 2. Fetch from API if cache is invalid or not present
         const response = await fetch('https://endoflife.date/api/all.json')
         if (!response.ok) {
           throw new Error('Failed to fetch products')
@@ -42,6 +57,12 @@ export const useProducts = () => {
           }
         })
         setProducts(productDetails)
+
+        // 3. Save to cache
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ data: productDetails, timestamp: Date.now() }),
+        )
       } catch (e) {
         setError(e as Error)
       } finally {
