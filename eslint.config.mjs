@@ -25,15 +25,18 @@ export default [
   {
     ignores: [
       'eslint.config.mjs',
-      'postcss.config.cjs',
       'react-router.config.ts',
-      'tailwind.config.ts',
       'vite.config.ts',
+      '.lintstagedrc.cjs',
       'build/**/*',
       '.react-router/**/*',
       '.husky/**/*',
+      'jest.config.cjs',
+      '.lintstagedrc.cjs',
+      'jest.setup.ts',
     ],
-
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -57,6 +60,8 @@ export default [
   ),
   ...fixupConfigRules(
     compat.extends(
+      'eslint:recommended',
+      'plugin:prettier/recommended',
       'plugin:react-hooks/recommended',
       'plugin:react/recommended',
       'plugin:react/jsx-runtime',
@@ -97,6 +102,7 @@ export default [
 
         typescript: {
           alwaysTryTypes: true,
+          project: './tsconfig.json',
         },
       },
 
