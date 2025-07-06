@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 import { SearchInputWithDebounce } from './search-input-with-debounce'
 
@@ -29,21 +29,63 @@ export const ProductSidebar = () => {
     useSelectedProducts(products)
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
-  const filteredProducts = useMemo(() => {
-    if (!debouncedSearchTerm) {
-      return products
-    }
-    const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase()
-    return Object.fromEntries(
-      Object.entries(products).filter(([productName]) =>
+  const sortedAndFilteredProducts = useMemo(() => {
+    let currentProducts = Object.entries(products)
+
+    // 検索によるフィルタリング
+    if (debouncedSearchTerm) {
+      const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase()
+      currentProducts = currentProducts.filter(([productName]) =>
         productName.toLowerCase().includes(lowerCaseSearchTerm),
-      ),
-    )
-  }, [products, debouncedSearchTerm])
+      )
+    }
+
+    // 選択状態によるソート
+    currentProducts.sort(([productNameA], [productNameB]) => {
+      const isSelectedA =
+        selectedProducts.includes(productNameA) ||
+        products[productNameA]?.some((v) =>
+          selectedProducts.includes(`${productNameA}-${v.cycle}`),
+        )
+      const isSelectedB =
+        selectedProducts.includes(productNameB) ||
+        products[productNameB]?.some((v) =>
+          selectedProducts.includes(`${productNameB}-${v.cycle}`),
+        )
+
+      if (isSelectedA && !isSelectedB) return -1
+      if (!isSelectedA && isSelectedB) return 1
+
+      // 選択状態が同じ場合はアルファベット順
+      return productNameA.localeCompare(productNameB)
+    })
+
+    return Object.fromEntries(currentProducts)
+  }, [products, debouncedSearchTerm, selectedProducts])
+
+  const openAccordionItems = useMemo(() => {
+    return Object.keys(sortedAndFilteredProducts).filter((productName) => {
+      return (
+        selectedProducts.includes(productName) ||
+        products[productName]?.some((v) =>
+          selectedProducts.includes(`${productName}-${v.cycle}`),
+        )
+      )
+    })
+  }, [sortedAndFilteredProducts, selectedProducts, products])
+
+  const [accordionValue, setAccordionValue] = useState<string[]>([])
+
+  useEffect(() => {
+    setAccordionValue((prev) => {
+      const newValues = new Set([...prev, ...openAccordionItems])
+      return Array.from(newValues)
+    })
+  }, [openAccordionItems])
 
   const handleAllCheckedChange = (checked: boolean) => {
     if (checked) {
-      const allProductNames = Object.keys(filteredProducts)
+      const allProductNames = Object.keys(sortedAndFilteredProducts)
       selectAll(allProductNames)
     } else {
       deselectAll()
@@ -60,8 +102,9 @@ export const ProductSidebar = () => {
               id="all"
               checked={
                 !loading &&
-                Object.keys(filteredProducts).length > 0 &&
-                selectedProducts.length === Object.keys(filteredProducts).length
+                Object.keys(sortedAndFilteredProducts).length > 0 &&
+                selectedProducts.length ===
+                  Object.keys(sortedAndFilteredProducts).length
               }
               onCheckedChange={handleAllCheckedChange}
             />
@@ -85,10 +128,14 @@ export const ProductSidebar = () => {
             <div>Error: {error.message}</div>
           ) : (
             <SidebarMenu>
-              {Object.entries(filteredProducts).map(
-                ([productName, versions]) => (
-                  <SidebarMenuItem key={productName}>
-                    <Accordion type="single" collapsible>
+              <Accordion
+                type="multiple"
+                value={accordionValue}
+                onValueChange={setAccordionValue}
+              >
+                {Object.entries(sortedAndFilteredProducts).map(
+                  ([productName, versions]) => (
+                    <SidebarMenuItem key={productName}>
                       <AccordionItem value={productName}>
                         <AccordionTrigger>
                           <div className="flex items-center space-x-2">
@@ -127,10 +174,10 @@ export const ProductSidebar = () => {
                           </SidebarMenuSub>
                         </AccordionContent>
                       </AccordionItem>
-                    </Accordion>
-                  </SidebarMenuItem>
-                ),
-              )}
+                    </SidebarMenuItem>
+                  ),
+                )}
+              </Accordion>
             </SidebarMenu>
           )}
         </SidebarContent>
