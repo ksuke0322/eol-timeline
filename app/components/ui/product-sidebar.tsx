@@ -145,14 +145,21 @@ export const ProductSidebar = () => {
                   ([productName, versions]) => (
                     <SidebarMenuItem key={productName}>
                       <AccordionItem value={productName}>
-                        <AccordionTrigger>
+                        <AccordionTrigger
+                          aria-label={`Toggle details for ${productName}`}
+                        >
                           <div className="flex items-center space-x-2">
                             <Checkbox
                               id={productName}
                               checked={selectedProductsSet.has(productName)}
                               onCheckedChange={() => toggleProduct(productName)}
                             />
-                            <label htmlFor={productName}>{productName}</label>
+                            <label
+                              htmlFor={productName}
+                              className="font-semibold"
+                            >
+                              {productName}
+                            </label>
                           </div>
                         </AccordionTrigger>
                         <AccordionContent>
@@ -173,6 +180,7 @@ export const ProductSidebar = () => {
                                   />
                                   <label
                                     htmlFor={`${productName}-${version.cycle}`}
+                                    className="font-normal"
                                   >
                                     {version.cycle}
                                   </label>

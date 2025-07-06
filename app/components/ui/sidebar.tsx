@@ -215,7 +215,7 @@ function Sidebar({
   return (
     <div
       className={`
-        group peer hidden text-sidebar-foreground
+        group peer hidden text-sidebar-foreground shadow-md
         md:block
       `}
       data-state={state}
