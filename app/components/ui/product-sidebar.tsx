@@ -25,8 +25,7 @@ import { useSelectedProducts } from '~/hooks/use-selected-products'
 
 export const ProductSidebar = () => {
   const { products, loading, error } = useProducts()
-  const { selectedProducts, toggleProduct, selectAll, deselectAll } =
-    useSelectedProducts(products)
+  const { selectedProducts, toggleProduct } = useSelectedProducts(products)
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const sortedAndFilteredProducts = useMemo(() => {
@@ -83,33 +82,11 @@ export const ProductSidebar = () => {
     })
   }, [openAccordionItems])
 
-  const handleAllCheckedChange = (checked: boolean) => {
-    if (checked) {
-      const allProductNames = Object.keys(sortedAndFilteredProducts)
-      selectAll(allProductNames)
-    } else {
-      deselectAll()
-    }
-  }
-
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <SearchInputWithDebounce onDebouncedChange={setDebouncedSearchTerm} />
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="all"
-              checked={
-                !loading &&
-                Object.keys(sortedAndFilteredProducts).length > 0 &&
-                selectedProducts.length ===
-                  Object.keys(sortedAndFilteredProducts).length
-              }
-              onCheckedChange={handleAllCheckedChange}
-            />
-            <label htmlFor="all">All</label>
-          </div>
         </SidebarHeader>
         <SidebarContent>
           {loading ? (

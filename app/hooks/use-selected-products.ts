@@ -23,64 +23,63 @@ export const useSelectedProducts = (allProducts: ProductDetails) => {
     }
   }, [selectedProducts])
 
-  const toggleProduct = (productName: string) => {
+  const toggleProduct = (id: string) => {
     setSelectedProducts((prev) => {
-      const isProductSelected = prev.includes(productName)
-      let newSelection = [...prev]
+      const newSelection = new Set(prev)
+      const isProduct = !!allProducts[id]
 
-      if (isProductSelected) {
-        // 製品の選択を解除する場合、その製品の全てのバージョンも解除
-        newSelection = newSelection.filter((p) => p !== productName)
-        if (allProducts[productName]) {
-          allProducts[productName].forEach((version) => {
-            const versionId = `${productName}-${version.cycle}`
-            newSelection = newSelection.filter((p) => p !== versionId)
-          })
+      if (isProduct) {
+        // --- 製品（親）がクリックされた場合 ---
+        const productName = id
+        const versions = allProducts[productName] || []
+        const versionIds = versions.map((v) => `${productName}-${v.cycle}`)
+
+        if (newSelection.has(productName)) {
+          // 製品の選択を解除
+          newSelection.delete(productName)
+          versionIds.forEach((vid) => newSelection.delete(vid))
+        } else {
+          // 製品を選択
+          newSelection.add(productName)
+          versionIds.forEach((vid) => newSelection.add(vid))
         }
       } else {
-        // 製品を選択する場合、その製品の全てのバージョンも選択
-        newSelection = [...newSelection, productName]
-        if (allProducts[productName]) {
-          allProducts[productName].forEach((version) => {
-            const versionId = `${productName}-${version.cycle}`
-            if (!newSelection.includes(versionId)) {
-              newSelection = [...newSelection, versionId]
-            }
-          })
+        // --- バージョン（子）がクリックされた場合 ---
+        const versionId = id
+        const productName = Object.keys(allProducts).find((p) =>
+          versionId.startsWith(`${p}-`),
+        )
+
+        if (!productName) return Array.from(newSelection) // 親製品が見つからない場合は何もしない
+
+        if (newSelection.has(versionId)) {
+          // バージョンの選択を解除
+          newSelection.delete(versionId)
+          // 親製品の選択も解除
+          newSelection.delete(productName)
+        } else {
+          // バージョンを選択
+          newSelection.add(versionId)
+
+          // この製品のすべてのバージョンが選択されたか確認
+          const versions = allProducts[productName] || []
+          const allVersionsSelected = versions.every((v) =>
+            newSelection.has(`${productName}-${v.cycle}`),
+          )
+
+          if (allVersionsSelected) {
+            // すべて選択されていれば親製品も選択
+            newSelection.add(productName)
+          }
         }
       }
-      return newSelection
-    })
-  }
 
-  const selectAll = (productNames: string[]) => {
-    setSelectedProducts((prev) => {
-      let newSelection = [...prev]
-      productNames.forEach((productName) => {
-        if (!newSelection.includes(productName)) {
-          newSelection = [...newSelection, productName]
-        }
-        if (allProducts[productName]) {
-          allProducts[productName].forEach((version) => {
-            const versionId = `${productName}-${version.cycle}`
-            if (!newSelection.includes(versionId)) {
-              newSelection = [...newSelection, versionId]
-            }
-          })
-        }
-      })
-      return newSelection
+      return Array.from(newSelection)
     })
-  }
-
-  const deselectAll = () => {
-    setSelectedProducts([])
   }
 
   return {
     selectedProducts,
     toggleProduct,
-    selectAll,
-    deselectAll,
   }
 }

@@ -59,37 +59,6 @@ describe('useSelectedProducts', () => {
     ])
   })
 
-  it('すべての製品を選択できること', () => {
-    const { result } = renderHook(() => useSelectedProducts(mockAllProducts))
-
-    act(() => {
-      result.current.selectAll(['product1', 'product2'])
-    })
-
-    expect(result.current.selectedProducts).toEqual([
-      'product1',
-      'product1-1.0',
-      'product1-1.1',
-      'product2',
-      'product2-2.0',
-      'product2-2.1',
-    ])
-  })
-
-  it('すべての製品の選択を解除できること', () => {
-    const { result } = renderHook(() => useSelectedProducts(mockAllProducts))
-
-    act(() => {
-      result.current.selectAll(['product1', 'product2'])
-    })
-
-    act(() => {
-      result.current.deselectAll()
-    })
-
-    expect(result.current.selectedProducts).toEqual([])
-  })
-
   it('LocalStorageから初期状態を復元できること', () => {
     localStorage.setItem(
       'selectedProducts',
