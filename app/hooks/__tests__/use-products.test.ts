@@ -47,7 +47,7 @@ describe('useProducts', () => {
 
     expect(result.current.products).toEqual(mockProductDetails)
     expect(result.current.error).toBeNull()
-    expect(fetch).toHaveBeenCalledTimes(3) // all.json + 2 product details
+    expect(fetch).toHaveBeenCalledTimes(3) // all.json + 2製品の詳細
   })
 
   it('製品リストの取得に失敗した場合、エラーが設定されること', async () => {

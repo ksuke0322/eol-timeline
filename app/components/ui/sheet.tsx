@@ -109,7 +109,7 @@ function SheetContent({
           `}
         >
           <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">閉じる</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

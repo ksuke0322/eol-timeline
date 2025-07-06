@@ -74,7 +74,16 @@ export const useSelectedProducts = (allProducts: ProductDetails) => {
         }
       }
 
-      return Array.from(newSelection)
+      const newSelectionArray = Array.from(newSelection)
+      // 変更がない場合は既存の prev を返す
+      if (
+        newSelectionArray.length === prev.length &&
+        newSelectionArray.every((item) => prev.includes(item))
+      ) {
+        return prev
+      }
+
+      return newSelectionArray
     })
   }
 

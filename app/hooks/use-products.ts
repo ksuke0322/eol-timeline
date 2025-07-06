@@ -13,18 +13,18 @@ export const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // 1. Try to load from cache
+        // 1. キャッシュからの読み込みを試みる
         const cachedData = localStorage.getItem(CACHE_KEY)
         if (cachedData) {
           const { data, timestamp } = JSON.parse(cachedData)
           if (Date.now() - timestamp < ONE_DAY_IN_MS) {
             setProducts(data)
             setLoading(false)
-            return // Use cached data
+            return // キャッシュされたデータを使用
           }
         }
 
-        // 2. Fetch from API if cache is invalid or not present
+        // 2. キャッシュが無効または存在しない場合はAPIからフェッチ
         const response = await fetch('https://endoflife.date/api/all.json')
         if (!response.ok) {
           throw new Error('Failed to fetch products')
@@ -58,7 +58,7 @@ export const useProducts = () => {
         })
         setProducts(productDetails)
 
-        // 3. Save to cache
+        // 3. キャッシュに保存
         localStorage.setItem(
           CACHE_KEY,
           JSON.stringify({ data: productDetails, timestamp: Date.now() }),
