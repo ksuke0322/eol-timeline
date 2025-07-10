@@ -21,7 +21,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ganttInstance.current = new Gantt(ganttRef.current, tasks as any, {
           upper_header_height: 50,
-          column_width: 30,
+          column_width: 60,
           bar_height: 20,
           bar_corner_radius: 3,
           arrow_curve: 5,
