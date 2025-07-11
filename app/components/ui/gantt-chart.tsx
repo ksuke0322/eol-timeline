@@ -31,6 +31,12 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           view_mode: 'Month',
           view_mode_select: true,
           scroll_to: 'today',
+          popup: function ({ task, set_title, set_subtitle, set_details }) {
+            const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
+            set_title(`${task.productName} ${task.id}`)
+            set_subtitle(`Release Date: ${task.start}`)
+            set_details(`EOL Date: ${eolDate}`)
+          },
         })
       }
     }

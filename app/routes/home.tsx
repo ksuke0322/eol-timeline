@@ -85,26 +85,10 @@ const Home = () => {
   )
   const [sortOrder, setSortOrder] = useState<'tool' | 'release' | 'eol'>('tool')
 
-  const filteredProductVersionDetails = useMemo(() => {
-    const filtered: ProductVersionDetail[] = []
-    for (const productName in allProductDetails) {
-      const versions = allProductDetails[productName]
-      if (selectedProductsSet.has(productName)) {
-        filtered.push(...versions)
-      } else {
-        for (const version of versions) {
-          if (selectedProductsSet.has(`${productName}-${version.cycle}`)) {
-            filtered.push(version)
-          }
-        }
-      }
-    }
-    return filtered
-  }, [allProductDetails, selectedProductsSet])
-
   const ganttTasks = useMemo(() => {
     const tasks = convertProductVersionDetailsToGanttTasks(
-      filteredProductVersionDetails,
+      allProductDetails,
+      selectedProductsSet,
     )
 
     switch (sortOrder) {
@@ -120,7 +104,7 @@ const Home = () => {
       default:
         return [...tasks].sort((a, b) => a.name.localeCompare(b.name))
     }
-  }, [filteredProductVersionDetails, sortOrder])
+  }, [allProductDetails, selectedProductsSet, sortOrder])
 
   return (
     <div className="flex">
