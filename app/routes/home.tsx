@@ -125,7 +125,7 @@ const Home = () => {
   return (
     <div className="flex">
       <ProductSidebar products={allProductDetails} />
-      <main className="flex-1 p-4">
+      <main className="flex-1 justify-stretch p-4">
         <div className="mb-4">
           <label htmlFor="sort-order" className="mr-2">
             Sort by:
@@ -143,7 +143,10 @@ const Home = () => {
             <option value="eol">EOL Date</option>
           </select>
         </div>
-        <GanttChart tasks={ganttTasks} />
+        {/* 画面幅 - sidemenu幅 - メイン領域左右padding */}
+        <div className="w-[calc(100svw-16rem-32px)] overflow-hidden">
+          <GanttChart tasks={ganttTasks} />
+        </div>
       </main>
     </div>
   )

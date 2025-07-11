@@ -30,6 +30,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           infinite_padding: false,
           view_mode: 'Month',
           view_mode_select: true,
+          scroll_to: 'today',
         })
       }
     }
