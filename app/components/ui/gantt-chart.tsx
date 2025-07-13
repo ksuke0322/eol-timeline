@@ -18,8 +18,11 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
       if (ganttInstance.current) {
         ganttInstance.current.refresh(tasks)
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ganttInstance.current = new Gantt(ganttRef.current, tasks as any, {
+        // frappe/gantt の型定義が不十分で自前型定義を用意する必要がある、それをするくらいなら型の恩恵を無視して実装する
+        // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/frappe-gantt
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ganttInstance.current = new Gantt(ganttRef.current, tasks, {
           upper_header_height: 50,
           column_width: 60,
           bar_height: 20,
@@ -31,12 +34,15 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           view_mode: 'Month',
           view_mode_select: true,
           scroll_to: 'today',
-          popup: function ({ task, set_title, set_subtitle, set_details }) {
+          auto_move_label: true,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          popup: function ({ task, set_title, set_details }) {
             const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
             set_title(`${task.productName} ${task.id}`)
-            set_subtitle(`Release Date: ${task.start}`)
             set_details(`EOL Date: ${eolDate}`)
           },
+          popup_on: 'hover',
         })
       }
     }

@@ -20,4 +20,5 @@ export type GanttTask = {
   progress?: number
   dependencies?: string
   custom_class?: string
+  color?: string
 }

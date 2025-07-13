@@ -7,6 +7,30 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+const COLORS = [
+  '#FF6B6B', // Red
+  '#4ECDC4', // Teal
+  '#45B7D1', // Light Blue
+  '#FFA07A', // Light Salmon
+  '#98D8C8', // Mint Green
+  '#F7DC6F', // Yellow
+  '#BB8FCE', // Light Purple
+  '#F0B27A', // Orange
+  '#82E0AA', // Light Green
+  '#D7BDE2', // Lavender
+]
+
+const productColors = new Map<string, string>()
+let colorIndex = 0
+
+function getProductColor(productName: string): string {
+  if (!productColors.has(productName)) {
+    productColors.set(productName, COLORS[colorIndex % COLORS.length])
+    colorIndex++
+  }
+  return productColors.get(productName) || '#CCCCCC' // Default grey if somehow not found
+}
+
 export function convertProductVersionDetailsToGanttTasks(
   allProductDetails: ProductDetails,
   selectedProductsSet: Set<string>,
@@ -15,6 +39,7 @@ export function convertProductVersionDetailsToGanttTasks(
 
   for (const productName in allProductDetails) {
     const versions = allProductDetails[productName]
+    const color = getProductColor(productName)
     if (selectedProductsSet.has(productName)) {
       versions.forEach((detail) => {
         const taskName = `${productName} ${detail.cycle}`
@@ -37,6 +62,7 @@ export function convertProductVersionDetailsToGanttTasks(
           start: detail.releaseDate,
           end: endDate,
           progress: 0,
+          color: color,
         })
       })
     } else {
@@ -62,6 +88,7 @@ export function convertProductVersionDetailsToGanttTasks(
             start: version.releaseDate,
             end: endDate,
             progress: 0,
+            color: color,
           })
         }
       }
