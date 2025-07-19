@@ -19,15 +19,19 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '~/components/ui/sidebar'
-import { useSelectedProducts } from '~/hooks/use-selected-products'
 import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
 
 interface ProductSidebarProps {
   products: ProductDetails
+  selectedProducts: string[]
+  toggleProduct: (id: string) => void
 }
 
-export const ProductSidebar: React.FC<ProductSidebarProps> = ({ products }) => {
-  const { selectedProducts, toggleProduct } = useSelectedProducts(products)
+export const ProductSidebar: React.FC<ProductSidebarProps> = ({
+  products,
+  selectedProducts,
+  toggleProduct,
+}) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const selectedProductsSet = useMemo(

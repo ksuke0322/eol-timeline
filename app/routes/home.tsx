@@ -78,7 +78,8 @@ export const clientLoader = async (): Promise<ProductDetails> => {
 
 const Home = () => {
   const allProductDetails = useLoaderData<ProductDetails>()
-  const { selectedProducts } = useSelectedProducts(allProductDetails)
+  const { selectedProducts, toggleProduct } =
+    useSelectedProducts(allProductDetails)
   const selectedProductsSet = useMemo(
     () => new Set(selectedProducts),
     [selectedProducts],
@@ -108,7 +109,11 @@ const Home = () => {
 
   return (
     <div className="flex">
-      <ProductSidebar products={allProductDetails} />
+      <ProductSidebar
+        products={allProductDetails}
+        selectedProducts={selectedProducts}
+        toggleProduct={toggleProduct}
+      />
       <main className="flex-1 justify-stretch p-4">
         <div className="mb-4">
           <label htmlFor="sort-order" className="mr-2">
