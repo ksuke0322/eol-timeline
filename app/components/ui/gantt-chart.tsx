@@ -32,7 +32,6 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           language: 'ja',
           infinite_padding: false,
           view_mode: 'Month',
-          view_mode_select: true,
           scroll_to: 'today',
           auto_move_label: true,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
