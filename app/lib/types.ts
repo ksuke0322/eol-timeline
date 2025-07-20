@@ -10,3 +10,15 @@ export type ProductVersionDetail = {
 }
 
 export type ProductDetails = Record<string, ProductVersionDetail[]>
+
+export type GanttTask = {
+  id: string
+  name: string
+  productName: string
+  start: string
+  end: string
+  progress?: number
+  dependencies?: string
+  custom_class?: string
+  color?: string
+}

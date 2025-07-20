@@ -15,18 +15,23 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
   SidebarProvider,
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '~/components/ui/sidebar'
-import { useProducts } from '~/hooks/use-products'
-import { useSelectedProducts } from '~/hooks/use-selected-products'
-import { type ProductVersionDetail } from '~/lib/types'
+import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
 
-export const ProductSidebar = () => {
-  const { products, loading, error } = useProducts()
-  const { selectedProducts, toggleProduct } = useSelectedProducts(products)
+interface ProductSidebarProps {
+  products: ProductDetails
+  selectedProducts: string[]
+  toggleProduct: (id: string) => void
+}
+
+export const ProductSidebar: React.FC<ProductSidebarProps> = ({
+  products,
+  selectedProducts,
+  toggleProduct,
+}) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const selectedProductsSet = useMemo(
@@ -120,82 +125,67 @@ export const ProductSidebar = () => {
           <SearchInputWithDebounce onDebouncedChange={setDebouncedSearchTerm} />
         </SidebarHeader>
         <SidebarContent>
-          {loading ? (
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuSkeleton showIcon />
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuSkeleton showIcon />
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuSkeleton showIcon />
-              </SidebarMenuItem>
-            </SidebarMenu>
-          ) : error ? (
-            <div>Error: {error.message}</div>
-          ) : (
-            <SidebarMenu>
-              <Accordion
-                type="multiple"
-                value={accordionValue}
-                onValueChange={setAccordionValue}
-              >
-                {Object.entries(sortedAndFilteredProducts).map(
-                  ([productName, versions]) => (
-                    <SidebarMenuItem key={productName}>
-                      <AccordionItem value={productName}>
-                        <AccordionTrigger
-                          aria-label={`Toggle details for ${productName}`}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id={productName}
-                              checked={selectedProductsSet.has(productName)}
-                              onCheckedChange={() => toggleProduct(productName)}
-                            />
-                            <label
-                              htmlFor={productName}
-                              className="font-semibold"
-                            >
-                              {productName}
-                            </label>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <SidebarMenuSub>
-                            {versions.map((version: ProductVersionDetail) => (
-                              <SidebarMenuSubItem key={version.cycle}>
-                                <div className="flex items-center space-x-2">
-                                  <Checkbox
-                                    id={`${productName}-${version.cycle}`}
-                                    checked={selectedProductsSet.has(
+          {/* loadingとerrorの表示はHomeコンポーネントで管理されるため削除 */}
+          <SidebarMenu>
+            <Accordion
+              type="multiple"
+              value={accordionValue}
+              onValueChange={setAccordionValue}
+            >
+              {Object.entries(sortedAndFilteredProducts).map(
+                ([productName, versions]) => (
+                  <SidebarMenuItem key={productName}>
+                    <AccordionItem value={productName}>
+                      <AccordionTrigger
+                        aria-label={`Toggle details for ${productName}`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id={productName}
+                            checked={selectedProductsSet.has(productName)}
+                            onCheckedChange={() => toggleProduct(productName)}
+                          />
+                          <label
+                            htmlFor={productName}
+                            className="font-semibold"
+                          >
+                            {productName}
+                          </label>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <SidebarMenuSub>
+                          {versions.map((version: ProductVersionDetail) => (
+                            <SidebarMenuSubItem key={version.cycle}>
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`${productName}-${version.cycle}`}
+                                  checked={selectedProductsSet.has(
+                                    `${productName}-${version.cycle}`,
+                                  )}
+                                  onCheckedChange={() =>
+                                    toggleProduct(
                                       `${productName}-${version.cycle}`,
-                                    )}
-                                    onCheckedChange={() =>
-                                      toggleProduct(
-                                        `${productName}-${version.cycle}`,
-                                      )
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={`${productName}-${version.cycle}`}
-                                    className="font-normal"
-                                  >
-                                    {version.cycle}
-                                  </label>
-                                </div>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </SidebarMenuItem>
-                  ),
-                )}
-              </Accordion>
-            </SidebarMenu>
-          )}
+                                    )
+                                  }
+                                />
+                                <label
+                                  htmlFor={`${productName}-${version.cycle}`}
+                                  className="font-normal"
+                                >
+                                  {version.cycle}
+                                </label>
+                              </div>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </SidebarMenuItem>
+                ),
+              )}
+            </Accordion>
+          </SidebarMenu>
         </SidebarContent>
       </Sidebar>
     </SidebarProvider>
