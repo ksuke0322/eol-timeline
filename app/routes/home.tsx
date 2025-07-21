@@ -3,9 +3,9 @@ import { useLoaderData } from 'react-router'
 
 import type { ProductVersionDetail, ProductDetails } from '~/lib/types'
 
-import GanttChart from '~/components/ui/gantt-chart'
-import { ProductSidebar } from '~/components/ui/product-sidebar'
-import { useSelectedProducts } from '~/hooks/use-selected-products'
+import GanttChart from '~/components/ui/ganttChart'
+import { ProductSidebar } from '~/components/ui/productSidebar'
+import { useSelectedProducts } from '~/hooks/useSelectedProducts'
 import { convertProductVersionDetailsToGanttTasks } from '~/lib/utils'
 
 export function meta() {

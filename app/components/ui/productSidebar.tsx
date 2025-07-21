@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 
-import { SearchInputWithDebounce } from './search-input-with-debounce'
+import { SearchInputWithDebounce } from './searchInputWithDebounce'
 
 import {
   Accordion,

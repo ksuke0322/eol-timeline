@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
 
-import { useSelectedProducts } from '../use-selected-products'
+import { useSelectedProducts } from '../useSelectedProducts'
 
 import { type ProductDetails } from '~/lib/types'
 
