@@ -76,7 +76,7 @@
 - 目的：複数のユニットが組み合わさったときの挙動を検証する
 - 対象：Reactコンポーネント、フォーム、ルーティングなど
 - 特徴：
-  - JSDOMベースで実行（React Testing Libraryなど）
+  - JSDOMベースで実行（Storybook, React Testing Libraryなど）
   - 外部APIは原則モック化
 - 技術：
   - テストしたい内容に応じて以下を使い分けること
