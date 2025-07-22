@@ -5,13 +5,31 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  plugins: [
+    tailwindcss(),
+    !process.env.VITEST && reactRouter(), // Conditionally apply reactRouter plugin
+    tsconfigPaths(),
+  ],
   resolve: {
     alias: {
       'frappe-gantt/dist/frappe-gantt.css': path.resolve(
         __dirname,
         'node_modules/frappe-gantt/dist/frappe-gantt.css',
       ),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './test/setup.ts',
+    moduleNameMapper: {
+      '^~/(.*)': path.resolve(__dirname, './app/$1'),
+      '\.css': 'identity-obj-proxy',
+    },
+    server: {
+      deps: {
+        inline: ['@react-router/dev/vite'],
+      },
     },
   },
 })

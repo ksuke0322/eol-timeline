@@ -3,13 +3,14 @@
   "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
     "**/app/**/*",
+    "test/**/*",
     "**/.server/**/*",
     "**/.client/**/*",
     ".react-router/types/**/*"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "vite/client", "jest", "@testing-library/jest-dom"],
+    "types": ["node", "vite/client", "vitest/globals"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",

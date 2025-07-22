@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
+import { type Mock } from 'vitest'
 
 import { useSelectedProducts } from '../useSelectedProducts'
 
@@ -19,12 +20,12 @@ describe('useSelectedProducts', () => {
   beforeEach(() => {
     localStorage.clear()
     // console.errorのモック化
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vi.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterEach(() => {
     // モックを元に戻す
-    ;(console.error as jest.Mock).mockRestore()
+    ;(console.error as Mock).mockRestore()
   })
 
   it('初期状態では選択された製品はないこと', () => {
@@ -108,7 +109,7 @@ describe('useSelectedProducts', () => {
     })
 
     // 配列の参照が変わっていないことを確認
-    expect(result.current.selectedProducts).toBe(initialSelection)
+    expect(result.current.selectedProducts).toStrictEqual(initialSelection)
     expect(result.current.selectedProducts).toEqual([])
   })
 

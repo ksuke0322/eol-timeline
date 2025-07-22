@@ -113,7 +113,9 @@
 - eslint
 - prettier
 - husky
-- jest
+- Vitest
+- Storybook
+- Playwright
 
 ### プロジェクト概要
 
