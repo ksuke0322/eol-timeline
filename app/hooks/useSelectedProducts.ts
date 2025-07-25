@@ -15,6 +15,8 @@ export const useSelectedProducts = (allProducts: ProductDetails) => {
     }
   })
 
+  console.log(selectedProducts)
+
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedProducts))

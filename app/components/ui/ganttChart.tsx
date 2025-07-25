@@ -31,7 +31,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           padding: 18,
           language: 'ja',
           infinite_padding: false,
-          view_mode: 'Month',
+          view_mode: 'Year',
           view_mode_select: true,
           view_modes: [
             Gantt.VIEW_MODE.WEEK,

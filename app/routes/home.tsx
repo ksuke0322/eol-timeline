@@ -86,6 +86,8 @@ const Home = () => {
   )
   const [sortOrder, setSortOrder] = useState<'tool' | 'release' | 'eol'>('tool')
 
+  console.log(selectedProducts, selectedProductsSet)
+
   const ganttTasks = useMemo(() => {
     const tasks = convertProductVersionDetailsToGanttTasks(
       allProductDetails,

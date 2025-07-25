@@ -32,6 +32,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
   selectedProducts,
   toggleProduct,
 }) => {
+  console.log(selectedProducts)
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const selectedProductsSet = useMemo(
@@ -70,6 +71,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
         )
 
       if (isSelected) {
+        console.log('isSelected')
         selected.push([productName, versions])
       } else {
         unselected.push([productName, versions])
