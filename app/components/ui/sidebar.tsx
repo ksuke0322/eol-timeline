@@ -178,9 +178,7 @@ function Sidebar({
           className,
         )}
         {...props}
-      >
-        {children}
-      </div>
+      />
     )
   }
 
@@ -214,6 +212,7 @@ function Sidebar({
 
   return (
     <div
+      role="navigation"
       className={`
         group peer hidden text-sidebar-foreground shadow-md
         md:block
@@ -434,6 +433,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-content"
       data-sidebar="content"
+      data-testid="sidebar-content"
       className={cn(
         `
           flex min-h-0 flex-1 flex-col gap-2 overflow-auto

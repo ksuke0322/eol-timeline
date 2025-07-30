@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { Separator } from '~/components/ui/separator'
 
@@ -15,7 +15,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Horizontal: Story = {
-  render: (args) => (
+  render: (args: Parameters<typeof Separator>[0]) => (
     <div className="w-[200px]">
       <div className="space-y-1">
         <h4 className="text-sm leading-none font-medium">Radix Primitives</h4>
@@ -39,7 +39,7 @@ export const Vertical: Story = {
   args: {
     orientation: 'vertical',
   },
-  render: (args) => (
+  render: (args: Parameters<typeof Separator>[0]) => (
     <div className="flex h-[100px] items-center justify-center">
       <div>Blog</div>
       <Separator {...args} className="mx-4" />

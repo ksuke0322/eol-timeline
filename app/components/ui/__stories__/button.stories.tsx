@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { within, expect } from '@storybook/test'
+
+import type { Meta, StoryObj, StoryFn } from '@storybook/react'
 
 import { Button } from '~/components/ui/button'
 
@@ -41,6 +43,7 @@ export const Default: Story = {
   args: {
     children: 'Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Secondary: Story = {
@@ -48,6 +51,7 @@ export const Secondary: Story = {
     variant: 'secondary',
     children: 'Secondary Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Destructive: Story = {
@@ -55,6 +59,7 @@ export const Destructive: Story = {
     variant: 'destructive',
     children: 'Destructive Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Outline: Story = {
@@ -62,6 +67,7 @@ export const Outline: Story = {
     variant: 'outline',
     children: 'Outline Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Ghost: Story = {
@@ -69,6 +75,7 @@ export const Ghost: Story = {
     variant: 'ghost',
     children: 'Ghost Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Link: Story = {
@@ -76,6 +83,7 @@ export const Link: Story = {
     variant: 'link',
     children: 'Link Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Small: Story = {
@@ -83,6 +91,7 @@ export const Small: Story = {
     size: 'sm',
     children: 'Small Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Large: Story = {
@@ -90,6 +99,7 @@ export const Large: Story = {
     size: 'lg',
     children: 'Large Button',
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
 }
 
 export const Icon: Story = {
@@ -97,4 +107,35 @@ export const Icon: Story = {
     size: 'icon',
     children: '⚙️', // Example icon
   },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
+}
+
+export const Disabled: Story = {
+  args: {
+    children: 'Disabled Button',
+    disabled: true,
+  },
+  render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'Disabled Button' })
+    await expect(button).toBeDisabled()
+  },
+}
+
+export const WithLongText: Story = {
+  args: {
+    children:
+      'This is a very long button text to check how the component handles text wrapping and overflow',
+  },
+  render: (args: Parameters<typeof Button>[0]) => (
+    <div style={{ width: '200px' }}>
+      <Button {...args} />
+    </div>
+  ),
+  decorators: [
+    (Story: StoryFn<typeof Button>, context) => (
+      <div style={{ width: '200px' }}>{Story(context.args, context)}</div>
+    ),
+  ],
 }

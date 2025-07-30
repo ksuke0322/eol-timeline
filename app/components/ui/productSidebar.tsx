@@ -32,7 +32,6 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
   selectedProducts,
   toggleProduct,
 }) => {
-  console.log(selectedProducts)
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   const selectedProductsSet = useMemo(
@@ -71,7 +70,6 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
         )
 
       if (isSelected) {
-        console.log('isSelected')
         selected.push([productName, versions])
       } else {
         unselected.push([productName, versions])
@@ -138,48 +136,59 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                 ([productName, versions]) => (
                   <SidebarMenuItem key={productName}>
                     <AccordionItem value={productName}>
-                      <AccordionTrigger
-                        aria-label={`Toggle details for ${productName}`}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id={productName}
-                            checked={selectedProductsSet.has(productName)}
-                            onCheckedChange={() => toggleProduct(productName)}
-                          />
+                      <div className="flex items-center justify-between pr-2">
+                        <div className="flex flex-1 items-center space-x-2 p-2">
+                          {versions.length !== 0 ? (
+                            <Checkbox
+                              id={productName}
+                              checked={selectedProductsSet.has(productName)}
+                              onCheckedChange={() => toggleProduct(productName)}
+                              aria-label={productName}
+                            />
+                          ) : null}
                           <label
                             htmlFor={productName}
-                            className="font-semibold"
+                            className="flex-1 cursor-pointer font-semibold"
                           >
                             {productName}
                           </label>
                         </div>
-                      </AccordionTrigger>
+                        <AccordionTrigger
+                          aria-label={`Toggle details for ${productName}`}
+                        />
+                      </div>
                       <AccordionContent>
                         <SidebarMenuSub>
-                          {versions.map((version: ProductVersionDetail) => (
-                            <SidebarMenuSubItem key={version.cycle}>
-                              <div className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`${productName}-${version.cycle}`}
-                                  checked={selectedProductsSet.has(
-                                    `${productName}-${version.cycle}`,
-                                  )}
-                                  onCheckedChange={() =>
-                                    toggleProduct(
-                                      `${productName}-${version.cycle}`,
-                                    )
-                                  }
-                                />
-                                <label
-                                  htmlFor={`${productName}-${version.cycle}`}
-                                  className="font-normal"
-                                >
-                                  {version.cycle}
-                                </label>
-                              </div>
+                          {versions.length === 0 ? (
+                            <SidebarMenuSubItem key={`${productName}-Empty`}>
+                              No version
                             </SidebarMenuSubItem>
-                          ))}
+                          ) : (
+                            versions.map((version: ProductVersionDetail) => (
+                              <SidebarMenuSubItem key={version.cycle}>
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`${productName}-${version.cycle}`}
+                                    checked={selectedProductsSet.has(
+                                      `${productName}-${version.cycle}`,
+                                    )}
+                                    onCheckedChange={() =>
+                                      toggleProduct(
+                                        `${productName}-${version.cycle}`,
+                                      )
+                                    }
+                                  />
+                                  <label
+                                    htmlFor={`${productName}-${version.cycle}`}
+                                    aria-label={`${productName}-${version.cycle}`}
+                                    className="font-normal"
+                                  >
+                                    {version.cycle}
+                                  </label>
+                                </div>
+                              </SidebarMenuSubItem>
+                            ))
+                          )}
                         </SidebarMenuSub>
                       </AccordionContent>
                     </AccordionItem>

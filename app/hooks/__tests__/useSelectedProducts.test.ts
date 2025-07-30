@@ -144,4 +144,98 @@ describe('useSelectedProducts', () => {
       JSON.stringify(['product1', 'product1-1.0', 'product1-1.1']),
     )
   })
+
+  describe('カスタムデータが存在する場合', () => {
+    const customProducts: ProductDetails = {
+      custom1: [{ cycle: 'c1', releaseDate: '', eol: '' }],
+    }
+
+    it('カスタム製品を選択・解除できること', () => {
+      const { result } = renderHook(() =>
+        useSelectedProducts(mockAllProducts, customProducts),
+      )
+
+      act(() => {
+        result.current.toggleProduct('custom1')
+      })
+      expect(result.current.selectedProducts).toEqual(['custom1', 'custom1-c1'])
+
+      act(() => {
+        result.current.toggleProduct('custom1')
+      })
+      expect(result.current.selectedProducts).toEqual([])
+    })
+
+    it('通常製品とカスタム製品を同時に選択できること', () => {
+      const { result } = renderHook(() =>
+        useSelectedProducts(mockAllProducts, customProducts),
+      )
+
+      act(() => {
+        result.current.toggleProduct('product1')
+      })
+      act(() => {
+        result.current.toggleProduct('custom1')
+      })
+
+      expect(result.current.selectedProducts).toEqual(
+        expect.arrayContaining([
+          'product1',
+          'product1-1.0',
+          'product1-1.1',
+          'custom1',
+          'custom1-c1',
+        ]),
+      )
+    })
+  })
+
+  it('initialSelectedProducts で初期選択状態を指定できること', () => {
+    const initial = ['product2', 'product2-2.0']
+    const { result } = renderHook(() =>
+      useSelectedProducts(mockAllProducts, {}),
+    )
+    expect(result.current.selectedProducts).toEqual(initial)
+  })
+
+  describe('全選択・全解除', () => {
+    const customProducts: ProductDetails = {
+      custom1: [{ cycle: 'c1', releaseDate: '', eol: '' }],
+    }
+
+    it('全選択ですべての製品が選択されること', () => {
+      const { result } = renderHook(() =>
+        useSelectedProducts(mockAllProducts, customProducts),
+      )
+
+      act(() => {
+        result.current.selectAllProducts()
+      })
+
+      expect(result.current.selectedProducts).toEqual(
+        expect.arrayContaining([
+          'product1',
+          'product1-1.0',
+          'product1-1.1',
+          'product2',
+          'product2-2.0',
+          'product2-2.1',
+          'custom1',
+          'custom1-c1',
+        ]),
+      )
+    })
+
+    it('全解除ですべての選択がクリアされること', () => {
+      const { result } = renderHook(() =>
+        useSelectedProducts(mockAllProducts, customProducts),
+      )
+
+      act(() => {
+        result.current.clearAllProducts()
+      })
+
+      expect(result.current.selectedProducts).toEqual([])
+    })
+  })
 })

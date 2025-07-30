@@ -169,4 +169,9 @@ export default [{
       },
     ],
   },
+}, {
+  files: ['**/*.test.ts'],
+  rules: {
+    'better-tailwindcss/no-unregistered-classes': 'off',
+  },
 }, ...storybook.configs["flat/recommended"]];

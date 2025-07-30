@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { within, expect, userEvent, screen } from '@storybook/test'
+
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { Button } from '~/components/ui/button'
 import {
@@ -20,7 +22,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: (args) => (
+  render: (args: Parameters<typeof Tooltip>[0]) => (
     <Tooltip {...args}>
       <TooltipTrigger asChild>
         <Button variant="outline">Hover</Button>
@@ -30,10 +32,22 @@ export const Default: Story = {
       </TooltipContent>
     </Tooltip>
   ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: 'Hover' })
+
+    await expect(screen.queryByText('Add to library')).not.toBeInTheDocument()
+
+    await userEvent.hover(trigger, { delay: 200 })
+    await expect(screen.queryAllByText('Add to library')[0]).toBeVisible()
+
+    await userEvent.unhover(trigger, { delay: 200 })
+    await expect(screen.queryByText('Add to library')).not.toBeInTheDocument()
+  },
 }
 
 export const WithLongContent: Story = {
-  render: (args) => (
+  render: (args: Parameters<typeof Tooltip>[0]) => (
     <Tooltip {...args}>
       <TooltipTrigger asChild>
         <Button variant="outline">Hover</Button>
@@ -43,10 +57,34 @@ export const WithLongContent: Story = {
       </TooltipContent>
     </Tooltip>
   ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: 'Hover' })
+
+    await expect(
+      screen.queryByText(
+        'This is a very long tooltip content that should wrap nicely.',
+      ),
+    ).not.toBeInTheDocument()
+
+    await userEvent.hover(trigger, { delay: 200 })
+    await expect(
+      screen.queryAllByText(
+        'This is a very long tooltip content that should wrap nicely.',
+      )[0],
+    ).toBeVisible()
+
+    await userEvent.unhover(trigger, { delay: 200 })
+    await expect(
+      screen.queryByText(
+        'This is a very long tooltip content that should wrap nicely.',
+      ),
+    ).not.toBeInTheDocument()
+  },
 }
 
 export const WithSide: Story = {
-  render: (args) => (
+  render: (args: Parameters<typeof Tooltip>[0]) => (
     <div className="flex gap-4">
       <Tooltip {...args}>
         <TooltipTrigger asChild>
@@ -82,4 +120,44 @@ export const WithSide: Story = {
       </Tooltip>
     </div>
   ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+
+    await expect(screen.queryByText('Tooltip on top')).not.toBeInTheDocument()
+    await expect(screen.queryByText('Tooltip on right')).not.toBeInTheDocument()
+    await expect(
+      screen.queryByText('Tooltip on bottom'),
+    ).not.toBeInTheDocument()
+    await expect(screen.queryByText('Tooltip on left')).not.toBeInTheDocument()
+
+    const topTrigger = canvas.getByRole('button', { name: 'Top' })
+    await userEvent.hover(topTrigger, { delay: 200 })
+    await expect(screen.queryAllByText('Tooltip on top')[0]).toBeVisible()
+
+    await userEvent.unhover(topTrigger, { delay: 200 })
+    await expect(screen.queryByText('Tooltip on top')).not.toBeInTheDocument()
+
+    const rightTrigger = canvas.getByRole('button', { name: 'Right' })
+    await userEvent.hover(rightTrigger, { delay: 200 })
+    await expect(screen.queryAllByText('Tooltip on right')[0]).toBeVisible()
+
+    await userEvent.unhover(rightTrigger, { delay: 200 })
+    await expect(screen.queryByText('Tooltip on right')).not.toBeInTheDocument()
+
+    const bottomTrigger = canvas.getByRole('button', { name: 'Bottom' })
+    await userEvent.hover(bottomTrigger, { delay: 200 })
+    await expect(screen.queryAllByText('Tooltip on bottom')[0]).toBeVisible()
+
+    await userEvent.unhover(bottomTrigger, { delay: 200 })
+    await expect(
+      screen.queryByText('Tooltip on bottom'),
+    ).not.toBeInTheDocument()
+
+    const leftTrigger = canvas.getByRole('button', { name: 'Left' })
+    await userEvent.hover(leftTrigger, { delay: 200 })
+    await expect(screen.queryAllByText('Tooltip on left')[0]).toBeVisible()
+
+    await userEvent.unhover(leftTrigger, { delay: 200 })
+    await expect(screen.queryByText('Tooltip on left')).not.toBeInTheDocument()
+  },
 }

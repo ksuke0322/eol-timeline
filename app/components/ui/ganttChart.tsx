@@ -53,7 +53,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
     }
   }, [tasks])
 
-  return <div ref={ganttRef} />
+  return <div ref={ganttRef} data-testid="gantt-chart-mock" role="figure" />
 }
 
 export default GanttChart

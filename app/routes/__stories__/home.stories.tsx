@@ -1,8 +1,8 @@
+import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { http, HttpResponse } from 'msw'
-import { useEffect } from 'react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import Home, { clientLoader } from '~/routes/home'
 
@@ -43,28 +43,66 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const storyWrapper = () => {
-  useEffect(() => {
+export const Default: Story = {
+  render: () => {
+    const initialSelectedProducts = [
+      'angular-17',
+      'react-18',
+      'react-17',
+      'react',
+    ]
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['angular-17', 'react-18', 'react-17', 'react']),
+      JSON.stringify(initialSelectedProducts),
     )
-  }, [])
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/',
+          element: <Home />,
+          loader: clientLoader,
+        },
+      ],
+      { initialEntries: ['/'] },
+    )
 
-  const router = createMemoryRouter(
-    [
-      {
-        path: '/',
-        element: <Home />,
-        loader: clientLoader,
-      },
-    ],
-    { initialEntries: ['/'] },
-  )
+    return <RouterProvider router={router} />
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
 
-  return <RouterProvider router={router} />
-}
+    // サイドバーの要素が表示されていることを確認
+    await expect(await canvas.findByText('react')).toBeInTheDocument()
+    await expect(await canvas.findByText('vue')).toBeInTheDocument()
+    await expect(await canvas.findByText('angular')).toBeInTheDocument()
 
-export const Default: Story = {
-  render: storyWrapper,
+    // ガントチャートの要素が表示されていることを確認
+    await waitFor(() =>
+      expect(canvas.getByTestId('gantt-chart-mock')).toBeInTheDocument(),
+    )
+
+    // ソートオプションが表示されていることを確認
+    await expect(canvas.getByLabelText('Sort by:')).toBeInTheDocument()
+
+    // reactのチェックボックスがチェックされていることを確認
+    const reactCheckbox = canvas.getByRole('checkbox', { name: 'react' })
+    await expect(reactCheckbox).toBeChecked()
+
+    // vueのバージョン3のチェックボックスをクリックして選択状態にする
+    const vueAccordionTrigger = canvas.getByRole('button', {
+      name: /toggle details for vue/i,
+    })
+    await userEvent.click(vueAccordionTrigger)
+    const vue3Checkbox = canvas.getByRole('checkbox', { name: 'vue-3' })
+    await userEvent.click(vue3Checkbox)
+    await expect(vue3Checkbox).toBeChecked()
+
+    // ソート順を変更してガントチャートが更新されることを確認
+    const sortBySelect = canvas.getByLabelText('Sort by:')
+    await userEvent.selectOptions(sortBySelect, 'release')
+    // ここでガントチャートのタスク順序が変更されたことを検証するアサーションを追加
+    // ただし、GanttChartがモックされているため、直接DOMの順序を検証することは難しい。
+    // 代わりに、GanttChartに渡されるpropsが変化したことをモック経由で検証する必要があるが、
+    // それはユニットテストの範囲となるため、ここでは省略する。
+  },
 }

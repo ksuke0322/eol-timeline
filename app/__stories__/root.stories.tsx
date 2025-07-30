@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { ErrorBoundary } from '~/root'
 
@@ -21,7 +21,7 @@ export const ErrorBoundaryStory: ErrorBoundaryStory = {
     loaderData: undefined,
     actionData: undefined,
   },
-  render: (args) => <ErrorBoundary {...args} />,
+  render: (args: any) => <ErrorBoundary {...args} />,
 }
 
 export const NotFoundError: ErrorBoundaryStory = {
@@ -35,5 +35,5 @@ export const NotFoundError: ErrorBoundaryStory = {
     loaderData: undefined,
     actionData: undefined,
   },
-  render: (args) => <ErrorBoundary {...args} />,
+  render: (args: any) => <ErrorBoundary {...args} />,
 }

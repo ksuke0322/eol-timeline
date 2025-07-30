@@ -1,4 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { within, expect, userEvent, waitFor } from '@storybook/test'
+import * as React from 'react'
+
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { Checkbox } from '~/components/ui/checkbox'
 
@@ -15,25 +18,56 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: (args) => <Checkbox {...args} />,
+  render: (args: Parameters<typeof Checkbox>[0]) => <Checkbox {...args} />,
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = canvas.getByRole('checkbox')
+    await userEvent.click(checkbox)
+    await waitFor(() => expect(checkbox).toBeChecked())
+    await userEvent.click(checkbox)
+    await waitFor(() => expect(checkbox).not.toBeChecked())
+  },
 }
 
 export const Checked: Story = {
   args: {
     checked: true,
   },
-  render: (args) => <Checkbox {...args} />,
+  render: function Render(args) {
+    const [checked, setChecked] = React.useState(args.checked)
+    return (
+      <Checkbox
+        {...args}
+        checked={checked}
+        onCheckedChange={() => setChecked(!checked)}
+      />
+    )
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = await canvas.findByRole('checkbox')
+    await expect(checkbox).toBeChecked()
+    await userEvent.click(checkbox)
+    await waitFor(() => expect(checkbox).not.toBeChecked())
+  },
 }
 
 export const Disabled: Story = {
   args: {
     disabled: true,
   },
-  render: (args) => <Checkbox {...args} />,
+  render: (args: Parameters<typeof Checkbox>[0]) => <Checkbox {...args} />,
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = canvas.getByRole('checkbox')
+    await expect(checkbox).toBeDisabled()
+    await userEvent.click(checkbox)
+    await expect(checkbox).toBeDisabled()
+  },
 }
 
 export const WithLabel: Story = {
-  render: (args) => (
+  render: (args: Parameters<typeof Checkbox>[0]) => (
     <div className="flex items-center space-x-2">
       <Checkbox id="terms" {...args} />
       <label
@@ -47,4 +81,38 @@ export const WithLabel: Story = {
       </label>
     </div>
   ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = canvas.getByRole('checkbox', {
+      name: 'Accept terms and conditions',
+    })
+    await userEvent.click(checkbox)
+    await waitFor(() => expect(checkbox).toBeChecked())
+  },
+}
+
+export const WithLongLabel: Story = {
+  render: (args: Parameters<typeof Checkbox>[0]) => (
+    <div className="flex w-64 items-start space-x-2">
+      <Checkbox id="long-label" {...args} />
+      <label
+        htmlFor="long-label"
+        className={`
+          text-sm leading-none font-medium
+          peer-disabled:cursor-not-allowed peer-disabled:opacity-70
+        `}
+      >
+        This is an extremely long label for a checkbox to verify that the text
+        wraps correctly and the layout remains aligned.
+      </label>
+    </div>
+  ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = canvas.getByRole('checkbox', {
+      name: /This is an extremely long label/i,
+    })
+    await userEvent.click(checkbox)
+    await waitFor(() => expect(checkbox).toBeChecked())
+  },
 }
