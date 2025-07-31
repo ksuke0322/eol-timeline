@@ -1,6 +1,6 @@
 import { within, expect } from '@storybook/test'
 
-import type { Meta, StoryObj, StoryContext } from '@storybook/react'
+import type { Meta, StoryContext, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '~/components/ui/button'
 

@@ -1,6 +1,6 @@
 import { within, expect, userEvent, waitFor } from '@storybook/test'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { ProductSidebar } from '~/components/ui/productSidebar'
 import { useSelectedProducts } from '~/hooks/useSelectedProducts'

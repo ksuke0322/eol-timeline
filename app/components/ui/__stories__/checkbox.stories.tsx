@@ -1,7 +1,7 @@
 import { within, expect, userEvent, waitFor } from '@storybook/test'
 import * as React from 'react'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Checkbox } from '~/components/ui/checkbox'
 

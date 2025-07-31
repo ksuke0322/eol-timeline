@@ -2,7 +2,7 @@ import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { HomeIcon, SettingsIcon, UsersIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import type { Meta, StoryObj, StoryContext } from '@storybook/react'
+import type { Meta, StoryContext, StoryObj } from '@storybook/react-vite'
 
 import {
   Sidebar,

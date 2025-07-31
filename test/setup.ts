@@ -1,13 +1,14 @@
 import 'vitest-dom/extend-expect'
+import { TextEncoder, TextDecoder } from 'node:util'
+
 import { vi } from 'vitest'
 
 // Polyfill for TextEncoder and TextDecoder for JSDOM environment
 // This is often needed for libraries that use these browser APIs
 // but are run in a Node.js environment like Vitest with JSDOM.
 if (typeof global.TextEncoder === 'undefined') {
-  const { TextEncoder, TextDecoder } = require('node:util')
   global.TextEncoder = TextEncoder
-  global.TextDecoder = TextDecoder
+  global.TextDecoder = TextDecoder as typeof global.TextDecoder
 }
 
 Object.defineProperty(window, 'matchMedia', {

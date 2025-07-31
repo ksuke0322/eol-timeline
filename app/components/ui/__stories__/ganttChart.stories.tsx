@@ -1,6 +1,6 @@
 import { within, expect } from '@storybook/test'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { GanttTask } from '~/lib/types'
 
 import GanttChart from '~/components/ui/ganttChart'
