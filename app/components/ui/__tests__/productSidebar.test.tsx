@@ -63,7 +63,7 @@ describe('ProductSidebar', () => {
     fireEvent.click(
       screen.getByRole('button', { name: /toggle details for react/i }),
     )
-    fireEvent.click(screen.getByRole('checkbox', { name: '18' }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'React-18' }))
     expect(toggleProductMock).toHaveBeenCalledWith('React-18')
   })
 

@@ -1,6 +1,6 @@
 import { within, expect } from '@storybook/test'
 
-import type { Meta, StoryObj, StoryFn } from '@storybook/react'
+import type { Meta, StoryObj, StoryContext } from '@storybook/react'
 
 import { Button } from '~/components/ui/button'
 
@@ -134,8 +134,8 @@ export const WithLongText: Story = {
     </div>
   ),
   decorators: [
-    (Story: StoryFn<typeof Button>, context) => (
-      <div style={{ width: '200px' }}>{Story(context.args, context)}</div>
+    (Story, context: StoryContext) => (
+      <div style={{ width: '200px' }}>{Story(context.args)}</div>
     ),
   ],
 }

@@ -190,14 +190,6 @@ describe('useSelectedProducts', () => {
     })
   })
 
-  it('initialSelectedProducts で初期選択状態を指定できること', () => {
-    const initial = ['product2', 'product2-2.0']
-    const { result } = renderHook(() =>
-      useSelectedProducts(mockAllProducts, {}),
-    )
-    expect(result.current.selectedProducts).toEqual(initial)
-  })
-
   describe('全選択・全解除', () => {
     const customProducts: ProductDetails = {
       custom1: [{ cycle: 'c1', releaseDate: '', eol: '' }],

@@ -2,7 +2,7 @@ import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { HomeIcon, SettingsIcon, UsersIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import type { Meta, StoryObj, StoryFn } from '@storybook/react'
+import type { Meta, StoryObj, StoryContext } from '@storybook/react'
 
 import {
   Sidebar,
@@ -30,9 +30,9 @@ const meta = {
   },
   tags: ['autodocs'],
   decorators: [
-    (Story: StoryFn<typeof Sidebar>, context) => (
+    (Story, context: StoryContext) => (
       <div style={{ display: 'flex', height: '100vh' }}>
-        {Story(context.args, context)}
+        {Story(context.args)}
       </div>
     ),
   ],
@@ -152,7 +152,7 @@ export const Collapsible: Story = {
       </div>
     </SidebarProvider>
   ),
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const sidebar = canvas.getByRole('navigation')
     const trigger = canvas.getByRole('button', { name: 'Toggle Sidebar' })

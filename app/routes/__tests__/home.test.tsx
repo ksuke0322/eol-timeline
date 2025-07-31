@@ -66,7 +66,7 @@ describe('Home Component Integration Tests', () => {
     fireEvent.click(
       screen.getByRole('button', { name: /toggle details for vue/i }),
     )
-    fireEvent.click(screen.getByRole('checkbox', { name: '3' }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'vue-3' }))
 
     expect(ganttTasks).toHaveLength(3)
     expect(ganttTasks.some((task) => task.name === 'vue 3')).toBe(true)

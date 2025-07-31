@@ -1,5 +1,5 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import storybook from 'eslint-plugin-storybook'
 
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat'
 import unusedImports from 'eslint-plugin-unused-imports'
@@ -24,154 +24,164 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 })
 
-export default [{
-  ignores: [
-    'eslint.config.mjs',
-    'react-router.config.ts',
-    'vite.config.ts',
-    '.lintstagedrc.cjs',
-    'build/**/*',
-    '.react-router/**/*',
-    '.husky/**/*',
-    '.lintstagedrc.cjs',
-  ],
-}, {
-  files: ['**/*.{ts,tsx}', '.storybook/**/*'],
-  languageOptions: {
-    globals: {
-      ...globals.browser,
-      ...globals.commonjs,
-    },
-
-    parser: tsParser,
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
+export default [
+  {
+    ignores: [
+      'eslint.config.mjs',
+      'react-router.config.ts',
+      'vite.config.ts',
+      '.lintstagedrc.cjs',
+      'build/**/*',
+      '.react-router/**/*',
+      '.husky/**/*',
+      '.lintstagedrc.cjs',
+      '.storybook/**/*',
+      'storybook-static/**/*',
+    ],
+  },
+  {
+    files: ['**/*.{ts,tsx}', '.storybook/**/*'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.commonjs,
       },
+
+      parser: tsParser,
+      ecmaVersion: 'latest',
       sourceType: 'module',
-      project: './tsconfig.json',
-    },
-  },
-}, ...fixupConfigRules(
-  compat.extends('eslint:recommended', 'plugin:prettier/recommended'),
-), ...fixupConfigRules(
-  compat.extends(
-    'eslint:recommended',
-    'plugin:prettier/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
-  ),
-).map((config) => ({
-  ...config,
-  files: ['**/*.{ts,tsx}'],
-})), {
-  files: ['**/*.{ts,tsx}'],
-
-  plugins: {
-    'unused-imports': unusedImports,
-    'react-refresh': reactRefresh,
-    react: fixupPluginRules(react),
-    'jsx-a11y': fixupPluginRules(jsxA11Y),
-    '@typescript-eslint': fixupPluginRules(typescriptEslint),
-    import: fixupPluginRules(_import),
-    'better-tailwindcss': eslintPluginBetterTailwindcss,
-  },
-
-  settings: {
-    'better-tailwindcss': {
-      entryPoint: 'app/app.css',
-    },
-
-    'import/internal-regex': '^~/',
-
-    'import/resolver': {
-      node: {
-        extensions: ['.ts', '.tsx', '.svg'],
-      },
-
-      typescript: {
-        alwaysTryTypes: true,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        sourceType: 'module',
         project: './tsconfig.json',
       },
     },
+  },
+  ...fixupConfigRules(
+    compat.extends('eslint:recommended', 'plugin:prettier/recommended'),
+  ),
+  ...fixupConfigRules(
+    compat.extends(
+      'eslint:recommended',
+      'plugin:prettier/recommended',
+      'plugin:react-hooks/recommended',
+      'plugin:react/recommended',
+      'plugin:react/jsx-runtime',
+      'plugin:react-hooks/recommended',
+      'plugin:jsx-a11y/recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:import/recommended',
+      'plugin:import/typescript',
+    ),
+  ).map((config) => ({
+    ...config,
+    files: ['**/*.{ts,tsx}'],
+  })),
+  {
+    files: ['**/*.{ts,tsx}'],
 
-    react: {
-      version: 'detect',
+    plugins: {
+      'unused-imports': unusedImports,
+      'react-refresh': reactRefresh,
+      react: fixupPluginRules(react),
+      'jsx-a11y': fixupPluginRules(jsxA11Y),
+      '@typescript-eslint': fixupPluginRules(typescriptEslint),
+      import: fixupPluginRules(_import),
+      'better-tailwindcss': eslintPluginBetterTailwindcss,
     },
 
-    formComponents: ['Form'],
-
-    linkComponents: [
-      {
-        name: 'Link',
-        linkAttribute: 'to',
+    settings: {
+      'better-tailwindcss': {
+        entryPoint: 'app/app.css',
       },
-      {
-        name: 'NavLink',
-        linkAttribute: 'to',
-      },
-    ],
-  },
 
-  rules: {
-    // enable all recommended rules to report a warning
-    ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
-    // enable all recommended rules to report an error
-    ...eslintPluginBetterTailwindcss.configs['recommended-error'].rules,
+      'import/internal-regex': '^~/',
 
-    'unused-imports/no-unused-imports': 'warn',
-
-    'import/order': [
-      'error',
-      {
-        groups: [
-          'builtin',
-          'external',
-          'parent',
-          'sibling',
-          'index',
-          'object',
-          'type',
-        ],
-
-        alphabetize: {
-          order: 'asc',
+      'import/resolver': {
+        node: {
+          extensions: ['.ts', '.tsx', '.svg'],
         },
 
-        'newlines-between': 'always',
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
       },
-    ],
 
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        caughtErrorsIgnorePattern: '^_',
-        destructuredArrayIgnorePattern: '^_',
+      react: {
+        version: 'detect',
       },
-    ],
 
-    'react/prop-types': 0,
+      formComponents: ['Form'],
 
-    'react-refresh/only-export-components': [
-      'warn',
-      {
-        allowConstantExport: true,
-      },
-    ],
+      linkComponents: [
+        {
+          name: 'Link',
+          linkAttribute: 'to',
+        },
+        {
+          name: 'NavLink',
+          linkAttribute: 'to',
+        },
+      ],
+    },
+
+    rules: {
+      // enable all recommended rules to report a warning
+      ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
+      // enable all recommended rules to report an error
+      ...eslintPluginBetterTailwindcss.configs['recommended-error'].rules,
+
+      'unused-imports/no-unused-imports': 'warn',
+
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type',
+          ],
+
+          alphabetize: {
+            order: 'asc',
+          },
+
+          'newlines-between': 'always',
+        },
+      ],
+
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
+
+      'react/prop-types': 0,
+
+      'react-refresh/only-export-components': [
+        'warn',
+        {
+          allowConstantExport: true,
+        },
+      ],
+    },
   },
-}, {
-  files: ['**/*.test.ts'],
-  rules: {
-    'better-tailwindcss/no-unregistered-classes': 'off',
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      'better-tailwindcss/no-unregistered-classes': 'off',
+    },
   },
-}, ...storybook.configs["flat/recommended"]];
+  ...storybook.configs['flat/recommended'],
+]

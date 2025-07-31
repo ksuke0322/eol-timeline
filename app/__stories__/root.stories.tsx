@@ -12,16 +12,20 @@ const _errorBoundaryMeta = {
 } satisfies Meta<typeof ErrorBoundary>
 export default _errorBoundaryMeta
 
-type ErrorBoundaryStory = StoryObj<typeof _errorBoundaryMeta>
+type ErrorBoundaryStory = StoryObj<typeof _errorBoundaryMeta> & {
+  args: { params: Record<string, string | undefined> }
+}
 
 export const ErrorBoundaryStory: ErrorBoundaryStory = {
   args: {
     error: new Error('Something went wrong!'),
-    params: {},
+    params: {} as Record<string, string | undefined>,
     loaderData: undefined,
     actionData: undefined,
   },
-  render: (args: any) => <ErrorBoundary {...args} />,
+  render: (args: Parameters<typeof ErrorBoundary>[0]) => (
+    <ErrorBoundary {...args} />
+  ),
 }
 
 export const NotFoundError: ErrorBoundaryStory = {
@@ -35,5 +39,7 @@ export const NotFoundError: ErrorBoundaryStory = {
     loaderData: undefined,
     actionData: undefined,
   },
-  render: (args: any) => <ErrorBoundary {...args} />,
+  render: (args: Parameters<typeof ErrorBoundary>[0]) => (
+    <ErrorBoundary {...args} />
+  ),
 }
