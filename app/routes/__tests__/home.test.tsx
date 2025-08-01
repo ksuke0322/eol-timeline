@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { useLoaderData } from 'react-router'
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest'
 
-import Home from '../home'
+import Home, { clientLoader } from '../home' // clientLoaderをインポート
 
 import type { GanttTask, ProductDetails } from '~/lib/types'
 
@@ -103,4 +103,237 @@ describe('Home Component Integration Tests', () => {
   // ここでは一旦プレースホルダーとしておく。
   it.todo('カスタムデータを読み込んで表示できること')
   it.todo('カスタムデータをクリアできること')
+})
+
+describe('clientLoader', () => {
+  // Mock localStorage
+  const localStorageMock = (() => {
+    let store: { [key: string]: string } = {}
+    return {
+      getItem: vi.fn((key: string) => store[key] || null),
+      setItem: vi.fn((key: string, value: string) => {
+        store[key] = value
+      }),
+      clear: vi.fn(() => {
+        store = {}
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete store[key]
+      }),
+    }
+  })()
+
+  Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+  })
+
+  beforeEach(() => {
+    localStorageMock.clear()
+    vi.clearAllMocks()
+  })
+
+  it('APIからデータをフェッチし、キャッシュに保存すること', async () => {
+    const mockAllJson = ['react', 'vue']
+    const mockReactDetails = [
+      { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
+    ]
+    const mockVueDetails = [
+      { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
+    ]
+
+    global.fetch = vi.fn((url: string) => {
+      if (url.includes('all.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockAllJson),
+        })
+      } else if (url.includes('react.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockReactDetails),
+        })
+      } else if (url.includes('vue.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockVueDetails),
+        })
+      }
+      return Promise.reject(new Error('unknown url'))
+    }) as Mock
+
+    const result = await clientLoader()
+
+    expect(global.fetch).toHaveBeenCalledTimes(3) // all.json + react.json + vue.json
+    expect(result).toEqual({
+      react: mockReactDetails,
+      vue: mockVueDetails,
+    })
+
+    // キャッシュに保存されていることを確認
+    expect(localStorageMock.setItem).toHaveBeenCalledTimes(1)
+    const cachedData = JSON.parse(localStorageMock.setItem.mock.calls[0][1])
+    expect(cachedData.data).toEqual(result)
+    expect(cachedData.timestamp).toBeCloseTo(Date.now(), -1000) // 1秒程度の誤差を許容
+  })
+
+  it('キャッシュが存在し、有効期限内の場合はキャッシュからデータをロードすること', async () => {
+    const expiredTimestamp = Date.now() - 1000 // 1秒前
+    const mockCachedData = {
+      data: {
+        cached: [
+          { cycle: '1.0', releaseDate: '2020-01-01', eol: '2023-01-01' },
+        ],
+      },
+      timestamp: expiredTimestamp,
+    }
+    localStorageMock.setItem(
+      'eol_products_cache',
+      JSON.stringify(mockCachedData),
+    )
+
+    global.fetch = vi.fn() // fetchが呼ばれないことを確認するためモック
+
+    const result = await clientLoader()
+
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('eol_products_cache')
+    expect(global.fetch).not.toHaveBeenCalled() // fetchが呼ばれないこと
+    expect(result).toEqual(mockCachedData.data)
+  })
+
+  it('キャッシュが存在するが、有効期限切れの場合はAPIから再フェッチすること', async () => {
+    const expiredTimestamp = Date.now() - (24 * 60 * 60 * 1000 + 1000) // 1日以上前
+    const mockCachedData = {
+      data: {
+        old: [{ cycle: 'old', releaseDate: '2000-01-01', eol: '2001-01-01' }],
+      },
+      timestamp: expiredTimestamp,
+    }
+    localStorageMock.setItem(
+      'eol_products_cache',
+      JSON.stringify(mockCachedData),
+    )
+
+    const mockAllJson = ['new_product']
+    const mockNewProductDetails = [
+      { cycle: '1.0', releaseDate: '2024-01-01', eol: '2025-01-01' },
+    ]
+
+    global.fetch = vi.fn((url: string) => {
+      if (url.includes('all.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockAllJson),
+        })
+      } else if (url.includes('new_product.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockNewProductDetails),
+        })
+      }
+      return Promise.reject(new Error('unknown url'))
+    }) as Mock
+
+    const result = await clientLoader()
+
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('eol_products_cache')
+    expect(global.fetch).toHaveBeenCalledTimes(2) // all.json + new_product.json
+    expect(result).toEqual({ new_product: mockNewProductDetails })
+    expect(localStorageMock.setItem).toHaveBeenCalledTimes(2) // 新しいデータでキャッシュが更新されること (セットアップでの呼び出しを含む)
+  })
+
+  it('APIフェッチが失敗した場合、エラーをスローすること', async () => {
+    global.fetch = vi.fn((url: string) => {
+      if (url.includes('all.json')) {
+        return Promise.resolve({
+          ok: false, // 失敗
+          status: 500,
+          json: () => Promise.resolve({ message: 'Server Error' }),
+        })
+      }
+      return Promise.reject(new Error('should not be called'))
+    }) as Mock
+
+    await expect(clientLoader()).rejects.toThrow('Failed to fetch products')
+    expect(global.fetch).toHaveBeenCalledTimes(1)
+    expect(localStorageMock.setItem).not.toHaveBeenCalled() // エラー時はキャッシュしない
+  })
+
+  it('個別の製品詳細のフェッチが失敗した場合、その製品は結果に含まれないこと', async () => {
+    const mockAllJson = ['react', 'vue']
+    const mockReactDetails = [
+      { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
+    ]
+
+    global.fetch = vi.fn((url: string) => {
+      if (url.includes('all.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockAllJson),
+        })
+      } else if (url.includes('react.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockReactDetails),
+        })
+      } else if (url.includes('vue.json')) {
+        return Promise.resolve({
+          ok: false, // vueのフェッチは失敗
+          status: 404,
+          json: () => Promise.resolve({ message: 'Not Found' }),
+        })
+      }
+      return Promise.reject(new Error('unknown url'))
+    }) as Mock
+
+    const consoleWarnSpy = vi
+      .spyOn(console, 'warn')
+      .mockImplementation(() => {}) // console.warnをモック
+
+    const result = await clientLoader()
+
+    expect(global.fetch).toHaveBeenCalledTimes(3)
+    expect(result).toEqual({ react: mockReactDetails }) // vueは含まれない
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Failed to fetch details for vue',
+    )
+    consoleWarnSpy.mockRestore()
+  })
+
+  it('個別の製品詳細のフェッチでエラーが発生した場合、その製品は結果に含まれないこと', async () => {
+    const mockAllJson = ['react', 'vue']
+    const mockReactDetails = [
+      { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
+    ]
+
+    global.fetch = vi.fn((url: string) => {
+      if (url.includes('all.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockAllJson),
+        })
+      } else if (url.includes('react.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockReactDetails),
+        })
+      } else if (url.includes('vue.json')) {
+        return Promise.reject(new Error('Network Error')) // vueのフェッチでエラー
+      }
+      return Promise.reject(new Error('unknown url'))
+    }) as Mock
+
+    const consoleWarnSpy = vi
+      .spyOn(console, 'warn')
+      .mockImplementation(() => {}) // console.warnをモック
+
+    const result = await clientLoader()
+
+    expect(global.fetch).toHaveBeenCalledTimes(3)
+    expect(result).toEqual({ react: mockReactDetails }) // vueは含まれない
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Error fetching details for vue:',
+      expect.any(Error),
+    )
+    consoleWarnSpy.mockRestore()
+  })
 })

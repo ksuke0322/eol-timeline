@@ -20,8 +20,6 @@ export const ErrorBoundaryStory: ErrorBoundaryStory = {
   args: {
     error: new Error('Something went wrong!'),
     params: {} as Record<string, string | undefined>,
-    loaderData: undefined,
-    actionData: undefined,
   },
   render: (args: Parameters<typeof ErrorBoundary>[0]) => (
     <ErrorBoundary {...args} />
@@ -36,8 +34,6 @@ export const NotFoundError: ErrorBoundaryStory = {
       data: 'Page not found',
     },
     params: {},
-    loaderData: undefined,
-    actionData: undefined,
   },
   render: (args: Parameters<typeof ErrorBoundary>[0]) => (
     <ErrorBoundary {...args} />

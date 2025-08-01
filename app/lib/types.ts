@@ -1,7 +1,7 @@
 export type ProductVersionDetail = {
   cycle: string
   releaseDate: string
-  eol: string | boolean
+  eol: string | boolean | undefined
   latest?: string
   latestReleaseDate?: string
   lts?: boolean

@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test'
+import { within, expect, userEvent } from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
@@ -18,6 +18,12 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox')
+    await userEvent.type(input, 'Hello, world!')
+    await expect(input).toHaveValue('Hello, world!')
+  },
 }
 
 export const WithPlaceholder: Story = {

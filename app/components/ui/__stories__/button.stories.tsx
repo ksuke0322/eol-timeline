@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test'
+import { within, expect, fn, userEvent } from '@storybook/test'
 
 import type { Meta, StoryContext, StoryObj } from '@storybook/react-vite'
 
@@ -17,6 +17,7 @@ const meta = {
   // https://storybook.js.org/docs/api/argtypes
   tags: ['autodocs'],
   argTypes: {
+    onClick: { action: 'clicked' },
     variant: {
       control: 'select',
       options: [
@@ -42,8 +43,15 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     children: 'Button',
+    onClick: fn(),
   },
   render: (args: Parameters<typeof Button>[0]) => <Button {...args} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: /Button/i })
+    await userEvent.click(button)
+    await expect(args.onClick).toHaveBeenCalled()
+  },
 }
 
 export const Secondary: Story = {

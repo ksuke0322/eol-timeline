@@ -1,4 +1,4 @@
-import { within, expect, userEvent, screen } from '@storybook/test'
+import { within, expect, userEvent, screen, waitFor } from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
@@ -63,6 +63,21 @@ export const Default: Story = {
       <SheetContentComponent />
     </Sheet>
   ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const openButton = canvas.getByRole('button', { name: 'Open' })
+
+    // Open the sheet
+    await userEvent.click(openButton)
+    const sheet = await screen.findByRole('dialog')
+    await expect(sheet).toBeVisible()
+
+    // Close the sheet
+    const closeButton = within(sheet).getByRole('button', { name: '閉じる' })
+    await userEvent.click(closeButton)
+
+    await waitFor(() => expect(sheet).not.toBeVisible())
+  },
 }
 
 export const Left: Story = {
