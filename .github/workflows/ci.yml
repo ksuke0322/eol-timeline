@@ -168,6 +168,9 @@ jobs:
           name: node_modules
           path: node_modules
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Run Storybook tests
         run: pnpm test-storybook
 
