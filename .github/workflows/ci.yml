@@ -2,6 +2,7 @@ name: CI
 
 env:
   NODE_VERSION: '22.12.0'
+  PNPM_VERSION: '10.4.1'
 
 on:
   push:
@@ -25,6 +26,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -49,6 +52,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -73,6 +78,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -97,6 +104,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -121,6 +130,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -145,6 +156,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -169,6 +182,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -193,6 +208,8 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
+        with:
+          node-version: ${{ env.PNPM_VERSION }}
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
