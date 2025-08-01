@@ -27,10 +27,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Save node_modules as artifact
         uses: actions/upload-artifact@v4
@@ -53,7 +51,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -79,7 +78,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -105,7 +105,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -131,7 +132,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -157,7 +159,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -183,7 +186,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
@@ -209,7 +213,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         with:
-          node-version: ${{ env.PNPM_VERSION }}
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Download node_modules artifact
         uses: actions/download-artifact@v4
