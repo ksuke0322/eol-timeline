@@ -15,6 +15,10 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    a11y: {
+      // Optional: configure a11y addon
+      // See https://storybook.js.org/docs/essentials/a11y#configuration
+    },
   },
   loaders: [mswLoader],
 }
