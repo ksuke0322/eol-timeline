@@ -3,7 +3,17 @@ import { axe } from 'vitest-axe'
 
 import { Button } from '../button'
 
-test('a11y check', async () => {
-  const { container } = render(<Button />)
+test('基本的なボタンのa11yチェック', async () => {
+  const { container } = render(<Button aria-label="Basic Button" />)
+  expect(await axe(container)).toHaveNoViolations()
+})
+
+test('テキストを持つボタンのa11yチェック', async () => {
+  const { container } = render(<Button>Click me</Button>)
+  expect(await axe(container)).toHaveNoViolations()
+})
+
+test('無効化されたボタンのa11yチェック', async () => {
+  const { container } = render(<Button disabled>Disabled Button</Button>)
   expect(await axe(container)).toHaveNoViolations()
 })

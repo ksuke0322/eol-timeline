@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
+import { axe } from 'vitest-axe'
 
 import { ProductSidebar } from '~/components/ui/productSidebar'
 import { type ProductDetails } from '~/lib/types'
@@ -91,5 +92,116 @@ describe('ProductSidebar', () => {
     const newProductLabels = screen.getAllByText(/^(React|Vue|Angular)$/)
     const newProductNames = newProductLabels.map((label) => label.textContent)
     expect(newProductNames[0]).toBe('Vue')
+  })
+
+  test('基本的なa11yチェック', async () => {
+    const { container } = render(
+      <ProductSidebar
+        products={mockProducts}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('製品リストが空の場合のa11yチェック', async () => {
+    const { container } = render(
+      <ProductSidebar
+        products={{}}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('検索によって製品がフィルタリングされた場合のa11yチェック', async () => {
+    const { container } = render(
+      <ProductSidebar
+        products={mockProducts}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    const searchInput = screen.getByPlaceholderText('Search products...')
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: 'React' } })
+      await new Promise((r) => setTimeout(r, 350)) // debounce
+    })
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('多数の製品が選択されている場合のa11yチェック', async () => {
+    const { container } = render(
+      <ProductSidebar
+        products={mockProducts}
+        selectedProducts={[
+          'React',
+          'React-18',
+          'Vue',
+          'Vue-3',
+          'Angular',
+          'Angular-16',
+        ]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('長い製品名を持つ製品がある場合のa11yチェック', async () => {
+    const longNameProducts = {
+      'This is a very long product name to test overflow and accessibility': [
+        { cycle: '1.0', releaseDate: '2022-01-01', eol: '2025-01-01' },
+      ],
+      ...mockProducts,
+    }
+    const { container } = render(
+      <ProductSidebar
+        products={longNameProducts}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('多数の製品がある場合のa11yチェック', async () => {
+    const manyProducts = Array.from({ length: 50 }).reduce(
+      (acc: ProductDetails, _, i) => {
+        const productName = `Product ${i + 1}`
+        acc[productName] = Array.from({ length: 3 }, (__, j) => ({
+          cycle: `${i + 1}.${j}`,
+          releaseDate: '2023-01-01',
+          eol: '2026-01-01',
+        }))
+        return acc
+      },
+      {} as ProductDetails,
+    )
+    const { container } = render(
+      <ProductSidebar
+        products={manyProducts}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  test('バージョンを持たない製品がある場合のa11yチェック', async () => {
+    const productsWithNoVersions = {
+      ...mockProducts,
+      'Product With No Versions': [],
+    }
+    const { container } = render(
+      <ProductSidebar
+        products={productsWithNoVersions}
+        selectedProducts={[]}
+        toggleProduct={() => {}}
+      />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
   })
 })
