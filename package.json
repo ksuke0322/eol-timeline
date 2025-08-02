@@ -102,6 +102,7 @@
     "vite": "^6.3.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
+    "vitest-axe": "^0.1.0",
     "vitest-dom": "^0.1.1"
   }
 }

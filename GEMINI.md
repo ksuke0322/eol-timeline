@@ -31,6 +31,7 @@
    2. pnpm tsc -> 成功することを確認してください。
    3. pnpm test -> 全てのテストが成功することを確認してください。
    4. pnpm build -> 成功することを確認してください。
+   5. pnpm test-storybook -> 全てのテストが成功することを確認してください。
 
 ## 開発ルール
 
@@ -94,11 +95,13 @@
   - ユーティリティ関数、カスタムHook、Reducerなど
   - コンポーネントで発生する副作用（関数発火、API呼び出しなど）
   - ユーザインタラクションのないコンポーネントの表示・構造
+  - コンポーネントの a11y の violation 確認
 - 特徴：
   - 外部依存（API、Storageなど）はモック化
 - 技術：
   - Vitest
   - React Testing Library
+  - Vitest-axe
 
 #### インテグレーションテスト（Integration Test）
 

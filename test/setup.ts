@@ -1,7 +1,11 @@
 import 'vitest-dom/extend-expect'
 import { TextEncoder, TextDecoder } from 'node:util'
 
-import { vi } from 'vitest'
+// vitest-axe/matchers 用の extend 設定。
+// vitest-dom っぽくいけるはずなんだけど上手くできないのでこれで通す
+import { vi, expect } from 'vitest'
+import * as matchers from 'vitest-axe/matchers'
+expect.extend(matchers)
 
 // Polyfill for TextEncoder and TextDecoder for JSDOM environment
 // This is often needed for libraries that use these browser APIs
