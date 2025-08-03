@@ -37,6 +37,9 @@ export default [
       '.lintstagedrc.cjs',
       '.storybook/**/*',
       'storybook-static/**/*',
+      'playwright-report/**/*',
+      'test-results/**/*',
+      'playwright.config.ts',
     ],
   },
   {

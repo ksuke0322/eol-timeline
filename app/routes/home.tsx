@@ -10,7 +10,7 @@ import { convertProductVersionDetailsToGanttTasks } from '~/lib/utils'
 
 export function meta() {
   return [
-    { title: '<New React Router App>' },
+    { title: 'EOL Timeline' },
     { name: 'description', content: 'Welcome to React Router!' },
   ]
 }

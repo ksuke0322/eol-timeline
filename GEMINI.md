@@ -102,6 +102,8 @@
   - Vitest
   - React Testing Library
   - Vitest-axe
+- 配置場所
+  - テスト対象ファイルと同一階層の `__tests__` ディレクトリ内に配置すること
 
 #### インテグレーションテスト（Integration Test）
 
@@ -114,6 +116,8 @@
   - 外部APIは原則モック化
 - 技術：
   - Storybook Test Runner
+- 配置場所
+  - テスト対象ファイルと同一階層の `__stories__` ディレクトリ内に配置すること（storybook内に配置）
 
 #### E2Eテスト（End-to-End Test）
 
@@ -124,6 +128,8 @@
   - 実APIまたはモックサーバ使用可（CI環境では後者推奨）
 - 技術：
   - Playwright
+- 配置場所
+  - プロジェクトルートの `__e2e__` ディレクトリ内に配置すること
 
 ## プロジェクトについて
 

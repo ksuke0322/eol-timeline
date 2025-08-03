@@ -15,7 +15,8 @@
     "storybook": "STORYBOOK=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK=true storybook build",
     "test-storybook": "start-server-and-test storybook http://localhost:6006 \"pnpm test-storybook-runner\"",
-    "test-storybook-runner": "test-storybook --testTimeout 120000"
+    "test-storybook-runner": "test-storybook --testTimeout 120000",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": "=22.12.0",
@@ -48,6 +49,7 @@
     "@eslint/compat": "^1.2.6",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.20.0",
+    "@playwright/test": "^1.54.2",
     "@react-router/dev": "^7.5.3",
     "@sinonjs/fake-timers": "^14.0.0",
     "@storybook/addon-a11y": "^9.1.0",

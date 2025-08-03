@@ -8,7 +8,8 @@
     "**/.client/**/*",
     ".react-router/types/**/*",
     ".storybook/**/*",
-    "app/**/__stories__/**/*"
+    "app/**/__stories__/**/*",
+    "__e2e__/**/*"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
