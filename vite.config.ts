@@ -31,5 +31,7 @@ export default defineConfig({
         inline: ['@react-router/dev/vite'],
       },
     },
+    exclude: ['**/__e2e__/**'],
+    include: ['app/**/*.test.{ts,tsx}'],
   },
 })

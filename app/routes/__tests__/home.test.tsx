@@ -41,10 +41,6 @@ describe('Home Component Integration Tests', () => {
     expect(screen.getByText('react')).toBeInTheDocument()
     expect(screen.getByText('vue')).toBeInTheDocument()
 
-    // アコーディオンを開いてバージョンが表示されることを確認
-    fireEvent.click(
-      screen.getByRole('button', { name: /toggle details for react/i }),
-    )
     expect(await screen.findByText('18')).toBeVisible()
     expect(await screen.findByText('17')).toBeVisible()
   })
@@ -62,10 +58,6 @@ describe('Home Component Integration Tests', () => {
       expect.arrayContaining(['react 18', 'react 17']),
     )
 
-    // アコーディオンを開いて "vue" のバージョンをクリック
-    fireEvent.click(
-      screen.getByRole('button', { name: /toggle details for vue/i }),
-    )
     fireEvent.click(screen.getByRole('checkbox', { name: 'vue-3' }))
 
     expect(ganttTasks).toHaveLength(3)

@@ -292,10 +292,9 @@ export const WithNoVersions: Story = {
       name: 'Toggle details for Product With No Versions',
     })
 
-    await userEvent.click(productNoVersionsToggle)
-
-    await waitFor(() =>
-      expect(canvas.getByText('No version')).toBeInTheDocument(),
-    )
+    await Promise.all([
+      waitFor(() => expect(canvas.getByText('No version')).toBeInTheDocument()),
+      userEvent.click(productNoVersionsToggle),
+    ])
   },
 }

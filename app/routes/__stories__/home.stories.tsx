@@ -78,7 +78,7 @@ export const Default: Story = {
 
     // ガントチャートの要素が表示されていることを確認
     await waitFor(() =>
-      expect(canvas.getByTestId('gantt-chart-mock')).toBeInTheDocument(),
+      expect(canvas.getByTestId('gantt-chart')).toBeInTheDocument(),
     )
 
     // ソートオプションが表示されていることを確認

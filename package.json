@@ -16,7 +16,8 @@
     "build-storybook": "STORYBOOK=true storybook build",
     "test-storybook": "start-server-and-test storybook http://localhost:6006 \"pnpm test-storybook-runner\"",
     "test-storybook-runner": "test-storybook --testTimeout 120000",
-    "test:e2e": "start-server-and-test dev http://localhost:5173 \"playwright test\""
+    "test:e2e": "start-server-and-test dev http://localhost:5173 \"playwright test\"",
+    "all-check": "pnpm lint && pnpm tsc && pnpm test && pnpm build && pnpm test-storybook && pnpm test:e2e"
   },
   "engines": {
     "node": "=22.12.0",
