@@ -9,7 +9,8 @@
     ".react-router/types/**/*",
     ".storybook/**/*",
     "app/**/__stories__/**/*",
-    "__e2e__/**/*"
+    "__e2e__/**/*",
+    "vite-plugin-remove-data-testid.ts"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],

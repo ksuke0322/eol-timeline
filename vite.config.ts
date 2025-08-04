@@ -3,12 +3,14 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { removeDataTestId } from './vite-plugin-remove-data-testid'
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
     !process.env.VITEST && !process.env.STORYBOOK && reactRouter(), // reactRouterプラグインを条件付きで適用
     tsconfigPaths(),
+    removeDataTestId(),
   ],
   resolve: {
     alias: {
