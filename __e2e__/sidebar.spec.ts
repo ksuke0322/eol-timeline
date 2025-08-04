@@ -44,15 +44,15 @@ test.describe('Sidebar Interactions', () => {
   })
 
   test('should handle parent/child checkbox interactions', async ({ page }) => {
-    // Check parent, expect child to be checked
+    // 親をチェックすると、子もチェックされることを期待する
     await page.locator(`label[for="alpha"]`).click()
     await expect(page.locator('[id="alpha-1.0"]')).toBeChecked()
 
-    // Uncheck child, expect parent to be unchecked
+    // 子のチェックを外すと、親のチェックも外れることを期待する
     await page.locator(`label[for="alpha-1.0"]`).click()
     await expect(page.locator('[id="alpha"]')).not.toBeChecked()
 
-    // Check child, expect parent to be checked
+    // 子をチェックすると、親もチェックされることを期待する
     await page.locator(`label[for="alpha-1.0"]`).click()
     await expect(page.locator('[id="alpha"]')).toBeChecked()
   })
@@ -63,7 +63,7 @@ test.describe('Sidebar Interactions', () => {
     await expect(productListFirst.nth(1)).toContainText('beta')
     await expect(productListFirst.nth(2)).toContainText('gamma')
 
-    // Select gamma, expect it to move to the top
+    // gamma を選択すると、それが一番上に移動することを期待する
     await page.locator(`label[for="gamma-3.0"]`).click()
 
     const productListSecond = page.getByTestId('sidebar-product')
@@ -71,7 +71,7 @@ test.describe('Sidebar Interactions', () => {
     await expect(productListSecond.nth(1)).toContainText('alpha')
     await expect(productListSecond.nth(2)).toContainText('beta')
 
-    // Deselect gamma, expect it to return to original position
+    // gamma の選択を解除すると、元の位置に戻ることを期待する
     await page.locator(`label[for="gamma-3.0"]`).click()
 
     const productListThird = page.getByTestId('sidebar-product')

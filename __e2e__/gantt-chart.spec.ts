@@ -1,11 +1,11 @@
 import { test, expect, type Page } from '@playwright/test'
 
 const MOCK_PRODUCTS = ['product-a', 'product-b']
-// Product A: starts later, ends earlier
+// Product A: 開始が遅く、終了が早い
 const MOCK_PRODUCT_A_DETAILS = [
   { cycle: '1.0', releaseDate: '2023-01-01', eol: '2024-01-01' },
 ]
-// Product B: starts earlier, ends later
+// Product B: 開始が早く、終了が遅い
 const MOCK_PRODUCT_B_DETAILS = [
   { cycle: '2.0', releaseDate: '2022-01-01', eol: '2025-01-01' },
 ]
@@ -63,14 +63,14 @@ test.describe('Gantt Chart Interactions', () => {
   test('should sort by release date', async ({ page }) => {
     await page.selectOption('#sort-order', 'release')
     const labels = await getGanttBarLabels(page)
-    // Product B (2022) should come before Product A (2023)
+    // Product B (2022) は Product A (2023) の前に来るべき
     expect(labels).toEqual(['product-b 2.0', 'product-a 1.0'])
   })
 
   test('should sort by EOL date', async ({ page }) => {
     await page.selectOption('#sort-order', 'eol')
     const labels = await getGanttBarLabels(page)
-    // Product A (2024) should come before Product B (2025)
+    // Product A (2024) は Product B (2025) の前に来るべき
     expect(labels).toEqual(['product-a 1.0', 'product-b 2.0'])
   })
 

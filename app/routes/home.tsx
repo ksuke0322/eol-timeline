@@ -128,9 +128,9 @@ const Home = () => {
             }
             className="rounded border p-1"
           >
-            <option value="tool">Tool Order</option>
-            <option value="release">Release Date</option>
-            <option value="eol">EOL Date</option>
+            <option value="tool">ツール順</option>
+            <option value="release">リリース日</option>
+            <option value="eol">EOL日</option>
           </select>
         </div>
         {/* 画面幅 - sidemenu幅 - メイン領域左右padding */}

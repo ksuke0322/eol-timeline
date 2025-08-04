@@ -7,7 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [
     tailwindcss(),
-    !process.env.VITEST && !process.env.STORYBOOK && reactRouter(), // Conditionally apply reactRouter plugin
+    !process.env.VITEST && !process.env.STORYBOOK && reactRouter(), // reactRouterプラグインを条件付きで適用
     tsconfigPaths(),
   ],
   resolve: {

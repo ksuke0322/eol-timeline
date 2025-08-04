@@ -36,17 +36,17 @@ test.describe('Initial Display and Basic Operations', () => {
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
   })
 
-  test('should display sidebar and gantt chart', async ({ page }) => {
+  test('サイドバーとガントチャートが表示されること', async ({ page }) => {
     await expect(page.getByTestId('product-sidebar')).toBeVisible()
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
   })
 
-  test('should display product list in sidebar', async ({ page }) => {
+  test('サイドバーに製品リストが表示されること', async ({ page }) => {
     await expect(page.getByText('product-a')).toBeVisible()
     await expect(page.getByText('product-b')).toBeVisible()
   })
 
-  test('should reflect product selection in gantt chart', async ({ page }) => {
+  test('製品選択がガントチャートに反映されること', async ({ page }) => {
     await page.locator(`label[for="product-a-1.0"]`).click()
     await page.waitForSelector('.bar-wrapper', {
       state: 'visible',
@@ -64,7 +64,7 @@ test.describe('Initial Display and Basic Operations', () => {
     await expect(page.getByText('product-b 2.0')).toBeVisible()
   })
 
-  test('should remove product from gantt chart on deselection', async ({
+  test('選択解除時にガントチャートから製品が削除されること', async ({
     page,
   }) => {
     await page.locator(`label[for="product-a-1.0"]`).click()

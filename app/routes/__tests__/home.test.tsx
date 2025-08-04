@@ -6,7 +6,7 @@ import Home, { clientLoader } from '../home' // clientLoaderをインポート
 
 import type { GanttTask, ProductDetails } from '~/lib/types'
 
-// --- Mocks ---
+// --- モック ---
 vi.mock('react-router', async () => ({
   ...(await vi.importActual<typeof import('react-router')>('react-router')),
   useLoaderData: vi.fn(),

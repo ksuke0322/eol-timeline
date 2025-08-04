@@ -45,7 +45,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           popup: function ({ task, set_title, set_details }) {
             const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
             set_title(`${task.productName} ${task.id}`)
-            set_details(`EOL Date: ${eolDate}`)
+            set_details(`EOL日: ${eolDate}`)
           },
           popup_on: 'hover',
         })
