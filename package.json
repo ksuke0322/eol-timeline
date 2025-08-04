@@ -10,13 +10,13 @@
     "typecheck": "react-router typegen && tsc",
     "lint": "npx eslint --fix",
     "tsc": "npx tsc --incremental false --noEmit",
-    "test": "vitest",
+    "test": "vitest run",
     "test:ui": "vitest --ui",
     "storybook": "STORYBOOK=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK=true storybook build",
     "test-storybook": "start-server-and-test storybook http://localhost:6006 \"pnpm test-storybook-runner\"",
     "test-storybook-runner": "test-storybook --testTimeout 120000",
-    "test:e2e": "playwright test"
+    "test:e2e": "start-server-and-test dev http://localhost:5173 \"playwright test\""
   },
   "engines": {
     "node": "=22.12.0",

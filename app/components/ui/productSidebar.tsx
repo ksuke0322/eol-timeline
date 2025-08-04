@@ -99,7 +99,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
     })
   }, [filteredProducts, selectedProductsSet, products])
 
-  const [accordionValue, setAccordionValue] = useState<string[]>([])
+  const [accordionValue, setAccordionValue] = useState<string[]>(
+    Object.keys(products),
+  )
 
   useEffect(() => {
     setAccordionValue((prev) => {
@@ -120,7 +122,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar data-testid="product-sidebar">
         <SidebarHeader>
           <SearchInputWithDebounce onDebouncedChange={setDebouncedSearchTerm} />
         </SidebarHeader>
@@ -136,7 +138,10 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                 ([productName, versions]) => (
                   <SidebarMenuItem key={productName}>
                     <AccordionItem value={productName}>
-                      <div className="flex items-center justify-between pr-2">
+                      <div
+                        className="flex items-center justify-between pr-2"
+                        data-testid="sidebar-product"
+                      >
                         <div className="flex flex-1 items-center space-x-2 p-2">
                           {versions.length !== 0 ? (
                             <Checkbox

@@ -78,6 +78,7 @@ export const clientLoader = async (): Promise<ProductDetails> => {
 
 const Home = () => {
   const allProductDetails = useLoaderData<ProductDetails>()
+  console.log('allProductDetails:', allProductDetails)
   const { selectedProducts, toggleProduct } =
     useSelectedProducts(allProductDetails)
   const selectedProductsSet = useMemo(
