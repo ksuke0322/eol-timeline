@@ -23,7 +23,7 @@ export const links = () => [
   },
 ]
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -41,11 +41,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default function App() {
+const App = () => {
   return <Outlet />
 }
 
-export function ErrorBoundary({ error }: { error: unknown }) {
+export default App
+
+export const ErrorBoundary = ({ error }: { error: unknown }) => {
   let message = 'Oops!'
   let details = 'An unexpected error occurred.'
   let stack: string | undefined
@@ -62,7 +64,7 @@ export function ErrorBoundary({ error }: { error: unknown }) {
   }
 
   return (
-    <main className="container mx-auto p-4 pt-16">
+    <div className="container mx-auto p-4 pt-16">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
@@ -70,6 +72,6 @@ export function ErrorBoundary({ error }: { error: unknown }) {
           <code>{stack}</code>
         </pre>
       )}
-    </main>
+    </div>
   )
 }

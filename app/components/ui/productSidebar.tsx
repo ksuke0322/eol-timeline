@@ -182,6 +182,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                                         `${productName}-${version.cycle}`,
                                       )
                                     }
+                                    aria-label={`${productName}-${version.cycle}`}
                                   />
                                   <label
                                     htmlFor={`${productName}-${version.cycle}`}

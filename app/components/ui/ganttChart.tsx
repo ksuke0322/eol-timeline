@@ -6,9 +6,13 @@ import { type GanttTask } from '../../lib/types'
 
 interface GanttChartProps {
   tasks: GanttTask[]
+  'aria-label'?: string
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
+const GanttChart: React.FC<GanttChartProps> = ({
+  tasks,
+  'aria-label': ariaLabel = '',
+}) => {
   const ganttRef = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ganttInstance = useRef<any>(null)
@@ -42,7 +46,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
           auto_move_label: true,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
-          popup: function ({ task, set_title, set_details }) {
+          popup: ({ task, set_title, set_details }) => {
             const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
             set_title(`${task.productName} ${task.id}`)
             set_details(`EOL日: ${eolDate}`)
@@ -53,7 +57,28 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
     }
   }, [tasks])
 
-  return <div ref={ganttRef} data-testid="gantt-chart" role="figure" />
+  useEffect(() => {
+    /* FIXME: frapp/gantt から公式でスタイル上書き機能が提供されるまでの一時的な処理 */
+    const viewModeSelect = document.getElementsByClassName('viewmode-select')
+    if (ganttInstance.current && viewModeSelect.length > 0) {
+      console.log('exist', viewModeSelect[0])
+      viewModeSelect[0].setAttribute('aria-label', 'View mode select')
+      viewModeSelect[0].setAttribute('id', 'viewmode-select')
+    } else {
+      console.log('not exist')
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ganttInstance.current])
+
+  return (
+    <div
+      ref={ganttRef}
+      data-testid="gantt-chart"
+      role="figure"
+      aria-label={ariaLabel}
+    />
+  )
 }
 
 export default GanttChart

@@ -21,7 +21,7 @@ export const Default: Story = {
   args: {
     onDebouncedChange: fn(),
   },
-  render: function Render(args: Parameters<typeof SearchInputWithDebounce>[0]) {
+  render: (args: Parameters<typeof SearchInputWithDebounce>[0]) => {
     const [debouncedValue, setDebouncedValue] = useState('')
 
     return (
@@ -56,7 +56,7 @@ export const WithInitialValue: Story = {
     initialValue: 'Hello',
     onDebouncedChange: fn(),
   },
-  render: function Render(args: Parameters<typeof SearchInputWithDebounce>[0]) {
+  render: (args: Parameters<typeof SearchInputWithDebounce>[0]) => {
     const [debouncedValue, setDebouncedValue] = useState(
       args.initialValue || '',
     )
@@ -81,7 +81,7 @@ export const CustomDebounceTime: Story = {
     debounceTime: 1000,
     onDebouncedChange: fn(),
   },
-  render: function Render(args: Parameters<typeof SearchInputWithDebounce>[0]) {
+  render: (args: Parameters<typeof SearchInputWithDebounce>[0]) => {
     const [debouncedValue, setDebouncedValue] = useState('')
 
     return (
@@ -116,7 +116,7 @@ export const WithClearButton: Story = {
     initialValue: 'search query',
     onDebouncedChange: fn(),
   },
-  render: function Render(args: Parameters<typeof SearchInputWithDebounce>[0]) {
+  render: (args: Parameters<typeof SearchInputWithDebounce>[0]) => {
     const [debouncedValue, setDebouncedValue] = useState(
       args.initialValue || '',
     )
@@ -161,7 +161,7 @@ export const WithLongInputAndSpecialChars: Story = {
     initialValue: "あいうえお😀日本語と絵文字とEnglishとspecial chars &<>''\"`",
     onDebouncedChange: fn(),
   },
-  render: function Render(args: Parameters<typeof SearchInputWithDebounce>[0]) {
+  render: (args: Parameters<typeof SearchInputWithDebounce>[0]) => {
     const [debouncedValue, setDebouncedValue] = useState(
       args.initialValue || '',
     )

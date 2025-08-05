@@ -1,3 +1,4 @@
+import React from 'react'
 import { initialize, mswLoader } from 'msw-storybook-addon'
 
 import type { Preview } from '@storybook/react'
@@ -16,11 +17,17 @@ const preview: Preview = {
       },
     },
     a11y: {
-      // Optional: configure a11y addon
-      // See https://storybook.js.org/docs/essentials/a11y#configuration
+      test: 'error',
     },
   },
   loaders: [mswLoader],
+  decorators: [
+    (Story) => (
+      // <main>
+      <Story />
+      // </main>
+    ),
+  ],
 }
 
 export default preview

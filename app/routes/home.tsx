@@ -8,7 +8,7 @@ import { ProductSidebar } from '~/components/ui/productSidebar'
 import { useSelectedProducts } from '~/hooks/useSelectedProducts'
 import { convertProductVersionDetailsToGanttTasks } from '~/lib/utils'
 
-export function meta() {
+export const meta = () => {
   return [
     { title: 'EOL Timeline' },
     { name: 'description', content: 'Welcome to React Router!' },
@@ -134,7 +134,10 @@ const Home = () => {
         </div>
         {/* 画面幅 - sidemenu幅 - メイン領域左右padding */}
         <div className="w-[calc(100svw-16rem-32px)] overflow-hidden">
-          <GanttChart tasks={ganttTasks} />
+          <GanttChart
+            tasks={ganttTasks}
+            aria-label="製品のサポート終了タイムラインチャート"
+          />
         </div>
       </main>
     </div>

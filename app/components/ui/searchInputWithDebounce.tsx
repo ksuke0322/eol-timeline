@@ -37,6 +37,7 @@ export const SearchInputWithDebounce = ({
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="pr-8" // クリアボタンのスペースを確保
+        aria-label="Search products"
       />
       {searchTerm && (
         <button

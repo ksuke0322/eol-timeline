@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 
 import type { GanttTask, ProductDetails } from './types'
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
@@ -23,7 +23,7 @@ const COLORS = [
 const productColors = new Map<string, string>()
 let colorIndex = 0
 
-function getProductColor(productName: string): string {
+const getProductColor = (productName: string): string => {
   if (!productColors.has(productName)) {
     productColors.set(productName, COLORS[colorIndex % COLORS.length])
     colorIndex++
@@ -31,10 +31,10 @@ function getProductColor(productName: string): string {
   return productColors.get(productName) || '#CCCCCC' // Default grey if somehow not found
 }
 
-export function convertProductVersionDetailsToGanttTasks(
+export const convertProductVersionDetailsToGanttTasks = (
   allProductDetails: ProductDetails,
   selectedProductsSet: Set<string>,
-): GanttTask[] {
+): GanttTask[] => {
   const tasks: GanttTask[] = []
 
   for (const productName in allProductDetails) {

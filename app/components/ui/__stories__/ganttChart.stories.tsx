@@ -64,6 +64,7 @@ const tasks: GanttTask[] = [
 export const Default: Story = {
   args: {
     tasks: tasks,
+    'aria-label': 'Default Gantt Chart',
   },
   render: (args: Parameters<typeof GanttChart>[0]) => <GanttChart {...args} />,
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -75,6 +76,7 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     tasks: [],
+    'aria-label': 'Empty Gantt Chart',
   },
   render: (args: Parameters<typeof GanttChart>[0]) => <GanttChart {...args} />,
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -96,6 +98,7 @@ const manyTasks: GanttTask[] = Array.from({ length: 200 }, (_, i) => ({
 export const WithManyTasks: Story = {
   args: {
     tasks: manyTasks,
+    'aria-label': 'Gantt Chart with many tasks',
   },
   render: (args: Parameters<typeof GanttChart>[0]) => <GanttChart {...args} />,
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -122,6 +125,7 @@ const longNameTasks: GanttTask[] = [
 export const WithLongTaskNames: Story = {
   args: {
     tasks: longNameTasks,
+    'aria-label': 'Gantt Chart with long task names',
   },
   render: (args: Parameters<typeof GanttChart>[0]) => <GanttChart {...args} />,
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -169,6 +173,7 @@ const overlappingTasks: GanttTask[] = [
 export const WithOverlappingDates: Story = {
   args: {
     tasks: overlappingTasks,
+    'aria-label': 'Gantt Chart with overlapping dates',
   },
   render: (args: Parameters<typeof GanttChart>[0]) => <GanttChart {...args} />,
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {

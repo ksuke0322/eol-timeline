@@ -133,3 +133,12 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* FIXME: frapp/gantt から公式でスタイル上書き機能が提供されるまでの一時的な処理 */
+.lower-text {
+  color: #333333 !important;
+}
+
+.current-date-highlight {
+  color: #ffffff !important;
+}

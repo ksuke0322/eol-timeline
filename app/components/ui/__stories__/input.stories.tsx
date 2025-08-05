@@ -17,7 +17,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  render: (args: Parameters<typeof Input>[0]) => (
+    <Input aria-label="Default input" {...args} />
+  ),
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const input = canvas.getByRole('textbox')
@@ -30,7 +32,9 @@ export const WithPlaceholder: Story = {
   args: {
     placeholder: 'Email',
   },
-  render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  render: (args: Parameters<typeof Input>[0]) => (
+    <Input aria-label="Input with placeholder" {...args} />
+  ),
 }
 
 export const Disabled: Story = {
@@ -38,7 +42,9 @@ export const Disabled: Story = {
     disabled: true,
     placeholder: 'Disabled',
   },
-  render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  render: (args: Parameters<typeof Input>[0]) => (
+    <Input aria-label="Disabled input" {...args} />
+  ),
 }
 
 export const WithLabel: Story = {
@@ -55,14 +61,18 @@ export const Invalid: Story = {
     'aria-invalid': true,
     placeholder: 'Invalid Input',
   },
-  render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  render: (args: Parameters<typeof Input>[0]) => (
+    <Input aria-label="Invalid input" {...args} />
+  ),
 }
 
 export const WithLongInputAndSpecialChars: Story = {
   args: {
     defaultValue: `あいうえお😀日本語と絵文字とEnglishとspecial chars &<>"\``,
   },
-  render: (args: Parameters<typeof Input>[0]) => <Input {...args} />,
+  render: (args: Parameters<typeof Input>[0]) => (
+    <Input aria-label="Input with long text and special characters" {...args} />
+  ),
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const input = canvas.getByRole('textbox')

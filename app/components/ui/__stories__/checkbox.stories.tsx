@@ -18,7 +18,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: (args: Parameters<typeof Checkbox>[0]) => <Checkbox {...args} />,
+  render: (args: Parameters<typeof Checkbox>[0]) => (
+    <Checkbox aria-label="Default checkbox" {...args} />
+  ),
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const checkbox = canvas.getByRole('checkbox')
@@ -33,10 +35,11 @@ export const Checked: Story = {
   args: {
     checked: true,
   },
-  render: function Render(args) {
+  render: (args: Parameters<typeof Checkbox>[0]) => {
     const [checked, setChecked] = React.useState(args.checked)
     return (
       <Checkbox
+        aria-label="Checked checkbox"
         {...args}
         checked={checked}
         onCheckedChange={() => setChecked(!checked)}
@@ -56,7 +59,9 @@ export const Disabled: Story = {
   args: {
     disabled: true,
   },
-  render: (args: Parameters<typeof Checkbox>[0]) => <Checkbox {...args} />,
+  render: (args: Parameters<typeof Checkbox>[0]) => (
+    <Checkbox aria-label="Disabled checkbox" {...args} />
+  ),
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const checkbox = canvas.getByRole('checkbox')

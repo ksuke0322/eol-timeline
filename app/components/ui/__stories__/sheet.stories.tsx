@@ -198,7 +198,12 @@ export const WithOverflowingContent: Story = {
             This sheet contains a lot of content to demonstrate scrolling.
           </SheetDescription>
         </SheetHeader>
-        <div className="overflow-y-auto py-4">
+        <div
+          className="overflow-y-auto py-4"
+          aria-label="Scrollable Sheet content"
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          tabIndex={0}
+        >
           {Array.from({ length: 50 }).map((_, index) => (
             <p key={index} className="border-b py-2">
               Content item #{index + 1}
