@@ -1,6 +1,9 @@
 {
   "ci": {
     "collect": {
+      "settings": {
+        "preset": "desktop"
+      },
       "startServerCommand": "pnpm build && pnpm start",
       "url": ["http://localhost:4173/"]
     },
