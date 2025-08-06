@@ -20,7 +20,6 @@ const GanttChart: React.FC<GanttChartProps> = ({
   useEffect(() => {
     if (ganttRef.current) {
       if (ganttInstance.current) {
-        console.log(tasks)
         ganttInstance.current.refresh(tasks)
       } else {
         // frappe/gantt の型定義が不十分で自前型定義を用意する必要がある、それをするくらいなら型の恩恵を無視して実装する
