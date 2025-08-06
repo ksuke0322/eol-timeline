@@ -67,7 +67,7 @@ export const convertProductVersionDetailsToGanttTasks = (
       })
     } else {
       for (const version of versions) {
-        if (selectedProductsSet.has(`${productName}-${version.cycle}`)) {
+        if (selectedProductsSet.has(`${productName}_${version.cycle}`)) {
           const taskName = `${productName} ${version.cycle}`
           const endDate =
             typeof version.eol === 'string'

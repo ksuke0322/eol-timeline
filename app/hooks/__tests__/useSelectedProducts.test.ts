@@ -40,7 +40,7 @@ describe('useSelectedProducts', () => {
       result.current.toggleProduct('product1')
     })
     expect(result.current.selectedProducts).toEqual(
-      expect.arrayContaining(['product1', 'product1-1.0', 'product1-1.1']),
+      expect.arrayContaining(['product1', 'product1_1.0', 'product1_1.1']),
     )
 
     act(() => {
@@ -53,12 +53,12 @@ describe('useSelectedProducts', () => {
     const { result } = renderHook(() => useSelectedProducts(mockAllProducts))
 
     act(() => {
-      result.current.toggleProduct('product1-1.0')
+      result.current.toggleProduct('product1_1.0')
     })
-    expect(result.current.selectedProducts).toEqual(['product1-1.0'])
+    expect(result.current.selectedProducts).toEqual(['product1_1.0'])
 
     act(() => {
-      result.current.toggleProduct('product1-1.0')
+      result.current.toggleProduct('product1_1.0')
     })
     expect(result.current.selectedProducts).toEqual([])
   })
@@ -67,15 +67,15 @@ describe('useSelectedProducts', () => {
     const { result } = renderHook(() => useSelectedProducts(mockAllProducts))
 
     act(() => {
-      result.current.toggleProduct('product1-1.0')
+      result.current.toggleProduct('product1_1.0')
     })
     act(() => {
-      result.current.toggleProduct('product1-1.1')
+      result.current.toggleProduct('product1_1.1')
     })
 
     // 親プロダクトが自動的に選択されることを確認
     expect(result.current.selectedProducts).toEqual(
-      expect.arrayContaining(['product1', 'product1-1.0', 'product1-1.1']),
+      expect.arrayContaining(['product1', 'product1_1.0', 'product1_1.1']),
     )
     expect(result.current.selectedProducts.length).toBe(3)
   })
@@ -88,16 +88,16 @@ describe('useSelectedProducts', () => {
       result.current.toggleProduct('product1')
     })
     expect(result.current.selectedProducts).toEqual(
-      expect.arrayContaining(['product1', 'product1-1.0', 'product1-1.1']),
+      expect.arrayContaining(['product1', 'product1_1.0', 'product1_1.1']),
     )
 
     // バージョンを1つ選択解除
     act(() => {
-      result.current.toggleProduct('product1-1.0')
+      result.current.toggleProduct('product1_1.0')
     })
 
     // 親プロダクトの選択が解除されることを確認
-    expect(result.current.selectedProducts).toEqual(['product1-1.1'])
+    expect(result.current.selectedProducts).toEqual(['product1_1.1'])
   })
 
   it('存在しないIDをトグルしても状態は変わらないこと', () => {
@@ -116,12 +116,12 @@ describe('useSelectedProducts', () => {
   it('LocalStorageから初期状態を復元できること', () => {
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['product1', 'product1-1.0']),
+      JSON.stringify(['product1', 'product1_1.0']),
     )
     const { result } = renderHook(() => useSelectedProducts(mockAllProducts))
     expect(result.current.selectedProducts).toEqual([
       'product1',
-      'product1-1.0',
+      'product1_1.0',
     ])
   })
 
@@ -141,7 +141,7 @@ describe('useSelectedProducts', () => {
     })
 
     expect(localStorage.getItem('selectedProducts')).toBe(
-      JSON.stringify(['product1', 'product1-1.0', 'product1-1.1']),
+      JSON.stringify(['product1', 'product1_1.0', 'product1_1.1']),
     )
   })
 
@@ -158,7 +158,7 @@ describe('useSelectedProducts', () => {
       act(() => {
         result.current.toggleProduct('custom1')
       })
-      expect(result.current.selectedProducts).toEqual(['custom1', 'custom1-c1'])
+      expect(result.current.selectedProducts).toEqual(['custom1', 'custom1_c1'])
 
       act(() => {
         result.current.toggleProduct('custom1')
@@ -181,10 +181,10 @@ describe('useSelectedProducts', () => {
       expect(result.current.selectedProducts).toEqual(
         expect.arrayContaining([
           'product1',
-          'product1-1.0',
-          'product1-1.1',
+          'product1_1.0',
+          'product1_1.1',
           'custom1',
-          'custom1-c1',
+          'custom1_c1',
         ]),
       )
     })
@@ -207,13 +207,13 @@ describe('useSelectedProducts', () => {
       expect(result.current.selectedProducts).toEqual(
         expect.arrayContaining([
           'product1',
-          'product1-1.0',
-          'product1-1.1',
+          'product1_1.0',
+          'product1_1.1',
           'product2',
-          'product2-2.0',
-          'product2-2.1',
+          'product2_2.0',
+          'product2_2.1',
           'custom1',
-          'custom1-c1',
+          'custom1_c1',
         ]),
       )
     })

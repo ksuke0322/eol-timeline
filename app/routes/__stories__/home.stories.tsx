@@ -62,9 +62,9 @@ export const Default: Story = {
   },
   render: () => {
     const initialSelectedProducts = [
-      'angular-17',
-      'react-18',
-      'react-17',
+      'angular_17',
+      'react_18',
+      'react_17',
       'react',
     ]
     localStorage.setItem(
@@ -109,7 +109,7 @@ export const Default: Story = {
       name: /toggle details for vue/i,
     })
     await userEvent.click(vueAccordionTrigger)
-    const vue3Checkbox = canvas.getByRole('checkbox', { name: 'vue-3' })
+    const vue3Checkbox = canvas.getByRole('checkbox', { name: 'vue_3' })
     await userEvent.click(vue3Checkbox)
     await expect(vue3Checkbox).toBeChecked()
 

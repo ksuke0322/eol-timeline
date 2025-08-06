@@ -20,6 +20,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
   useEffect(() => {
     if (ganttRef.current) {
       if (ganttInstance.current) {
+        console.log(tasks)
         ganttInstance.current.refresh(tasks)
       } else {
         // frappe/gantt の型定義が不十分で自前型定義を用意する必要がある、それをするくらいなら型の恩恵を無視して実装する
@@ -61,11 +62,8 @@ const GanttChart: React.FC<GanttChartProps> = ({
     /* FIXME: frapp/gantt から公式でスタイル上書き機能が提供されるまでの一時的な処理 */
     const viewModeSelect = document.getElementsByClassName('viewmode-select')
     if (ganttInstance.current && viewModeSelect.length > 0) {
-      console.log('exist', viewModeSelect[0])
       viewModeSelect[0].setAttribute('aria-label', 'View mode select')
       viewModeSelect[0].setAttribute('id', 'viewmode-select')
-    } else {
-      console.log('not exist')
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

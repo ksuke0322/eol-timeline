@@ -41,6 +41,10 @@ describe('Home Component Integration Tests', () => {
     expect(screen.getByText('react')).toBeInTheDocument()
     expect(screen.getByText('vue')).toBeInTheDocument()
 
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Toggle details for react' }),
+    )
+
     expect(await screen.findByText('18')).toBeVisible()
     expect(await screen.findByText('17')).toBeVisible()
   })
@@ -58,7 +62,10 @@ describe('Home Component Integration Tests', () => {
       expect.arrayContaining(['react 18', 'react 17']),
     )
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'vue-3' }))
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Toggle details for vue' }),
+    )
+    fireEvent.click(screen.getByRole('checkbox', { name: 'vue_3' }))
 
     expect(ganttTasks).toHaveLength(3)
     expect(ganttTasks.some((task) => task.name === 'vue 3')).toBe(true)

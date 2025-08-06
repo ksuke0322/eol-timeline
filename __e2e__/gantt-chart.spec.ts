@@ -41,8 +41,15 @@ test.describe('Gantt Chart Interactions', () => {
 
     await expect(page.getByText('product-a')).toBeVisible()
 
-    await page.locator(`label[for="product-a-1.0"]`).click()
-    await page.locator(`label[for="product-b-2.0"]`).click()
+    await page
+      .getByRole('button', { name: 'Toggle details for product-a' })
+      .click()
+    await page
+      .getByRole('button', { name: 'Toggle details for product-b' })
+      .click()
+
+    await page.locator(`label[for="product-a_1.0"]`).click()
+    await page.locator(`label[for="product-b_2.0"]`).click()
 
     await page.waitForSelector('.bar-wrapper')
     await expect(page.locator('.bar-wrapper')).toHaveCount(2)

@@ -61,8 +61,12 @@ describe('ProductSidebar', () => {
     fireEvent.click(screen.getByRole('checkbox', { name: 'React' }))
     expect(toggleProductMock).toHaveBeenCalledWith('React')
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'React-18' }))
-    expect(toggleProductMock).toHaveBeenCalledWith('React-18')
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Toggle details for React' }),
+    )
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'React_18' }))
+    expect(toggleProductMock).toHaveBeenCalledWith('React_18')
   })
 
   it('選択された製品がリストの上部に表示されること', () => {
@@ -135,11 +139,11 @@ describe('ProductSidebar', () => {
         products={mockProducts}
         selectedProducts={[
           'React',
-          'React-18',
+          'React_18',
           'Vue',
-          'Vue-3',
+          'Vue_3',
           'Angular',
-          'Angular-16',
+          'Angular_16',
         ]}
         toggleProduct={() => {}}
       />,

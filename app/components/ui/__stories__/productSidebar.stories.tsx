@@ -42,7 +42,7 @@ export const Default: Story = {
   render: (args: Parameters<typeof ProductSidebar>[0]) => {
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['react', 'react-18', 'react-17', 'vue-3']),
+      JSON.stringify(['react', 'react_18', 'react_17', 'vue_3']),
     )
     const { selectedProducts, toggleProduct } =
       useSelectedProducts(mockProducts)
@@ -60,14 +60,14 @@ export const Default: Story = {
     const canvas = within(canvasElement)
     const reactCheckbox = await canvas.findByRole('checkbox', { name: 'react' })
     const react18Checkbox = await canvas.findByRole('checkbox', {
-      name: 'react-18',
+      name: 'react_18',
     })
     const react17Checkbox = await canvas.findByRole('checkbox', {
-      name: 'react-17',
+      name: 'react_17',
     })
     const vueCheckbox = await canvas.findByRole('checkbox', { name: 'vue' })
-    const vue3Checkbox = await canvas.findByRole('checkbox', { name: 'vue-3' })
-    const vue2Checkbox = await canvas.findByRole('checkbox', { name: 'vue-2' })
+    const vue3Checkbox = await canvas.findByRole('checkbox', { name: 'vue_3' })
+    const vue2Checkbox = await canvas.findByRole('checkbox', { name: 'vue_2' })
 
     await waitFor(() => expect(reactCheckbox).toBeChecked())
     await waitFor(() => expect(react18Checkbox).toBeChecked())
@@ -116,7 +116,7 @@ export const Searching: Story = {
   render: (args: Parameters<typeof ProductSidebar>[0]) => {
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['react', 'react-18', 'react-17', 'vue-3']),
+      JSON.stringify(['react', 'react_18', 'react_17', 'vue_3']),
     )
     const { selectedProducts, toggleProduct } =
       useSelectedProducts(mockProducts)
@@ -147,10 +147,10 @@ export const WithManySelectedProducts: Story = {
     ...Default.args,
     products: {
       ...mockProducts,
-      another_tool: [
+      anotherTool: [
         { cycle: '1.0', releaseDate: '2022-01-01', eol: '2025-01-01' },
       ],
-      super_tool: [
+      superTool: [
         { cycle: '2.0', releaseDate: '2023-01-01', eol: '2026-01-01' },
       ],
     },
@@ -158,7 +158,7 @@ export const WithManySelectedProducts: Story = {
   render: (args: Parameters<typeof ProductSidebar>[0]) => {
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['react-18', 'vue', 'angular-17', 'another_tool-1.0']),
+      JSON.stringify(['react_18', 'vue', 'angular_17', 'anotherTool_1.0']),
     )
     const { selectedProducts, toggleProduct } =
       useSelectedProducts(mockProducts)
@@ -175,19 +175,19 @@ export const WithManySelectedProducts: Story = {
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     await waitFor(() =>
-      expect(canvas.getByRole('checkbox', { name: 'react-18' })).toBeChecked(),
+      expect(canvas.getByRole('checkbox', { name: 'react_18' })).toBeChecked(),
     )
     await waitFor(() =>
       expect(canvas.getByRole('checkbox', { name: 'vue' })).toBeChecked(),
     )
     await waitFor(() =>
       expect(
-        canvas.getByRole('checkbox', { name: 'angular-17' }),
+        canvas.getByRole('checkbox', { name: 'angular_17' }),
       ).toBeChecked(),
     )
     await waitFor(() =>
       expect(
-        canvas.getByRole('checkbox', { name: 'another_tool-1.0' }),
+        canvas.getByRole('checkbox', { name: 'anotherTool_1.0' }),
       ).toBeChecked(),
     )
   },
@@ -201,7 +201,7 @@ export const WithLongProductNames: Story = {
       ],
       ...mockProducts,
     },
-    selectedProducts: ['react-18'],
+    selectedProducts: ['react_18'],
     toggleProduct: (id: string) => {
       console.log(`Toggling product: ${id}`)
     },
@@ -242,7 +242,7 @@ export const WithManyProducts: Story = {
   render: (args: Parameters<typeof ProductSidebar>[0]) => {
     localStorage.setItem(
       'selectedProducts',
-      JSON.stringify(['Product 1-1.0', 'Product 50-50.2']),
+      JSON.stringify(['Product 1_1.0', 'Product 50_50.2']),
     )
     const { selectedProducts, toggleProduct } =
       useSelectedProducts(mockProducts)
@@ -259,10 +259,10 @@ export const WithManyProducts: Story = {
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const product50Checkbox = await canvas.findByRole('checkbox', {
-      name: 'Product 1-1.0',
+      name: 'Product 1_1.0',
     })
     const product50_2Checkbox = await canvas.findByRole('checkbox', {
-      name: 'Product 50-50.2',
+      name: 'Product 50_50.2',
     })
     await waitFor(() => expect(product50Checkbox).toBeChecked())
     await waitFor(() => expect(product50_2Checkbox).toBeChecked())
@@ -276,7 +276,7 @@ export const WithNoVersions: Story = {
       ...mockProducts,
       'Product With No Versions': [],
     },
-    selectedProducts: ['react-18'],
+    selectedProducts: ['react_18'],
   },
   render: (args: Parameters<typeof ProductSidebar>[0]) => (
     <div style={{ height: '100vh' }}>

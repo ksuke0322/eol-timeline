@@ -11,11 +11,15 @@ import { convertProductVersionDetailsToGanttTasks } from '~/lib/utils'
 export const meta = () => {
   return [
     { title: 'EOL Timeline' },
-    { name: 'description', content: 'Welcome to React Router!' },
+    {
+      name: 'description',
+      content: 'display eol timeline which is based on endoflife.date',
+    },
   ]
 }
 
 const CACHE_KEY = 'eol_products_cache'
+// const PRODUCT_LIST_CACHE_KEY = 'products_list_cache'
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000 // 1 day in milliseconds
 
 export const clientLoader = async (): Promise<ProductDetails> => {
