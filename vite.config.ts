@@ -6,6 +6,12 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { removeDataTestId } from './vite-plugin-remove-data-testid'
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      treeshake: true,
+    },
+    target: 'esnext',
+  },
   plugins: [
     tailwindcss(),
     !process.env.VITEST && !process.env.STORYBOOK && reactRouter(), // reactRouterプラグインを条件付きで適用
