@@ -1,0 +1,9 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "pnpm build && pnpm start",
+      "url": ["http://localhost:4173/"]
+    },
+    "assert": {}
+  }
+}

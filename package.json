@@ -6,7 +6,7 @@
     "prepare": "husky",
     "build": "react-router build",
     "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "vite preview --outDir ./build/client --port 4173 --strictPort",
     "typecheck": "react-router typegen && tsc",
     "lint": "npx eslint --fix",
     "tsc": "npx tsc --incremental false --noEmit",
