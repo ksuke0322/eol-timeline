@@ -106,7 +106,7 @@ export const useSelectedProducts = (
     const allIds = new Set<string>()
     Object.entries(combinedProducts).forEach(([productName, versions]) => {
       allIds.add(productName)
-      versions.forEach((v) => allIds.add(`${productName}_${v.cycle}`))
+      versions?.forEach((v) => allIds.add(`${productName}_${v.cycle}`))
     })
     setSelectedProducts(Array.from(allIds))
   }

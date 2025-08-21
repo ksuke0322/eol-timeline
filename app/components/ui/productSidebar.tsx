@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 
 import { SearchInputWithDebounce } from './searchInputWithDebounce'
+import { Skeleton } from './skeleton'
 
 import {
   Accordion,
@@ -19,20 +20,29 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '~/components/ui/sidebar'
+import { useProductDetails } from '~/hooks/useProductDetails'
 import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
 
-interface ProductSidebarProps {
+export interface ProductSidebarProps {
   products: ProductDetails
   selectedProducts: string[]
   toggleProduct: (id: string) => void
+  setAllProductDetails: React.Dispatch<React.SetStateAction<ProductDetails>>
 }
 
 export const ProductSidebar: React.FC<ProductSidebarProps> = ({
   products,
   selectedProducts,
   toggleProduct,
+  setAllProductDetails,
 }) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const { updateProductDetails } = useProductDetails({
+    products,
+    selectedProducts,
+    toggleProduct,
+    setAllProductDetails,
+  })
 
   const selectedProductsSet = useMemo(
     () => new Set(selectedProducts),
@@ -94,7 +104,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
     )
   })
 
-  const updateOpenedProducts = (productName: string) => {
+  const updateOpenedProducts = async (productName: string) => {
     setOpenedProducts((prev) => {
       if (prev.includes(productName)) {
         return prev.filter((p) => p !== productName)
@@ -102,6 +112,8 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
         return [...prev, productName]
       }
     })
+
+    await updateProductDetails(productName)
   }
 
   return (
@@ -123,11 +135,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                         data-testid="sidebar-product"
                       >
                         <div className="flex flex-1 items-center space-x-2 p-2">
-                          {versions.length !== 0 ? (
+                          {versions && versions.length !== 0 ? (
                             <Checkbox
                               id={productName}
                               checked={selectedProductsSet.has(productName)}
-                              onCheckedChange={() => toggleProduct(productName)}
+                              onCheckedChange={async () => {
+                                toggleProduct(productName)
+                                await updateProductDetails(productName)
+                              }}
                               aria-label={productName}
                             />
                           ) : null}
@@ -145,11 +160,22 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                       </div>
                       <AccordionContent>
                         <SidebarMenuSub>
-                          {versions.length === 0 ? (
+                          {versions === null ? (
+                            <SidebarMenuSubItem
+                              key={`${productName}_skeleton`}
+                              data-testid="productSidebarSkeleton"
+                              className="flex flex-col gap-5"
+                            >
+                              <Skeleton className="h-3 w-full" />
+                              <Skeleton className="h-3 w-full" />
+                              <Skeleton className="h-3 w-full" />
+                            </SidebarMenuSubItem>
+                          ) : versions && versions.length === 0 ? (
                             <SidebarMenuSubItem key={`${productName}_Empty`}>
-                              No version
+                              API Error
                             </SidebarMenuSubItem>
                           ) : (
+                            versions &&
                             versions.map((version: ProductVersionDetail) => (
                               <SidebarMenuSubItem key={version.cycle}>
                                 <div className="flex items-center space-x-2">

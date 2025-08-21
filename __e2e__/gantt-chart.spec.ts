@@ -32,8 +32,6 @@ test.describe('Gantt Chart Interactions', () => {
     await page.goto('/')
 
     await page.waitForResponse('https://endoflife.date/api/all.json')
-    await page.waitForResponse('https://endoflife.date/api/product-a.json')
-    await page.waitForResponse('https://endoflife.date/api/product-b.json')
 
     await page
       .getByPlaceholder('Search products...')
@@ -41,12 +39,19 @@ test.describe('Gantt Chart Interactions', () => {
 
     await expect(page.getByText('product-a')).toBeVisible()
 
-    await page
-      .getByRole('button', { name: 'Toggle details for product-a' })
-      .click()
-    await page
-      .getByRole('button', { name: 'Toggle details for product-b' })
-      .click()
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-a.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-a' })
+        .click(),
+    ])
+
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-b.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-b' })
+        .click(),
+    ])
 
     await page.locator(`label[for="product-a_1.0"]`).click()
     await page.locator(`label[for="product-b_2.0"]`).click()

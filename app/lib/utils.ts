@@ -38,7 +38,7 @@ export const convertProductVersionDetailsToGanttTasks = (
   const tasks: GanttTask[] = []
 
   for (const productName in allProductDetails) {
-    const versions = allProductDetails[productName]
+    const versions = allProductDetails[productName] ?? []
     const color = getProductColor(productName)
     if (selectedProductsSet.has(productName)) {
       versions.forEach((detail) => {

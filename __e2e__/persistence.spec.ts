@@ -31,15 +31,16 @@ test.describe('Data Persistence', () => {
     await page.goto('/')
 
     await page.waitForResponse('https://endoflife.date/api/all.json')
-    await page.waitForResponse('https://endoflife.date/api/product-a.json')
-    await page.waitForResponse('https://endoflife.date/api/product-b.json')
 
     await expect(page.getByTestId('product-sidebar')).toBeVisible()
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
 
-    await page
-      .getByRole('button', { name: 'Toggle details for product-a' })
-      .click()
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-a.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-a' })
+        .click(),
+    ])
 
     // Select a product
     await page.locator(`label[for="product-a_1.0"]`).click()

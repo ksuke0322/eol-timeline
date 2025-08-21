@@ -29,8 +29,6 @@ test.describe('Initial Display and Basic Operations', () => {
     await page.goto('/')
 
     await page.waitForResponse('https://endoflife.date/api/all.json')
-    await page.waitForResponse('https://endoflife.date/api/product-a.json')
-    await page.waitForResponse('https://endoflife.date/api/product-b.json')
 
     await expect(page.getByTestId('product-sidebar')).toBeVisible()
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
@@ -47,11 +45,15 @@ test.describe('Initial Display and Basic Operations', () => {
   })
 
   test('製品選択がガントチャートに反映されること', async ({ page }) => {
-    await page
-      .getByRole('button', { name: 'Toggle details for product-a' })
-      .click()
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-a.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-a' })
+        .click(),
+    ])
 
     await page.locator(`label[for="product-a_1.0"]`).click()
+
     await page.waitForSelector('.bar-wrapper', {
       state: 'visible',
       timeout: 30000,
@@ -59,11 +61,15 @@ test.describe('Initial Display and Basic Operations', () => {
     await expect(page.locator('.bar-wrapper')).toHaveCount(1)
     await expect(page.getByText('product-a 1.0')).toBeVisible()
 
-    await page
-      .getByRole('button', { name: 'Toggle details for product-b' })
-      .click()
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-b.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-b' })
+        .click(),
+    ])
 
     await page.locator(`label[for="product-b_2.0"]`).click()
+
     await page.waitForSelector('.bar-wrapper', {
       state: 'visible',
       timeout: 30000,
@@ -75,12 +81,19 @@ test.describe('Initial Display and Basic Operations', () => {
   test('選択解除時にガントチャートから製品が削除されること', async ({
     page,
   }) => {
-    await page
-      .getByRole('button', { name: 'Toggle details for product-a' })
-      .click()
-    await page
-      .getByRole('button', { name: 'Toggle details for product-b' })
-      .click()
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-a.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-a' })
+        .click(),
+    ])
+
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-b.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-b' })
+        .click(),
+    ])
 
     await page.locator(`label[for="product-a_1.0"]`).click()
     await page.locator(`label[for="product-b_2.0"]`).click()
