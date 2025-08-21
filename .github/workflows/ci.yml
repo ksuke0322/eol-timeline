@@ -291,11 +291,12 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [
+    needs:
+      [
         lint,
         build,
         test,
-        tsc
+        tsc,
         test-storybook,
         e2e-test,
         security-audit,
@@ -308,11 +309,12 @@ jobs:
 
   delete-artifacts:
     runs-on: ubuntu-latest
-    needs: [
+    needs:
+      [
         lint,
         build,
         test,
-        tsc
+        tsc,
         test-storybook,
         e2e-test,
         security-audit,
