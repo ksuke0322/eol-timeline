@@ -2,6 +2,6 @@
   "name": "eol-timeline",
   "compatibility_date": "2025-08-21",
   "assets": {
-    "directory": "./dist/client/",
+    "directory": "./build/client/",
   },
 }
