@@ -288,3 +288,38 @@ jobs:
         with:
           configPath: './.lighthouserc.json'
           uploadArtifacts: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [
+        lint,
+        build,
+        test,
+        tsc
+        test-storybook,
+        e2e-test,
+        security-audit,
+        format-check,
+        lighthouse,
+      ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+  delete-artifacts:
+    runs-on: ubuntu-latest
+    needs: [
+        lint,
+        build,
+        test,
+        tsc
+        test-storybook,
+        e2e-test,
+        security-audit,
+        format-check,
+        lighthouse,
+      ]
+    steps:
+      - uses: geekyeggo/delete-artifact@v4
+        with:
+          name: '*' # 全部対象
