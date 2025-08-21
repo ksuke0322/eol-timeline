@@ -38,7 +38,7 @@ export const convertProductVersionDetailsToGanttTasks = (
   const tasks: GanttTask[] = []
 
   for (const productName in allProductDetails) {
-    const versions = allProductDetails[productName]
+    const versions = allProductDetails[productName] ?? []
     const color = getProductColor(productName)
     if (selectedProductsSet.has(productName)) {
       versions.forEach((detail) => {
@@ -67,7 +67,7 @@ export const convertProductVersionDetailsToGanttTasks = (
       })
     } else {
       for (const version of versions) {
-        if (selectedProductsSet.has(`${productName}-${version.cycle}`)) {
+        if (selectedProductsSet.has(`${productName}_${version.cycle}`)) {
           const taskName = `${productName} ${version.cycle}`
           const endDate =
             typeof version.eol === 'string'

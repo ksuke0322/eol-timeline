@@ -10,7 +10,7 @@
     "typecheck": "react-router typegen && tsc",
     "lint": "npx eslint --fix",
     "tsc": "npx tsc --incremental false --noEmit",
-    "test": "vitest run",
+    "test": "vitest --run",
     "test:ui": "vitest --ui",
     "storybook": "STORYBOOK=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK=true storybook build",

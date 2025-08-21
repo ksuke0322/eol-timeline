@@ -101,7 +101,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
   })
 
   it('選択された特定のバージョンのみをガントタスクに変換すること', () => {
-    const selectedProductsSet = new Set(['vue-3'])
+    const selectedProductsSet = new Set(['vue_3'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
       selectedProductsSet,
@@ -120,7 +120,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
   })
 
   it('EOLがfalseの場合、リリース日から1年後の日付をendに設定すること', () => {
-    const selectedProductsSet = new Set(['vue-2'])
+    const selectedProductsSet = new Set(['vue_2'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
       selectedProductsSet,
@@ -131,7 +131,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
   })
 
   it('EOLがundefinedの場合、リリース日をendに設定すること', () => {
-    const selectedProductsSet = new Set(['angular-17'])
+    const selectedProductsSet = new Set(['angular_17'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
       selectedProductsSet,
@@ -170,7 +170,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
   })
 
   it('同じ製品のバージョンは同じ色を持つこと', () => {
-    const selectedProductsSet = new Set(['react', 'react-18', 'react-17'])
+    const selectedProductsSet = new Set(['react', 'react_18', 'react_17'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
       selectedProductsSet,
