@@ -30,12 +30,12 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Save node_modules as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
-          retention-days: 1
+      # - name: Save node_modules as artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
+      #     retention-days: 1
 
   lint:
     runs-on: ubuntu-latest
@@ -55,11 +55,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Run lint
         run: pnpm lint
@@ -82,11 +82,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Run tests
         run: pnpm test
@@ -109,11 +109,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Run TypeScript check
         run: pnpm tsc
@@ -136,11 +136,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Build project
         run: pnpm build
@@ -163,11 +163,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -193,11 +193,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -223,11 +223,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Run security audit
         run: pnpm audit --audit-level=moderate
@@ -250,11 +250,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Check code formatting
         run: pnpm prettier --check
@@ -277,11 +277,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      - name: Download node_modules artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
+      # - name: Download node_modules artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: node_modules
+      #     path: node_modules
 
       - name: Run Lighthouse and assertion results
         uses: treosh/lighthouse-ci-action@v12
