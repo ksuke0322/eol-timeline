@@ -54,7 +54,9 @@ export const useSelectedProducts = (
       if (isProduct) {
         const productName = id
         const versions = combinedProducts[productName] || []
-        const versionIds = versions.map((v) => `${productName}-${v.cycle}`)
+        // FIXME: 2025/08 現在、プロダクト名に _ を含むものはないため採用
+        // いつか変える日がくるかも
+        const versionIds = versions.map((v) => `${productName}_${v.cycle}`)
 
         if (newSelection.has(productName)) {
           newSelection.delete(productName)
@@ -66,7 +68,7 @@ export const useSelectedProducts = (
       } else {
         const versionId = id
         const productName = Object.keys(combinedProducts).find((p) =>
-          versionId.startsWith(`${p}-`),
+          versionId.startsWith(`${p}_`),
         )
 
         if (!productName) return Array.from(newSelection)
@@ -79,7 +81,7 @@ export const useSelectedProducts = (
 
           const versions = combinedProducts[productName] || []
           const allVersionsSelected = versions.every((v) =>
-            newSelection.has(`${productName}-${v.cycle}`),
+            newSelection.has(`${productName}_${v.cycle}`),
           )
 
           if (allVersionsSelected) {
@@ -104,7 +106,7 @@ export const useSelectedProducts = (
     const allIds = new Set<string>()
     Object.entries(combinedProducts).forEach(([productName, versions]) => {
       allIds.add(productName)
-      versions.forEach((v) => allIds.add(`${productName}-${v.cycle}`))
+      versions?.forEach((v) => allIds.add(`${productName}_${v.cycle}`))
     })
     setSelectedProducts(Array.from(allIds))
   }

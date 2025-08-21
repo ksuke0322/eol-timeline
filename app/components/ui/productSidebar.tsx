@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 
 import { SearchInputWithDebounce } from './searchInputWithDebounce'
+import { Skeleton } from './skeleton'
 
 import {
   Accordion,
@@ -19,20 +20,29 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '~/components/ui/sidebar'
+import { useProductDetails } from '~/hooks/useProductDetails'
 import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
 
-interface ProductSidebarProps {
+export interface ProductSidebarProps {
   products: ProductDetails
   selectedProducts: string[]
   toggleProduct: (id: string) => void
+  setAllProductDetails: React.Dispatch<React.SetStateAction<ProductDetails>>
 }
 
 export const ProductSidebar: React.FC<ProductSidebarProps> = ({
   products,
   selectedProducts,
   toggleProduct,
+  setAllProductDetails,
 }) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const { updateProductDetails } = useProductDetails({
+    products,
+    selectedProducts,
+    toggleProduct,
+    setAllProductDetails,
+  })
 
   const selectedProductsSet = useMemo(
     () => new Set(selectedProducts),
@@ -66,7 +76,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
       const isSelected =
         selectedProductsSet.has(productName) ||
         versions?.some((v) =>
-          selectedProductsSet.has(`${productName}-${v.cycle}`),
+          selectedProductsSet.has(`${productName}_${v.cycle}`),
         )
 
       if (isSelected) {
@@ -88,37 +98,23 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
     return Object.fromEntries([...selected, ...unselected])
   }, [filteredProducts, selectedProductsSet])
 
-  const openAccordionItems = useMemo(() => {
-    return Object.keys(filteredProducts).filter((productName) => {
-      return (
-        selectedProductsSet.has(productName) ||
-        products[productName]?.some((v) =>
-          selectedProductsSet.has(`${productName}-${v.cycle}`),
-        )
-      )
-    })
-  }, [filteredProducts, selectedProductsSet, products])
+  const [openedProducts, setOpenedProducts] = useState<string[]>(() => {
+    return Array.from(
+      new Set(selectedProducts.map((product) => product.split('_')[0])),
+    )
+  })
 
-  const [accordionValue, setAccordionValue] = useState<string[]>(
-    Object.keys(products),
-  )
-
-  useEffect(() => {
-    setAccordionValue((prev) => {
-      const prevSet = new Set(prev)
-      const combinedSet = new Set([...prev, ...openAccordionItems])
-
-      // セットが同一であるかを確認
-      if (
-        prevSet.size === combinedSet.size &&
-        Array.from(prevSet).every((item) => combinedSet.has(item))
-      ) {
-        return prev // 変更がない場合、以前の配列参照を返す
+  const updateOpenedProducts = async (productName: string) => {
+    setOpenedProducts((prev) => {
+      if (prev.includes(productName)) {
+        return prev.filter((p) => p !== productName)
+      } else {
+        return [...prev, productName]
       }
-
-      return Array.from(combinedSet)
     })
-  }, [openAccordionItems])
+
+    await updateProductDetails(productName)
+  }
 
   return (
     <SidebarProvider>
@@ -129,11 +125,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
         <SidebarContent>
           {/* loadingとerrorの表示はHomeコンポーネントで管理されるため削除 */}
           <SidebarMenu>
-            <Accordion
-              type="multiple"
-              value={accordionValue}
-              onValueChange={setAccordionValue}
-            >
+            <Accordion type="multiple" value={openedProducts}>
               {Object.entries(sortedAndFilteredProducts).map(
                 ([productName, versions]) => (
                   <SidebarMenuItem key={productName}>
@@ -143,11 +135,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                         data-testid="sidebar-product"
                       >
                         <div className="flex flex-1 items-center space-x-2 p-2">
-                          {versions.length !== 0 ? (
+                          {versions && versions.length !== 0 ? (
                             <Checkbox
                               id={productName}
                               checked={selectedProductsSet.has(productName)}
-                              onCheckedChange={() => toggleProduct(productName)}
+                              onCheckedChange={async () => {
+                                toggleProduct(productName)
+                                await updateProductDetails(productName)
+                              }}
                               aria-label={productName}
                             />
                           ) : null}
@@ -160,33 +155,45 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                         </div>
                         <AccordionTrigger
                           aria-label={`Toggle details for ${productName}`}
+                          onClick={() => updateOpenedProducts(productName)}
                         />
                       </div>
                       <AccordionContent>
                         <SidebarMenuSub>
-                          {versions.length === 0 ? (
-                            <SidebarMenuSubItem key={`${productName}-Empty`}>
-                              No version
+                          {versions === null ? (
+                            <SidebarMenuSubItem
+                              key={`${productName}_skeleton`}
+                              data-testid="productSidebarSkeleton"
+                              className="flex flex-col gap-5"
+                            >
+                              <Skeleton className="h-3 w-full" />
+                              <Skeleton className="h-3 w-full" />
+                              <Skeleton className="h-3 w-full" />
+                            </SidebarMenuSubItem>
+                          ) : versions && versions.length === 0 ? (
+                            <SidebarMenuSubItem key={`${productName}_Empty`}>
+                              API Error
                             </SidebarMenuSubItem>
                           ) : (
+                            versions &&
                             versions.map((version: ProductVersionDetail) => (
                               <SidebarMenuSubItem key={version.cycle}>
                                 <div className="flex items-center space-x-2">
                                   <Checkbox
-                                    id={`${productName}-${version.cycle}`}
+                                    id={`${productName}_${version.cycle}`}
                                     checked={selectedProductsSet.has(
-                                      `${productName}-${version.cycle}`,
+                                      `${productName}_${version.cycle}`,
                                     )}
                                     onCheckedChange={() =>
                                       toggleProduct(
-                                        `${productName}-${version.cycle}`,
+                                        `${productName}_${version.cycle}`,
                                       )
                                     }
-                                    aria-label={`${productName}-${version.cycle}`}
+                                    aria-label={`${productName}_${version.cycle}`}
                                   />
                                   <label
-                                    htmlFor={`${productName}-${version.cycle}`}
-                                    aria-label={`${productName}-${version.cycle}`}
+                                    htmlFor={`${productName}_${version.cycle}`}
+                                    aria-label={`${productName}_${version.cycle}`}
                                     className="font-normal"
                                   >
                                     {version.cycle}

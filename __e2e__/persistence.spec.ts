@@ -31,29 +31,34 @@ test.describe('Data Persistence', () => {
     await page.goto('/')
 
     await page.waitForResponse('https://endoflife.date/api/all.json')
-    await page.waitForResponse('https://endoflife.date/api/product-a.json')
-    await page.waitForResponse('https://endoflife.date/api/product-b.json')
 
     await expect(page.getByTestId('product-sidebar')).toBeVisible()
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
 
+    await Promise.all([
+      page.waitForResponse('https://endoflife.date/api/product-a.json'),
+      page
+        .getByRole('button', { name: 'Toggle details for product-a' })
+        .click(),
+    ])
+
     // Select a product
-    await page.locator(`label[for="product-a-1.0"]`).click()
+    await page.locator(`label[for="product-a_1.0"]`).click()
     await page.waitForSelector('.bar-wrapper', {
       state: 'visible',
       timeout: 30000,
     })
-    await expect(page.locator('[id="product-a-1.0"]')).toBeChecked()
+    await expect(page.locator('[id="product-a_1.0"]')).toBeChecked()
     await expect(page.locator('.bar-wrapper')).toHaveCount(1)
 
     // Reload the page
     await page.reload()
 
     // Wait for the page to be fully loaded after reload
-    await expect(page.locator('[id="product-a-1.0"]')).toBeVisible()
+    await expect(page.locator('[id="product-a_1.0"]')).toBeVisible()
 
     // Verify the selection is maintained
-    await expect(page.locator('[id="product-a-1.0"]')).toBeChecked()
+    await expect(page.locator('[id="product-a_1.0"]')).toBeChecked()
     await expect(page.locator('.bar-wrapper')).toHaveCount(1)
     await expect(page.getByText('product-a 1.0')).toBeVisible()
   })
