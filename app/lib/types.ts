@@ -9,7 +9,7 @@ export type ProductVersionDetail = {
   discontinued?: boolean
 }
 
-export type ProductDetails = Record<string, ProductVersionDetail[]>
+export type ProductDetails = Record<string, ProductVersionDetail[] | null>
 
 export type GanttTask = {
   id: string

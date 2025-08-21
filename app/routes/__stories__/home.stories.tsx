@@ -62,15 +62,42 @@ export const Default: Story = {
   },
   render: () => {
     const initialSelectedProducts = [
-      'angular-17',
-      'react-18',
-      'react-17',
+      'angular_17',
+      'react_18',
+      'react_17',
       'react',
     ]
     localStorage.setItem(
       'selectedProducts',
       JSON.stringify(initialSelectedProducts),
     )
+    localStorage.setItem(
+      'eol_products_details_cache',
+      JSON.stringify({
+        react: {
+          data: [
+            { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+          ],
+          timestamp: Date.now(),
+        },
+        vue: {
+          data: [
+            { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
+            { cycle: '2', releaseDate: '2016-09-30', eol: '2023-12-31' },
+          ],
+          timestamp: Date.now(),
+        },
+        angular: {
+          data: [
+            { cycle: '17', releaseDate: '2023-11-08', eol: '2025-05-08' },
+            { cycle: '16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+          ],
+          timestamp: Date.now(),
+        },
+      }),
+    )
+
     const router = createMemoryRouter(
       [
         {
@@ -104,12 +131,13 @@ export const Default: Story = {
     const reactCheckbox = canvas.getByRole('checkbox', { name: 'react' })
     await expect(reactCheckbox).toBeChecked()
 
-    // vueのバージョン3のチェックボックスをクリックして選択状態にする
-    const vueAccordionTrigger = canvas.getByRole('button', {
-      name: /toggle details for vue/i,
-    })
-    await userEvent.click(vueAccordionTrigger)
-    const vue3Checkbox = canvas.getByRole('checkbox', { name: 'vue-3' })
+    await userEvent.click(
+      canvas.getByRole('button', {
+        name: /toggle details for vue/i,
+      }),
+    )
+
+    const vue3Checkbox = canvas.getByRole('checkbox', { name: 'vue_3' })
     await userEvent.click(vue3Checkbox)
     await expect(vue3Checkbox).toBeChecked()
 
