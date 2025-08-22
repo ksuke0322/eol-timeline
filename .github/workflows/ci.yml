@@ -26,11 +26,11 @@ on:
   push:
     branches:
       - main
-    paths: ${{ env.NODE_VERSION }}
+    paths: ${{ env.PATHS }}
   pull_request:
     branches:
       - main
-    paths: ${{ env.NODE_VERSION }}
+    paths: ${{ env.PATHS }}
 
 jobs:
   setup:
