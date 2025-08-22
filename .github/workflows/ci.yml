@@ -4,10 +4,6 @@ env:
   NODE_VERSION: '22.12.0'
   PNPM_VERSION: '9.15.9'
 
-  # accoundID: ba56789cecb86d3ef76d53b447e46dd0
-  # subDomain: keisuke-sawairi-0322.workers.dev
-  # APIToken: P2RfQ_07NcyDgA1v1sQT4tJOfr1Dieu7-KPyR1Jz
-
 on:
   push:
     branches:
