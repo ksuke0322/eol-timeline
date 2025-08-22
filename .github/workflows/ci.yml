@@ -15,7 +15,7 @@ on:
       - 'public'
       - 'test'
       - 'components.json'
-      - '.lighthouserc.js'
+      - '.lighthouserc.yml'
       - 'eslint.config.mjs'
       - 'playwright.config.ts'
       - 'react-router.config.ts'
@@ -32,33 +32,33 @@ on:
     paths: *PATHS
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # node_modules のキャッシュを行わないため不要、一応残しておく
+  # setup:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: true
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v4
+  #       with:
+  #         version: ${{ env.PNPM_VERSION }}
+  #         run_install: true
 
-      # - name: Save node_modules as artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: node_modules
-      #     path: node_modules
-      #     retention-days: 1
+  # - name: Save node_modules as artifact
+  #   uses: actions/upload-artifact@v4
+  #   with:
+  #     name: node_modules
+  #     path: node_modules
+  #     retention-days: 1
 
   lint:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -85,7 +85,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -112,7 +111,6 @@ jobs:
 
   tsc:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -139,7 +137,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -166,7 +163,6 @@ jobs:
 
   test-storybook:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -196,7 +192,6 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -226,7 +221,6 @@ jobs:
 
   security-audit:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -253,7 +247,6 @@ jobs:
 
   format-check:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -280,7 +273,6 @@ jobs:
 
   lighthouse:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -305,40 +297,30 @@ jobs:
       - name: Run Lighthouse and assertion results
         uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: './.lighthouserc.js'
+          configPath: './.lighthouserc.yml'
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs:
-      [
-        lint,
-        build,
-        test,
-        tsc,
-        test-storybook,
-        e2e-test,
-        security-audit,
-        format-check,
-        lighthouse,
-      ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # TODO: 本番環境へのデプロイ
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     [
+  #       lint,
+  #       build,
+  #       test,
+  #       tsc,
+  #       test-storybook,
+  #       e2e-test,
+  #       security-audit,
+  #       format-check,
+  #       lighthouse,
+  #     ]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
   delete-artifacts:
     runs-on: ubuntu-latest
-    needs:
-      [
-        lint,
-        build,
-        test,
-        tsc,
-        test-storybook,
-        e2e-test,
-        security-audit,
-        format-check,
-        lighthouse,
-      ]
+    needs: deploy
     steps:
       - uses: geekyeggo/delete-artifact@v4
         with:
