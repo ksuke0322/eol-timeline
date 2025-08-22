@@ -2,8 +2,11 @@ ci:
   collect:
     settings:
       preset: desktop
+      throttlingMethod: devtools
+      disableStorageReset: false
     startServerCommand: pnpm build && pnpm start
     url: http://localhost:4173
+    numberOfRuns: 5
 
   assert:
     # lighthouse:recommended - Asserts that every audit outside performance received a perfect score, that no resources were flagged for performance opportunities, and warns when metric values drop below a score of 90. This is a more realistic base that disables hard failures for flaky audits.
