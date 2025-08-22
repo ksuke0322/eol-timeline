@@ -3,14 +3,34 @@ name: CI
 env:
   NODE_VERSION: '22.12.0'
   PNPM_VERSION: '9.15.9'
+  PATHS:
+    - 'app/**'
+    - '__e2e__'
+    - '.storybook'
+    - 'public'
+    - 'test'
+    - 'components.json'
+    - '.lighthouserc.js'
+    - 'eslint.config.mjs'
+    - 'playwright.config.ts'
+    - 'react-router.config.ts'
+    - 'tsconfig.json'
+    - 'vite-plugin-remove-data-testid.ts'
+    - 'vite.config.ts'
+    - 'wrangler.jsonc'
+    - 'package.json'
+    - 'pnpm-lock.yaml'
+    - '.github/workflows/**'
 
 on:
   push:
     branches:
       - main
+    paths: ${{ env.NODE_VERSION }}
   pull_request:
     branches:
       - main
+    paths: ${{ env.NODE_VERSION }}
 
 jobs:
   setup:
@@ -286,8 +306,7 @@ jobs:
       - name: Run Lighthouse and assertion results
         uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: './.lighthouserc.json'
-          uploadArtifacts: true
+          configPath: './.lighthouserc.js'
 
   deploy:
     runs-on: ubuntu-latest

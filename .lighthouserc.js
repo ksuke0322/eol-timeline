@@ -1,0 +1,34 @@
+module.exports = {
+  ci: {
+    collect: {
+      settings: {
+        preset: 'desktop',
+      },
+      startServerCommand: 'pnpm build && pnpm start',
+      url: ['http://localhost:4173/'],
+    },
+    assert: {
+      // lighthouse:recommended - Asserts that every audit outside performance received a perfect score, that no resources were flagged for performance opportunities, and warns when metric values drop below a score of 90. This is a more realistic base that disables hard failures for flaky audits.
+      // https://tinyurl.com/2dhhb6y6
+      preset: 'lighthouse:recommended',
+      assertions: {
+        'categories:performance': [
+          'error',
+          { minScore: 0.9, aggregationMethod: 'median' },
+        ],
+        'largest-contentful-paint': [
+          'error',
+          { maxNumericValue: 2500, aggregationMethod: 'median' },
+        ],
+        'total-blocking-time': [
+          'error',
+          { maxNumericValue: 200, aggregationMethod: 'median' },
+        ],
+        'cumulative-layout-shift': [
+          'error',
+          { maxNumericValue: 0.1, aggregationMethod: 'median' },
+        ],
+      },
+    },
+  },
+}
