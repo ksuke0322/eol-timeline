@@ -4,6 +4,10 @@ env:
   NODE_VERSION: '22.12.0'
   PNPM_VERSION: '9.15.9'
 
+  # accoundID: ba56789cecb86d3ef76d53b447e46dd0
+  # subDomain: keisuke-sawairi-0322.workers.dev
+  # APIToken: P2RfQ_07NcyDgA1v1sQT4tJOfr1Dieu7-KPyR1Jz
+
 on:
   push:
     branches:
@@ -30,6 +34,13 @@ on:
     branches:
       - main
     paths: *PATHS
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   # node_modules のキャッシュを行わないため不要、一応残しておく
@@ -299,7 +310,7 @@ jobs:
         with:
           configPath: './.lighthouserc.yml'
 
-  # TODO: 本番環境へのデプロイ
+  # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
   deploy:
     runs-on: ubuntu-latest
     needs:
@@ -317,6 +328,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Mask secrets
+        run: echo "::add-mask::${{ secrets.CF_WORKERS_URL }}"
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
 
   delete-artifacts:
     runs-on: ubuntu-latest
