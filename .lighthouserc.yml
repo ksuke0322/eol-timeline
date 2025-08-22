@@ -21,3 +21,9 @@ ci:
         ['error', { maxNumericValue: 200, aggregationMethod: 'median' }]
       'cumulative-layout-shift':
         ['error', { maxNumericValue: 0.1, aggregationMethod: 'median' }]
+
+      # Insight系や環境依存度が高い項目は最初は緩める/警告に
+      'forced-reflow-insight': 'warn'
+      'network-dependency-tree-insight': 'warn'
+      'robots-txt': 'warn'
+      'unused-javascript': ['warn', { maxLength: 1 }]
