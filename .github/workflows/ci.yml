@@ -345,6 +345,7 @@ jobs:
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
+          wranglerVersion: '4.32.0'
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           apiToken: ${{ secrets.CF_API_TOKEN }}
 
