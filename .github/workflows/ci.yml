@@ -345,6 +345,7 @@ jobs:
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
+          # default の 3.90.0 だと wrangler.toml しか受け付けないため明示指定
           wranglerVersion: '4.32.0'
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           apiToken: ${{ secrets.CF_API_TOKEN }}
