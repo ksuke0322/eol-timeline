@@ -34,9 +34,21 @@ test.describe('Initial Display and Basic Operations', () => {
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
   })
 
-  test('サイドバーとガントチャートが表示されること', async ({ page }) => {
+  test('サイドバーとガントチャート、フッターが表示されること', async ({
+    page,
+  }) => {
     await expect(page.getByTestId('product-sidebar')).toBeVisible()
     await expect(page.getByTestId('gantt-chart')).toBeVisible()
+
+    const footer = page.locator('footer')
+    await expect(footer).toBeVisible()
+    await expect(footer).toContainText('Data from')
+
+    const link = footer.getByRole('link', { name: 'endoflife.date' })
+    await expect(link).toHaveAttribute(
+      'href',
+      'https://endoflife.date/docs/api',
+    )
   })
 
   test('サイドバーに製品リストが表示されること', async ({ page }) => {

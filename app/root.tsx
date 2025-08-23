@@ -37,8 +37,19 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="flex min-h-screen flex-col">
+        <div className="flex-1">{children}</div>
+        <footer className="py-4 text-center text-sm text-gray-500">
+          Data from{' '}
+          <a
+            href="https://endoflife.date/docs/api"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            endoflife.date
+          </a>
+        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>
