@@ -45,13 +45,33 @@ export const convertProductVersionDetailsToGanttTasks = (
         const endDate =
           typeof detail.support === 'string'
             ? detail.support
-            : detail.releaseDate
-        const eol_status =
-          typeof detail.support === 'string'
-            ? 0
-            : detail.support === true
-              ? 1
-              : 2
+            : typeof detail.eol === 'string'
+              ? detail.eol
+              : detail.releaseDate
+
+        const eol_status = (() => {
+          if (
+            typeof detail.support === 'string' ||
+            typeof detail.eol === 'string'
+          ) {
+            return 0
+          }
+
+          // こんなことあるのか？？
+          if (!('support' in detail) && !('eol' in detail)) {
+            return 2
+          }
+
+          // サポート中 || EOL でない = support:true, eol:false
+          if (
+            detail.support ||
+            (!detail.eol && typeof detail.eol !== 'undefined')
+          ) {
+            return 1
+          }
+
+          return 2
+        })()
 
         const taskName = `${productName} ${detail.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
 
@@ -72,13 +92,33 @@ export const convertProductVersionDetailsToGanttTasks = (
           const endDate =
             typeof version.support === 'string'
               ? version.support
-              : version.releaseDate
-          const eol_status =
-            typeof version.support === 'string'
-              ? 0
-              : version.support === true
-                ? 1
-                : 2
+              : typeof version.eol === 'string'
+                ? version.eol
+                : version.releaseDate
+
+          const eol_status = (() => {
+            if (
+              typeof version.support === 'string' ||
+              typeof version.eol === 'string'
+            ) {
+              return 0
+            }
+
+            // こんなことあるのか？？
+            if (!('support' in version) && !('eol' in version)) {
+              return 2
+            }
+
+            // サポート中 || EOL でない = support:true, eol:false
+            if (
+              version.support ||
+              (!version.eol && typeof version.eol !== 'undefined')
+            ) {
+              return 1
+            }
+
+            return 2
+          })()
 
           const taskName = `${productName} ${version.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
 

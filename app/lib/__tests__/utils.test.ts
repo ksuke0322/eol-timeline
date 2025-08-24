@@ -57,10 +57,24 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
     ],
     vue: [
       { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
-      { cycle: '2', releaseDate: '2017-09-30', support: false }, // supportがfalseの場合
+      { cycle: '2', releaseDate: '2017-09-30', support: false },
+      {
+        cycle: '1.support',
+        releaseDate: '2017-09-30',
+        support: '2024-03-18',
+      }, // support優先される
+      {
+        cycle: '1.eol',
+        releaseDate: '2017-09-30',
+        eol: '2024-03-18',
+      }, // eol優先される
     ],
     angular: [
-      { cycle: '16', releaseDate: '2023-11-08', support: true }, // supportがtrueの場合
+      { cycle: '16', releaseDate: '2023-11-08', support: true, eol: false }, // supportがtrueの場合
+      { cycle: '16', releaseDate: '2023-11-08', support: false, eol: true }, // eolがtrueの場合
+      { cycle: '15', releaseDate: '2023-11-08' }, // どっちもない
+      { cycle: '15', releaseDate: '2023-11-08', eol: true }, // support なし
+      { cycle: '15', releaseDate: '2023-11-08', support: true }, // eol なし
     ],
   }
 
@@ -122,31 +136,272 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
     })
   })
 
-  it('supportがfalseの場合、リリース日をendに設定すること。タスク名に独自の prefix がつくこと', () => {
-    const selectedProductsSet = new Set(['vue_2'])
-    const tasks = convertProductVersionDetailsToGanttTasks(
-      mockProductDetails,
-      selectedProductsSet,
-    )
+  it.each([
+    {
+      support: '2025-03-29',
+      eol: '2025-03-28',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: false,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: true,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: undefined,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: false,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: false,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: false,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: false,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: true,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: true,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: true,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: true,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: undefined,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: undefined,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: undefined,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: undefined,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+  ])(
+    'プロダクト全体が選択されている場合 => support:$support, eol:$eol => end:$end, eol_status:$eol_status, name:$name',
+    ({ support, eol, end, eol_status, name }) => {
+      const productDetails: ProductDetails = {
+        testProduct: [
+          { cycle: '1', releaseDate: '2020-09-18', support, eol },
+          { cycle: '2', releaseDate: '2020-09-20', support, eol },
+        ],
+      }
+      const selectedProductsSet = new Set(['testProduct', 'testProduct_1'])
+      const tasks = convertProductVersionDetailsToGanttTasks(
+        productDetails,
+        selectedProductsSet,
+      )
 
-    expect(tasks).toHaveLength(1)
-    expect(tasks[0].end).toBe('2017-09-30')
-    expect(tasks[0].eol_status).toBe(2)
-    expect(tasks[0].name).toBe('vue 2 | EOL')
-  })
+      expect(tasks).toHaveLength(2)
+      expect(tasks[0].end).toBe(end)
+      expect(tasks[0].eol_status).toBe(eol_status)
+      expect(tasks[0].name).toBe(`testProduct 1${name}`)
+    },
+  )
 
-  it('supportがtrueの場合、リリース日をendに設定すること。タスク名に独自の prefix がつくこと', () => {
-    const selectedProductsSet = new Set(['angular_16'])
-    const tasks = convertProductVersionDetailsToGanttTasks(
-      mockProductDetails,
-      selectedProductsSet,
-    )
+  it.each([
+    {
+      support: '2025-03-29',
+      eol: '2025-03-28',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: false,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: true,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: '2025-03-29',
+      eol: undefined,
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: false,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: false,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: false,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: false,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: true,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: true,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: true,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: true,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: undefined,
+      eol: '2025-03-29',
+      end: '2025-03-29',
+      eol_status: 0,
+      name: '',
+    },
+    {
+      support: undefined,
+      eol: false,
+      end: '2020-09-18',
+      eol_status: 1,
+      name: ' |----------> Support',
+    },
+    {
+      support: undefined,
+      eol: true,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+    {
+      support: undefined,
+      eol: undefined,
+      end: '2020-09-18',
+      eol_status: 2,
+      name: ' | EOL',
+    },
+  ])(
+    'バージョン単体が選択されている場合 => support:$support, eol:$eol => end:$end, eol_status:$eol_status, name:$name',
+    ({ support, eol, end, eol_status, name }) => {
+      const productDetails: ProductDetails = {
+        testProduct: [{ cycle: '1', releaseDate: '2020-09-18', support, eol }],
+      }
+      const selectedProductsSet = new Set(['testProduct_1'])
+      const tasks = convertProductVersionDetailsToGanttTasks(
+        productDetails,
+        selectedProductsSet,
+      )
 
-    expect(tasks).toHaveLength(1)
-    expect(tasks[0].end).toBe('2023-11-08')
-    expect(tasks[0].eol_status).toBe(1)
-    expect(tasks[0].name).toBe('angular 16 |----------> Support')
-  })
+      expect(tasks).toHaveLength(1)
+      expect(tasks[0].end).toBe(end)
+      expect(tasks[0].eol_status).toBe(eol_status)
+      expect(tasks[0].name).toBe(`testProduct 1${name}`)
+    },
+  )
 
   it('選択された製品がない場合、空の配列を返すこと', () => {
     const selectedProductsSet = new Set<string>()
