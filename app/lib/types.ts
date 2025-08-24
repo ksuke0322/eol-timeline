@@ -1,11 +1,11 @@
 export type ProductVersionDetail = {
   cycle: string
   releaseDate: string
-  eol: string | boolean | undefined
+  eol?: string | boolean | undefined
   latest?: string
   latestReleaseDate?: string
   lts?: boolean
-  support?: string
+  support: string | boolean
   discontinued?: boolean
 }
 
@@ -21,4 +21,5 @@ export type GanttTask = {
   dependencies?: string
   custom_class?: string
   color?: string
+  eol_status: 0 | 1 | 2
 }

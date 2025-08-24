@@ -31,6 +31,7 @@ test('タスクを持つガントチャートのa11yチェック', async () => {
       end: '2023-01-10',
       progress: 50,
       productName: 'Product 1',
+      eol_status: 0 as const,
     },
     {
       id: 'Task 2',
@@ -39,6 +40,7 @@ test('タスクを持つガントチャートのa11yチェック', async () => {
       end: '2023-01-15',
       progress: 20,
       productName: 'Product 1',
+      eol_status: 0 as const,
     },
   ]
   const { container } = render(<GanttChart tasks={tasks} />)

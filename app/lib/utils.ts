@@ -42,19 +42,19 @@ export const convertProductVersionDetailsToGanttTasks = (
     const color = getProductColor(productName)
     if (selectedProductsSet.has(productName)) {
       versions.forEach((detail) => {
-        const taskName = `${productName} ${detail.cycle}`
         const endDate =
-          typeof detail.eol === 'string'
-            ? detail.eol
-            : detail.eol === false
-              ? new Date(
-                  new Date(detail.releaseDate).setFullYear(
-                    new Date(detail.releaseDate).getFullYear() + 1,
-                  ),
-                )
-                  .toISOString()
-                  .split('T')[0]
-              : detail.releaseDate
+          typeof detail.support === 'string'
+            ? detail.support
+            : detail.releaseDate
+        const eol_status =
+          typeof detail.support === 'string'
+            ? 0
+            : detail.support === true
+              ? 1
+              : 2
+
+        const taskName = `${productName} ${detail.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
+
         tasks.push({
           id: detail.cycle,
           name: taskName,
@@ -63,24 +63,25 @@ export const convertProductVersionDetailsToGanttTasks = (
           end: endDate,
           progress: 0,
           color: color,
+          eol_status,
         })
       })
     } else {
       for (const version of versions) {
         if (selectedProductsSet.has(`${productName}_${version.cycle}`)) {
-          const taskName = `${productName} ${version.cycle}`
           const endDate =
-            typeof version.eol === 'string'
-              ? version.eol
-              : version.eol === false
-                ? new Date(
-                    new Date(version.releaseDate).setFullYear(
-                      new Date(version.releaseDate).getFullYear() + 1,
-                    ),
-                  )
-                    .toISOString()
-                    .split('T')[0]
-                : version.releaseDate
+            typeof version.support === 'string'
+              ? version.support
+              : version.releaseDate
+          const eol_status =
+            typeof version.support === 'string'
+              ? 0
+              : version.support === true
+                ? 1
+                : 2
+
+          const taskName = `${productName} ${version.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
+
           tasks.push({
             id: version.cycle,
             name: taskName,
@@ -89,6 +90,7 @@ export const convertProductVersionDetailsToGanttTasks = (
             end: endDate,
             progress: 0,
             color: color,
+            eol_status,
           })
         }
       }

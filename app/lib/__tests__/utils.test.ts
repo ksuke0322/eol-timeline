@@ -52,15 +52,15 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
   const mockProductDetails: ProductDetails = {
     react: [
-      { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-      { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+      { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+      { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
     ],
     vue: [
-      { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-      { cycle: '2', releaseDate: '2017-09-30', eol: false }, // EOLがfalseの場合
+      { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+      { cycle: '2', releaseDate: '2017-09-30', support: false }, // supportがfalseの場合
     ],
     angular: [
-      { cycle: '17', releaseDate: '2023-11-08', eol: undefined }, // EOLがundefinedの場合
+      { cycle: '16', releaseDate: '2023-11-08', support: true }, // supportがtrueの場合
     ],
   }
 
@@ -88,6 +88,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       end: '2025-03-29',
       progress: 0,
       color: expect.any(String),
+      eol_status: 0,
     })
     expect(tasks[1]).toEqual({
       id: '17',
@@ -97,6 +98,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       end: '2023-10-20',
       progress: 0,
       color: expect.any(String),
+      eol_status: 0,
     })
   })
 
@@ -116,10 +118,11 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       end: '2024-03-18',
       progress: 0,
       color: expect.any(String),
+      eol_status: 0,
     })
   })
 
-  it('EOLがfalseの場合、リリース日から1年後の日付をendに設定すること', () => {
+  it('supportがfalseの場合、リリース日をendに設定すること。タスク名に独自の prefix がつくこと', () => {
     const selectedProductsSet = new Set(['vue_2'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
@@ -127,11 +130,13 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
     )
 
     expect(tasks).toHaveLength(1)
-    expect(tasks[0].end).toBe('2018-09-30') // 2017-09-30の1年後
+    expect(tasks[0].end).toBe('2017-09-30')
+    expect(tasks[0].eol_status).toBe(2)
+    expect(tasks[0].name).toBe('vue 2 | EOL')
   })
 
-  it('EOLがundefinedの場合、リリース日をendに設定すること', () => {
-    const selectedProductsSet = new Set(['angular_17'])
+  it('supportがtrueの場合、リリース日をendに設定すること。タスク名に独自の prefix がつくこと', () => {
+    const selectedProductsSet = new Set(['angular_16'])
     const tasks = convertProductVersionDetailsToGanttTasks(
       mockProductDetails,
       selectedProductsSet,
@@ -139,6 +144,8 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
     expect(tasks).toHaveLength(1)
     expect(tasks[0].end).toBe('2023-11-08')
+    expect(tasks[0].eol_status).toBe(1)
+    expect(tasks[0].name).toBe('angular 16 |----------> Support')
   })
 
   it('選択された製品がない場合、空の配列を返すこと', () => {
@@ -186,7 +193,9 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
   it('カスタム製品が正しく処理されること', () => {
     const customProductDetails: ProductDetails = {
-      custom: [{ cycle: '1.0', releaseDate: '2023-01-01', eol: '2024-01-01' }],
+      custom: [
+        { cycle: '1.0', releaseDate: '2023-01-01', support: '2024-01-01' },
+      ],
     }
     const selectedProductsSet = new Set(['custom'])
     const tasks = convertProductVersionDetailsToGanttTasks(
@@ -203,6 +212,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       end: '2024-01-01',
       progress: 0,
       color: expect.any(String),
+      eol_status: 0,
     })
   })
 })

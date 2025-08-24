@@ -27,6 +27,7 @@ const tasks: GanttTask[] = [
     progress: 100,
     custom_class: 'bar-react',
     color: '#61DAFB',
+    eol_status: 0 as const,
   },
   {
     id: 'react-17',
@@ -38,6 +39,7 @@ const tasks: GanttTask[] = [
     dependencies: 'react-18',
     custom_class: 'bar-react',
     color: '#61DAFB',
+    eol_status: 0 as const,
   },
   {
     id: 'vue-3',
@@ -48,6 +50,7 @@ const tasks: GanttTask[] = [
     progress: 100,
     custom_class: 'bar-vue',
     color: '#4FC08D',
+    eol_status: 0 as const,
   },
   {
     id: 'angular-17',
@@ -58,6 +61,29 @@ const tasks: GanttTask[] = [
     progress: 50,
     custom_class: 'bar-angular',
     color: '#DD0031',
+    eol_status: 0 as const,
+  },
+  {
+    id: 'notEOL',
+    name: 'v0',
+    productName: 'notEOL',
+    start: '2023-11-08',
+    end: '2023-11-08',
+    progress: 50,
+    custom_class: 'bar-angular',
+    color: '#DD0031',
+    eol_status: 1 as const,
+  },
+  {
+    id: 'alreadyEOL',
+    name: 'v0',
+    productName: 'alreadyEOL',
+    start: '2023-11-08',
+    end: '2023-11-08',
+    progress: 50,
+    custom_class: 'bar-angular',
+    color: '#DD0031',
+    eol_status: 2 as const,
   },
 ]
 
@@ -93,6 +119,7 @@ const manyTasks: GanttTask[] = Array.from({ length: 200 }, (_, i) => ({
   end: `2024-${(i % 12) + 1}-15`,
   progress: Math.floor(Math.random() * 100),
   color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+  eol_status: 0 as const,
 }))
 
 export const WithManyTasks: Story = {
@@ -118,6 +145,7 @@ const longNameTasks: GanttTask[] = [
     end: '2024-03-01',
     progress: 50,
     color: '#FF5733',
+    eol_status: 0 as const,
   },
   ...tasks.slice(0, 2),
 ]
@@ -148,6 +176,7 @@ const overlappingTasks: GanttTask[] = [
     end: '2024-03-01',
     progress: 100,
     color: '#3498DB',
+    eol_status: 0 as const,
   },
   {
     id: 'task-b',
@@ -158,6 +187,7 @@ const overlappingTasks: GanttTask[] = [
     dependencies: 'task-a',
     progress: 50,
     color: '#3498DB',
+    eol_status: 0 as const,
   },
   {
     id: 'task-c',
@@ -167,6 +197,7 @@ const overlappingTasks: GanttTask[] = [
     end: '2024-03-15',
     progress: 75,
     color: '#F1C40F',
+    eol_status: 0 as const,
   },
 ]
 

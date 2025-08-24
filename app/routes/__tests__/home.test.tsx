@@ -45,12 +45,12 @@ describe('Home Component Integration Tests', () => {
               {
                 cycle: '18',
                 releaseDate: '2022-03-29',
-                eol: '2024-03-29',
+                support: '2024-03-29',
               },
               {
                 cycle: '17',
                 releaseDate: '2020-10-20',
-                eol: '2022-10-20',
+                support: '2022-10-20',
               },
             ],
             timestamp: Date.now(),
@@ -60,7 +60,7 @@ describe('Home Component Integration Tests', () => {
               {
                 cycle: '3',
                 releaseDate: '1999-09-03',
-                eol: '2023-09-03',
+                support: '2023-09-03',
               },
             ],
             timestamp: Date.now(),

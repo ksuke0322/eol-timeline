@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test'
 
 const MOCK_PRODUCTS = ['product-a', 'product-b']
 const MOCK_PRODUCT_A_DETAILS = [
-  { cycle: '1.0', releaseDate: '2023-01-01', eol: '2024-01-01' },
-  { cycle: '1.1', releaseDate: '2023-06-01', eol: '2024-06-01' },
+  { cycle: '1.0', releaseDate: '2023-01-01', support: '2024-01-01' },
+  { cycle: '1.1', releaseDate: '2023-06-01', support: '2024-06-01' },
 ]
 const MOCK_PRODUCT_B_DETAILS = [
-  { cycle: '2.0', releaseDate: '2022-03-15', eol: '2023-03-15' },
+  { cycle: '2.0', releaseDate: '2022-03-15', support: '2023-03-15' },
 ]
 
 test.describe('Initial Display and Basic Operations', () => {

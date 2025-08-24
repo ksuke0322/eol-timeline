@@ -3,11 +3,11 @@ import { test, expect, type Page } from '@playwright/test'
 const MOCK_PRODUCTS = ['product-a', 'product-b']
 // Product A: 開始が遅く、終了が早い
 const MOCK_PRODUCT_A_DETAILS = [
-  { cycle: '1.0', releaseDate: '2023-01-01', eol: '2024-01-01' },
+  { cycle: '1.0', releaseDate: '2023-01-01', support: '2024-01-01' },
 ]
 // Product B: 開始が早く、終了が遅い
 const MOCK_PRODUCT_B_DETAILS = [
-  { cycle: '2.0', releaseDate: '2022-01-01', eol: '2025-01-01' },
+  { cycle: '2.0', releaseDate: '2022-01-01', support: '2025-01-01' },
 ]
 
 // Helper function to open accordion for a product

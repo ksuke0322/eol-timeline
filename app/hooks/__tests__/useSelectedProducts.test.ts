@@ -8,12 +8,12 @@ import { type ProductDetails } from '~/lib/types'
 describe('useSelectedProducts', () => {
   const mockAllProducts: ProductDetails = {
     product1: [
-      { cycle: '1.0', releaseDate: '', eol: '' },
-      { cycle: '1.1', releaseDate: '', eol: '' },
+      { cycle: '1.0', releaseDate: '', support: '' },
+      { cycle: '1.1', releaseDate: '', support: '' },
     ],
     product2: [
-      { cycle: '2.0', releaseDate: '', eol: '' },
-      { cycle: '2.1', releaseDate: '', eol: '' },
+      { cycle: '2.0', releaseDate: '', support: '' },
+      { cycle: '2.1', releaseDate: '', support: '' },
     ],
   }
 
@@ -147,7 +147,7 @@ describe('useSelectedProducts', () => {
 
   describe('カスタムデータが存在する場合', () => {
     const customProducts: ProductDetails = {
-      custom1: [{ cycle: 'c1', releaseDate: '', eol: '' }],
+      custom1: [{ cycle: 'c1', releaseDate: '', support: '' }],
     }
 
     it('カスタム製品を選択・解除できること', () => {
@@ -192,7 +192,7 @@ describe('useSelectedProducts', () => {
 
   describe('全選択・全解除', () => {
     const customProducts: ProductDetails = {
-      custom1: [{ cycle: 'c1', releaseDate: '', eol: '' }],
+      custom1: [{ cycle: 'c1', releaseDate: '', support: '' }],
     }
 
     it('全選択ですべての製品が選択されること', () => {

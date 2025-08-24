@@ -91,9 +91,14 @@ const GanttChart: React.FC<GanttChartProps> = ({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           popup: ({ task, set_title, set_details }) => {
-            const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
+            const details =
+              task.eol_status === 0
+                ? `EOL date: ${task.end}`
+                : task.eol_status === 1
+                  ? 'Supported (no EOL date)'
+                  : 'EOL (date unknown)'
             set_title(`${task.productName} ${task.id}`)
-            set_details(`EOL date: ${eolDate}`)
+            set_details(details)
           },
           popup_on: 'hover',
           readonly: true,

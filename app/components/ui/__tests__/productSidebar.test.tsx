@@ -22,8 +22,8 @@ describe('ProductSidebar', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-              { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+              { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+              { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             ]),
         })
       } else if (url === 'https://endoflife.date/api/Vue.json') {
@@ -31,7 +31,7 @@ describe('ProductSidebar', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
+              { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
             ]),
         })
       } else if (url === 'https://endoflife.date/api/Angular.json') {
@@ -39,7 +39,7 @@ describe('ProductSidebar', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+              { cycle: '16', releaseDate: '2023-05-03', support: '2024-11-03' },
             ]),
         })
       }
@@ -119,7 +119,7 @@ describe('ProductSidebar', () => {
               {
                 cycle: '18',
                 releaseDate: '2022-03-29',
-                eol: '2024-03-29',
+                support: '2024-03-29',
               },
             ],
           },
@@ -232,7 +232,7 @@ describe('ProductSidebar', () => {
   test('長い製品名を持つ製品がある場合のa11yチェック', async () => {
     const longNameProducts = {
       'This is a very long product name to test overflow and accessibility': [
-        { cycle: '1.0', releaseDate: '2022-01-01', eol: '2025-01-01' },
+        { cycle: '1.0', releaseDate: '2022-01-01', support: '2025-01-01' },
       ],
       ...mockProductList,
     }
@@ -254,7 +254,7 @@ describe('ProductSidebar', () => {
         acc[productName] = Array.from({ length: 3 }, (__, j) => ({
           cycle: `${i + 1}.${j}`,
           releaseDate: '2023-01-01',
-          eol: '2026-01-01',
+          support: '2026-01-01',
         }))
         return acc
       },

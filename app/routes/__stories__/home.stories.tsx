@@ -18,20 +18,20 @@ const meta = {
         }),
         http.get('https://endoflife.date/api/react.json', () => {
           return HttpResponse.json([
-            { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-            { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+            { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
           ])
         }),
         http.get('https://endoflife.date/api/vue.json', () => {
           return HttpResponse.json([
-            { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-            { cycle: '2', releaseDate: '2016-09-30', eol: '2023-12-31' },
+            { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+            { cycle: '2', releaseDate: '2016-09-30', support: '2023-12-31' },
           ])
         }),
         http.get('https://endoflife.date/api/angular.json', () => {
           return HttpResponse.json([
-            { cycle: '17', releaseDate: '2023-11-08', eol: '2025-05-08' },
-            { cycle: '16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+            { cycle: '17', releaseDate: '2023-11-08', support: '2025-05-08' },
+            { cycle: '16', releaseDate: '2023-05-03', support: '2024-11-03' },
           ])
         }),
       ],
@@ -76,22 +76,22 @@ export const Default: Story = {
       JSON.stringify({
         react: {
           data: [
-            { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-            { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+            { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
           ],
           timestamp: Date.now(),
         },
         vue: {
           data: [
-            { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-            { cycle: '2', releaseDate: '2016-09-30', eol: '2023-12-31' },
+            { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+            { cycle: '2', releaseDate: '2016-09-30', support: '2023-12-31' },
           ],
           timestamp: Date.now(),
         },
         angular: {
           data: [
-            { cycle: '17', releaseDate: '2023-11-08', eol: '2025-05-08' },
-            { cycle: '16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+            { cycle: '17', releaseDate: '2023-11-08', support: '2025-05-08' },
+            { cycle: '16', releaseDate: '2023-05-03', support: '2024-11-03' },
           ],
           timestamp: Date.now(),
         },

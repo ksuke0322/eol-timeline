@@ -2,13 +2,13 @@ import { test, expect } from '@playwright/test'
 
 const MOCK_PRODUCTS = ['alpha', 'beta', 'gamma']
 const MOCK_ALPHA_DETAILS = [
-  { cycle: '1.0', releaseDate: '2023-01-01', eol: '2024-01-01' },
+  { cycle: '1.0', releaseDate: '2023-01-01', support: '2024-01-01' },
 ]
 const MOCK_BETA_DETAILS = [
-  { cycle: '2.0', releaseDate: '2022-03-15', eol: '2023-03-15' },
+  { cycle: '2.0', releaseDate: '2022-03-15', support: '2023-03-15' },
 ]
 const MOCK_GAMMA_DETAILS = [
-  { cycle: '3.0', releaseDate: '2021-07-20', eol: '2022-07-20' },
+  { cycle: '3.0', releaseDate: '2021-07-20', support: '2022-07-20' },
 ]
 
 test.describe('Sidebar Interactions', () => {

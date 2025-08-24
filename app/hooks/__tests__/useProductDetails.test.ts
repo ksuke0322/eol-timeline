@@ -32,8 +32,8 @@ describe('useProductDetails', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-              { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+              { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+              { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             ]),
         })
       } else if (url === 'https://endoflife.date/api/Vue.json') {
@@ -41,8 +41,8 @@ describe('useProductDetails', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-              { cycle: '2', releaseDate: '2020-09-18', eol: '2024-03-18' },
+              { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+              { cycle: '2', releaseDate: '2020-09-18', support: '2024-03-18' },
             ]),
         })
       } else if (url === 'https://endoflife.date/api/Angular.json') {
@@ -50,7 +50,7 @@ describe('useProductDetails', () => {
           ok: true,
           json: () =>
             Promise.resolve([
-              { cycle: '16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+              { cycle: '16', releaseDate: '2023-05-03', support: '2024-11-03' },
             ]),
         })
       }
@@ -69,12 +69,12 @@ describe('useProductDetails', () => {
             {
               cycle: 'cached.18',
               releaseDate: '1995-03-29',
-              eol: '1996-03-29',
+              support: '1996-03-29',
             },
             {
               cycle: 'cached.17',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻の23時間59分59秒前
@@ -97,8 +97,16 @@ describe('useProductDetails', () => {
 
     expect(setAllProductDetailsMock).toHaveBeenCalledWith({
       React: [
-        { cycle: 'cached.18', releaseDate: '1995-03-29', eol: '1996-03-29' },
-        { cycle: 'cached.17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+        {
+          cycle: 'cached.18',
+          releaseDate: '1995-03-29',
+          support: '1996-03-29',
+        },
+        {
+          cycle: 'cached.17',
+          releaseDate: '2020-10-20',
+          support: '2023-10-20',
+        },
       ],
       Vue: null,
       Angular: null,
@@ -131,8 +139,16 @@ describe('useProductDetails', () => {
         // プロダクト全体が選択されている場合
         React: {
           data: [
-            { cycle: 'old.18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-            { cycle: 'old.17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+            {
+              cycle: 'old.18',
+              releaseDate: '2022-03-29',
+              support: '2025-03-29',
+            },
+            {
+              cycle: 'old.17',
+              releaseDate: '2020-10-20',
+              support: '2023-10-20',
+            },
           ],
           // システム時刻の1週間前
           timestamp: new Date('2025/03/21 09:00:00').getTime(),
@@ -140,8 +156,16 @@ describe('useProductDetails', () => {
         // バージョンの一部のみ選択されている場合
         Vue: {
           data: [
-            { cycle: 'old.3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-            { cycle: 'old.2', releaseDate: '2020-09-18', eol: '2024-03-18' },
+            {
+              cycle: 'old.3',
+              releaseDate: '2020-09-18',
+              support: '2024-03-18',
+            },
+            {
+              cycle: 'old.2',
+              releaseDate: '2020-09-18',
+              support: '2024-03-18',
+            },
           ],
           // システム時刻の1週間前
           timestamp: new Date('2025/03/21 09:00:00').getTime(),
@@ -149,7 +173,11 @@ describe('useProductDetails', () => {
         // 選択されていないプロダクトの場合
         Angular: {
           data: [
-            { cycle: 'old.16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+            {
+              cycle: 'old.16',
+              releaseDate: '2023-05-03',
+              support: '2024-11-03',
+            },
           ],
           // システム時刻の1週間前
           timestamp: new Date('2025/03/21 09:00:00').getTime(),
@@ -171,15 +199,15 @@ describe('useProductDetails', () => {
       expect(setAllProductDetailsMock).toHaveBeenCalledTimes(1)
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
         React: [
-          { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-          { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+          { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
         ],
         Vue: [
-          { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-          { cycle: '2', releaseDate: '2020-09-18', eol: '2024-03-18' },
+          { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+          { cycle: '2', releaseDate: '2020-09-18', support: '2024-03-18' },
         ],
         Angular: [
-          { cycle: 'old.16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+          { cycle: 'old.16', releaseDate: '2023-05-03', support: '2024-11-03' },
         ],
       })
 
@@ -196,21 +224,25 @@ describe('useProductDetails', () => {
         JSON.stringify({
           React: {
             data: [
-              { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-              { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+              { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+              { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             ],
             timestamp: new Date('2025/03/28 09:00:00').getTime(),
           },
           Vue: {
             data: [
-              { cycle: '3', releaseDate: '2020-09-18', eol: '2024-03-18' },
-              { cycle: '2', releaseDate: '2020-09-18', eol: '2024-03-18' },
+              { cycle: '3', releaseDate: '2020-09-18', support: '2024-03-18' },
+              { cycle: '2', releaseDate: '2020-09-18', support: '2024-03-18' },
             ],
             timestamp: new Date('2025/03/28 09:00:00').getTime(),
           },
           Angular: {
             data: [
-              { cycle: 'old.16', releaseDate: '2023-05-03', eol: '2024-11-03' },
+              {
+                cycle: 'old.16',
+                releaseDate: '2023-05-03',
+                support: '2024-11-03',
+              },
             ],
             timestamp: new Date('2025/03/21 09:00:00').getTime(),
           },
@@ -230,12 +262,12 @@ describe('useProductDetails', () => {
       JSON.stringify({
         React: {
           data: [
-            { cycle: '18', releaseDate: '1995-03-29', eol: '1996-03-29' },
-            { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+            { cycle: '18', releaseDate: '1995-03-29', support: '1996-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             {
               cycle: 'old.selected',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻の1週間前
@@ -276,12 +308,12 @@ describe('useProductDetails', () => {
             {
               cycle: 'old.18',
               releaseDate: '2022-03-29',
-              eol: '2025-03-29',
+              support: '2025-03-29',
             },
             {
               cycle: 'old.17',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻のちょうど1週間前
@@ -302,8 +334,8 @@ describe('useProductDetails', () => {
     waitFor(() => {
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
         React: [
-          { cycle: 'old.18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-          { cycle: 'old.17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+          { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: 'old.17', releaseDate: '2020-10-20', support: '2023-10-20' },
         ],
       })
 
@@ -336,8 +368,8 @@ describe('useProductDetails', () => {
     waitFor(() => {
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
         React: [
-          { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-          { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+          { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
         ],
       })
 
@@ -351,8 +383,8 @@ describe('useProductDetails', () => {
         JSON.stringify({
           React: {
             data: [
-              { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-              { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+              { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+              { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             ],
             timestamp: new Date('2025/03/22 09:00:00').getTime(),
           },
@@ -410,12 +442,12 @@ describe('useProductDetails', () => {
             {
               cycle: 'old.18',
               releaseDate: '2022-03-29',
-              eol: '2025-03-29',
+              support: '2025-03-29',
             },
             {
               cycle: 'old.17',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻の23時間59分59秒前
@@ -456,12 +488,12 @@ describe('useProductDetails', () => {
             {
               cycle: 'old.18',
               releaseDate: '2022-03-29',
-              eol: '2025-03-29',
+              support: '2025-03-29',
             },
             {
               cycle: 'old.17',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻のちょうど1週間前
@@ -486,8 +518,8 @@ describe('useProductDetails', () => {
     waitFor(() => {
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
         React: [
-          { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-          { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+          { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
         ],
       })
 
@@ -499,8 +531,8 @@ describe('useProductDetails', () => {
       expect(setItemSpy).toEqual({
         React: {
           data: [
-            { cycle: '18', releaseDate: '2022-03-29', eol: '2025-03-29' },
-            { cycle: '17', releaseDate: '2020-10-20', eol: '2023-10-20' },
+            { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
           ],
           timestamp: new Date('2025/03/22 09:00:00').getTime(),
         },
@@ -526,12 +558,12 @@ describe('useProductDetails', () => {
             {
               cycle: 'old.18',
               releaseDate: '2022-03-29',
-              eol: '2025-03-29',
+              support: '2025-03-29',
             },
             {
               cycle: 'old.17',
               releaseDate: '2020-10-20',
-              eol: '2023-10-20',
+              support: '2023-10-20',
             },
           ],
           // システム時刻のちょうど1週間前
