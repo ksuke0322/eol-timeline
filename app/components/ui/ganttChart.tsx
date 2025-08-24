@@ -27,7 +27,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
         bar_corner_radius: 3,
         arrow_curve: 5,
         padding: 18,
-        language: 'ja',
+        language: 'en',
         infinite_padding: false,
         view_mode: 'Year',
         view_mode_select: true,
@@ -55,7 +55,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
         ganttInstance.current.setup_tasks(tasks)
         ganttInstance.current.setup_options({
           ...ganttOptions,
-          column_width: viewMode === 'Month' ? 35 : 60,
+          column_width: viewMode === 'Month' ? 80 : 60,
           view_mode: viewMode,
         })
         ganttInstance.current.change_view_mode()
