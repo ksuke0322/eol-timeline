@@ -4,8 +4,7 @@ ci:
       preset: desktop
       throttlingMethod: devtools
       disableStorageReset: false
-    startServerCommand: pnpm build && pnpm start
-    url: http://localhost:4173
+    url: https://eol-timeline.dev
     numberOfRuns: 5
 
   assert:
@@ -13,15 +12,14 @@ ci:
     # https://tinyurl.com/2dhhb6y6
     preset: lighthouse:recommended
     assertions:
-      # TODO: これらは error としたいが結果が flaky すぎて CI が通らないので一旦緩めて warn とする
       'categories:performance':
-        ['warn', { minScore: 0.9, aggregationMethod: 'median' }]
+        ['error', { minScore: 0.9, aggregationMethod: 'median' }]
       'largest-contentful-paint':
-        ['warn', { maxNumericValue: 2500, aggregationMethod: 'median' }]
+        ['error', { maxNumericValue: 2500, aggregationMethod: 'median' }]
       'total-blocking-time':
-        ['warn', { maxNumericValue: 200, aggregationMethod: 'median' }]
+        ['error', { maxNumericValue: 200, aggregationMethod: 'median' }]
       'cumulative-layout-shift':
-        ['warn', { maxNumericValue: 0.1, aggregationMethod: 'median' }]
+        ['error', { maxNumericValue: 0.1, aggregationMethod: 'median' }]
 
       # Insight系や環境依存度が高い項目は最初は緩める/警告に
       'forced-reflow-insight': 'warn'

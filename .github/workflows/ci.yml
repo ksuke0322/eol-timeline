@@ -15,7 +15,6 @@ on:
       - 'public/**'
       - 'test'
       - 'components.json'
-      - '.lighthouserc.yml'
       - 'eslint.config.mjs'
       - 'playwright.config.ts'
       - 'react-router.config.ts'
@@ -279,34 +278,6 @@ jobs:
       - name: Check code formatting
         run: pnpm prettier --check
 
-  lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: true
-
-      # - name: Download node_modules artifact
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: node_modules
-      #     path: node_modules
-
-      - name: Run Lighthouse and assertion results
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          configPath: './.lighthouserc.yml'
-
   # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
   deploy:
     runs-on: ubuntu-latest
@@ -320,7 +291,6 @@ jobs:
         e2e-test,
         security-audit,
         format-check,
-        lighthouse,
       ]
     steps:
       - name: Checkout code
