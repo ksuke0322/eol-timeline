@@ -52,6 +52,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </footer>
         <ScrollRestoration />
         <Scripts />
+        {/* <!-- Cloudflare Web Analytics --> */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "81d83771590e42d8ba1b8449ad8ed44e"}'
+        ></script>
+        {/* <!-- End Cloudflare Web Analytics --> */}
       </body>
     </html>
   )
