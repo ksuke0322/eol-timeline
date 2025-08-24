@@ -135,6 +135,7 @@ body {
 }
 
 /* FIXME: frapp/gantt から公式でスタイル上書き機能が提供されるまでの一時的な処理 */
+/* 日時表示のスタイル上書き */
 .lower-text {
   color: #333333 !important;
 }
