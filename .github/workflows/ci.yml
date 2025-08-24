@@ -12,7 +12,7 @@ on:
       - 'app/**'
       - '__e2e__'
       - '.storybook'
-      - 'public'
+      - 'public/**'
       - 'test'
       - 'components.json'
       - '.lighthouserc.yml'
