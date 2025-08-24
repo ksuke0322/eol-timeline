@@ -16,55 +16,71 @@ const GanttChart: React.FC<GanttChartProps> = ({
   const ganttRef = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ganttInstance = useRef<any>(null)
-  const [viewMode, setViewMode] = React.useState<string>('Year')
 
   useEffect(() => {
     if (ganttRef.current) {
-      const ganttOptions = {
-        upper_header_height: 50,
-        column_width: 60,
-        bar_height: 20,
-        bar_corner_radius: 3,
-        arrow_curve: 5,
-        padding: 18,
-        language: 'en',
-        infinite_padding: false,
-        view_mode: 'Year',
-        view_mode_select: true,
-        view_modes: [
-          Gantt.VIEW_MODE.WEEK,
-          Gantt.VIEW_MODE.MONTH,
-          Gantt.VIEW_MODE.YEAR,
-        ],
-        scroll_to: 'today',
-        auto_move_label: true,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        popup: ({ task, set_title, set_details }) => {
-          const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
-          set_title(`${task.productName} ${task.id}`)
-          set_details(`EOL date: ${eolDate}`)
-        },
-        popup_on: 'hover',
-        readonly: true,
-        on_view_change: (viewMode: Gantt.ViewModeObject) => {
-          setViewMode(viewMode.name)
-        },
-      }
       if (ganttInstance.current) {
-        ganttInstance.current.setup_tasks(tasks)
-        ganttInstance.current.setup_options({
-          ...ganttOptions,
-          column_width: viewMode === 'Month' ? 80 : 60,
-          view_mode: viewMode,
-        })
-        ganttInstance.current.change_view_mode()
+        ganttInstance.current.refresh(tasks)
       } else {
+        const getDecade = (d: Date) => {
+          const year = d.getFullYear()
+          return year - (year % 10) + ''
+        }
         // frappe/gantt の型定義が不十分で自前型定義を用意する必要がある、それをするくらいなら型の恩恵を無視して実装する
         // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/frappe-gantt
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        ganttInstance.current = new Gantt(ganttRef.current, tasks, ganttOptions)
+        ganttInstance.current = new Gantt(ganttRef.current, tasks, {
+          upper_header_height: 50,
+          bar_height: 20,
+          bar_corner_radius: 3,
+          arrow_curve: 5,
+          padding: 18,
+          lines: 'horizontal',
+          // 休日のハイライトを無効化
+          holidays: [],
+          infinite_padding: false,
+          view_mode: 'Year',
+          view_mode_select: true,
+          view_modes: [
+            {
+              name: 'Month',
+              padding: '2m',
+              step: '1m',
+              column_width: 30,
+              date_format: 'YYYY-MM',
+              lower_text: (d) => d.getMonth() + 1,
+              upper_text: (d, ld) =>
+                !ld || d.getFullYear() !== ld.getFullYear()
+                  ? d.getFullYear()
+                  : '',
+              // thick_line: (d) => d.getMonth() % 3 === 0,
+              snap_at: '7d',
+            },
+            {
+              name: 'Year',
+              padding: '2y',
+              step: '1y',
+              column_width: 60,
+              date_format: 'YYYY',
+              upper_text: (d, ld) =>
+                !ld || getDecade(d) !== getDecade(ld) ? getDecade(d) : '',
+              lower_text: 'YYYY',
+              snap_at: '30d',
+            },
+          ],
+          scroll_to: 'today',
+          auto_move_label: true,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          popup: ({ task, set_title, set_details }) => {
+            const eolDate = typeof task.end === 'string' ? task.end : 'N/A'
+            set_title(`${task.productName} ${task.id}`)
+            set_details(`EOL date: ${eolDate}`)
+          },
+          popup_on: 'hover',
+          readonly: true,
+        })
       }
 
       /* FIXME: frapp/gantt から公式でスタイル上書き機能が提供されるまでの一時的な処理 */
@@ -75,7 +91,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
         viewModeSelect[0].setAttribute('id', 'viewmode-select')
       }
     }
-  }, [tasks, viewMode])
+  }, [tasks])
 
   return (
     <div
