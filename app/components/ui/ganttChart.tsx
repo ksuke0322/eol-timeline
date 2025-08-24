@@ -54,8 +54,25 @@ const GanttChart: React.FC<GanttChartProps> = ({
                 !ld || d.getFullYear() !== ld.getFullYear()
                   ? d.getFullYear()
                   : '',
-              // thick_line: (d) => d.getMonth() % 3 === 0,
+              thick_line: (d) => d.getMonth() % 3 === 0,
               snap_at: '7d',
+            },
+            {
+              // 四半期表示
+              name: 'Quarter',
+              // 全体の余白は年単位で俯瞰しやすく
+              padding: '1y',
+              // 3か月単位で1列
+              step: '3m',
+              column_width: 40,
+              date_format: 'YYYY-MM',
+              lower_text: (d) => `Q${Math.floor(d.getMonth() / 3) + 1}`,
+              upper_text: (d, ld) =>
+                !ld || d.getFullYear() !== ld.getFullYear()
+                  ? d.getFullYear()
+                  : '',
+              snap_at: '15d',
+              thick_line: (d) => d.getMonth() % 12 === 0, // 年境界を太線にしたい場合
             },
             {
               name: 'Year',
