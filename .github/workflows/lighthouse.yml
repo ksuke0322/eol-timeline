@@ -1,5 +1,9 @@
 name: 'lighthouse'
 
+env:
+  NODE_VERSION: '22.12.0'
+  PNPM_VERSION: '9.15.9'
+
 on:
   schedule:
     - cron: '0 15 * * *' # 毎日0時（UTC 15:00 = JST 00:00）に実行
