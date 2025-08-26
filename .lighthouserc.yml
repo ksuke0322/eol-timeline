@@ -3,7 +3,7 @@ ci:
     settings:
       preset: desktop
       formFactor: desktop
-      throttlingMethod: devtools
+      throttlingMethod: simulate
       # https://tinyurl.com/2bg2soe8
       # https://github.com/GoogleChrome/lighthouse/blob/6b199b2cb50968c78d6e532ce8a436b5472dbd89/lighthouse-core/config/constants.js#L43
       throttling:
