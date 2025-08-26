@@ -10,11 +10,11 @@ ci:
         rttMs: 40
         throughputKbps: 10240
         cpuSlowdownMultiplier: 1
-        requestLatencyMs: 0 #0 means unset
+        requestLatencyMs: 0 # 0 means unset
         downloadThroughputKbps: 0
         uploadThroughputKbps: 0
       disableStorageReset: false
-      chromeFlags: '--incognito --disable-extensions --no-first-run --no-default-browser-check --disable-background-networking'
+      # chromeFlags: '--incognito --disable-extensions --no-first-run --no-default-browser-check --disable-background-networking'
     url: https://eol-timeline.dev
     numberOfRuns: 5
   assert:
