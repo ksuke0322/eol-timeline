@@ -1,5 +1,4 @@
 ci:
-  extends: lighthouse:default
   collect:
     settings:
       preset: desktop
