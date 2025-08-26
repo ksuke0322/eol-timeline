@@ -2,12 +2,21 @@ ci:
   collect:
     settings:
       preset: desktop
+      formFactor: desktop
       throttlingMethod: simulate
+      # https://tinyurl.com/2bg2soe8
+      # https://github.com/GoogleChrome/lighthouse/blob/6b199b2cb50968c78d6e532ce8a436b5472dbd89/lighthouse-core/config/constants.js#L43
+      throttling:
+        rttMs: 40
+        throughputKbps: 10240
+        cpuSlowdownMultiplier: 1
+        requestLatencyMs: 0 #0 means unset
+        downloadThroughputKbps: 0
+        uploadThroughputKbps: 0
       disableStorageReset: false
       chromeFlags: '--incognito --disable-extensions --no-first-run --no-default-browser-check --disable-background-networking'
     url: https://eol-timeline.dev
     numberOfRuns: 10
-
   assert:
     # lighthouse:recommended - Asserts that every audit outside performance received a perfect score, that no resources were flagged for performance opportunities, and warns when metric values drop below a score of 90. This is a more realistic base that disables hard failures for flaky audits.
     # https://tinyurl.com/2dhhb6y6
