@@ -6,7 +6,7 @@ ci:
       disableStorageReset: false
       chromeFlags: '--incognito --disable-extensions --no-first-run --no-default-browser-check --disable-background-networking'
     url: https://eol-timeline.dev
-    numberOfRuns: 5
+    numberOfRuns: 10
 
   assert:
     # lighthouse:recommended - Asserts that every audit outside performance received a perfect score, that no resources were flagged for performance opportunities, and warns when metric values drop below a score of 90. This is a more realistic base that disables hard failures for flaky audits.
