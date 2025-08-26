@@ -1,8 +1,9 @@
 ci:
+  extends: lighthouse:default
   collect:
     settings:
       preset: desktop
-      throttlingMethod: devtools
+      throttlingMethod: simulate
       disableStorageReset: false
     url: https://eol-timeline.dev
     numberOfRuns: 5

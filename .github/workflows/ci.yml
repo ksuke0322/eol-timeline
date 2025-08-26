@@ -24,7 +24,7 @@ on:
       - 'wrangler.jsonc'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - '.github/workflows/**'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches:
       - main
