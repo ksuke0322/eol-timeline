@@ -2,7 +2,7 @@ ci:
   collect:
     settings:
       preset: desktop
-      throttlingMethod: simulate
+      throttlingMethod: devtools
       disableStorageReset: false
       chromeFlags: '--incognito --disable-extensions --no-first-run --no-default-browser-check --disable-background-networking'
     url: https://eol-timeline.dev
