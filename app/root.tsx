@@ -29,11 +29,59 @@ export const links = () => [
 ]
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://eol-timeline.dev/#website',
+        url: 'https://eol-timeline.dev/',
+        name: 'EOL Timeline',
+        description:
+          'EOL Timeline provides a comprehensive timeline for end-of-life dates of developer tools, helping developers stay informed about software lifecycle changes.',
+        inLanguage: 'en',
+        publisher: {
+          '@id': 'https://eol-timeline.dev/#org',
+        },
+      },
+      {
+        '@type': 'Organization',
+        '@id': 'https://eol-timeline.dev/#org',
+        name: 'EOL Timeline',
+        url: 'https://eol-timeline.dev/',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://eol-timeline.dev/assets/logo-512.png',
+        },
+        sameAs: ['https://x.com/ksuke_dev', 'https://github.com/ksuke_dev'],
+      },
+      {
+        '@type': 'SoftwareApplication',
+        '@id': 'https://eol-timeline.dev/#app',
+        name: 'EOL Timeline',
+        applicationCategory: 'DeveloperTool',
+        operatingSystem: 'All',
+        url: 'https://eol-timeline.dev/',
+        description:
+          'EOL Timeline is a developer tool that tracks end-of-life dates for various software and platforms.',
+        publisher: {
+          '@id': 'https://eol-timeline.dev/#org',
+        },
+        isBasedOn: 'https://endoflife.date/docs/api',
+      },
+    ],
+  }
+  const jsonLdString = JSON.stringify(jsonLd)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script type="application/ld+json">{jsonLdString}</script>
         <Meta />
         <Links />
       </head>
