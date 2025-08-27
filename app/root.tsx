@@ -49,10 +49,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         '@id': 'https://eol-timeline.dev/#org',
         name: 'EOL Timeline',
         url: 'https://eol-timeline.dev/',
-        logo: {
-          '@type': 'ImageObject',
-          url: 'https://eol-timeline.dev/assets/logo-512.png',
-        },
         sameAs: ['https://x.com/ksuke_dev', 'https://github.com/ksuke_dev'],
       },
       {
