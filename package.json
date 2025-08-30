@@ -20,10 +20,10 @@
     "all-check": "pnpm lint && pnpm tsc && pnpm test && pnpm build && pnpm test-storybook && pnpm test:e2e"
   },
   "engines": {
-    "node": ">=22.x",
+    "node": "=22.12.0",
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
-    "pnpm": ">=9.x"
+    "pnpm": "=9.15.9"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.11",

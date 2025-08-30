@@ -6,7 +6,8 @@
   "requiredStatusChecks": true,
   "dependencyDashboard": false,
   "automerge": true,
-  "branchConcurrentLimit": 10,
+  "rebaseWhen": "never",
+  "branchConcurrentLimit": 1,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
   "packageRules": [
