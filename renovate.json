@@ -6,7 +6,7 @@
   "requiredStatusChecks": true,
   "dependencyDashboard": false,
   "automerge": true,
-  "branchConcurrentLimit": 0,
+  "branchConcurrentLimit": 10,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
   "packageRules": [
@@ -18,6 +18,12 @@
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "matchPackagePatterns": ["eslint"],
       "groupName": "eslint",
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchPackagePatterns": ["storybook"],
+      "groupName": "storybook",
       "automerge": true
     },
     {

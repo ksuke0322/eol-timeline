@@ -281,6 +281,7 @@ jobs:
   # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
     needs:
       [
         lint,
