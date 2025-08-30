@@ -12,25 +12,65 @@
   "labels": ["dependencies", "renovate"],
   "packageRules": [
     {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "groupName": "devDeps (non-major)"
     },
     {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "matchPackagePatterns": ["eslint"],
-      "groupName": "eslint",
-      "automerge": true
+      "groupName": "devDeps - eslint (non-major)"
     },
     {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "matchPackagePatterns": ["storybook"],
-      "groupName": "storybook",
-      "automerge": true
+      "groupName": "devDeps - storybook (non-major)"
+    },
+
+    {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "excludePackagePatterns": [
+        "^eslint($|-)",
+        "^@eslint/",
+        "^@typescript-eslint/",
+        "^storybook",
+        "^@storybook/"
+      ],
+      "groupName": "devDeps (major)"
     },
     {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["major"],
-      "groupName": "major dependencies",
-      "automerge": false
+      "matchPackagePatterns": ["eslint"],
+      "groupName": "devDeps - eslint (major)"
+    },
+    {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "matchPackagePatterns": ["storybook"],
+      "groupName": "devDeps - storybook (major)"
+    },
+
+    {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "deps (non-major)"
+    },
+
+    {
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["major"]
     }
   ]
 }
