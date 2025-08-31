@@ -11,7 +11,7 @@ expect.extend(matchers)
 // This is often needed for libraries that use these browser APIs
 // but are run in a Node.js environment like Vitest with JSDOM.
 if (typeof global.TextEncoder === 'undefined') {
-  global.TextEncoder = TextEncoder
+  global.TextEncoder = TextEncoder as typeof global.TextEncoder
   global.TextDecoder = TextDecoder as typeof global.TextDecoder
 }
 
