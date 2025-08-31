@@ -15,21 +15,24 @@
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "groupName": "devDeps (non-major)"
+      "groupName": "devDeps (non-major)",
+      "automerge": true
     },
     {
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "matchPackagePatterns": ["eslint"],
-      "groupName": "devDeps - eslint (non-major)"
+      "groupName": "devDeps - eslint (non-major)",
+      "automerge": true
     },
     {
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "matchPackagePatterns": ["storybook"],
-      "groupName": "devDeps - storybook (non-major)"
+      "groupName": "devDeps - storybook (non-major)",
+      "automerge": true
     },
 
     {
@@ -60,7 +63,8 @@
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "groupName": "deps (non-major)"
+      "groupName": "deps (non-major)",
+      "automerge": true
     },
 
     {
