@@ -278,12 +278,10 @@ jobs:
       - name: Check code formatting
         run: pnpm prettier --check
 
-  # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
-  deploy:
+  status_check_complete:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main' }}
     needs:
-      [
+      &NEEDS_ACTIONS [
         lint,
         build,
         test,
@@ -293,6 +291,15 @@ jobs:
         security-audit,
         format-check,
       ]
+    steps:
+      - name: echo
+        run: echo "complete status check actions"
+
+  # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
+    needs: *NEEDS_ACTIONS
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
