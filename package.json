@@ -43,7 +43,7 @@
     "react-dom": "19.1.0",
     "react-router": "7.5.3",
     "react-router-dom": "7.7.0",
-    "start-server-and-test": "2.0.12",
+    "start-server-and-test": "2.0.13",
     "tailwind-merge": "3.3.1"
   },
   "devDependencies": {
