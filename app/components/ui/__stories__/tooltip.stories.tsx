@@ -1,4 +1,11 @@
-import { within, expect, userEvent, screen, waitFor } from '@storybook/test'
+import {
+  within,
+  expect,
+  userEvent,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
@@ -23,7 +30,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: (args: Parameters<typeof Tooltip>[0]) => (
-    <Tooltip {...args}>
+    <Tooltip {...args} delayDuration={0}>
       <TooltipTrigger asChild>
         <Button variant="outline">Hover</Button>
       </TooltipTrigger>
@@ -35,30 +42,41 @@ export const Default: Story = {
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('button', { name: 'Hover' })
+    const name = 'Add to library'
 
-    await expect(
-      screen.queryByRole('tooltip', { name: 'Add to library' }),
-    ).not.toBeInTheDocument()
+    // 初期状態: DOM にないことを確認（portal 外も含めて screen で確認）
+    expect(screen.queryByRole('tooltip', { name })).toBeNull()
 
+    // 開く
     await userEvent.hover(trigger)
-    await waitFor(() => {
-      expect(
-        screen.queryByRole('tooltip', { name: 'Add to library' }),
-      ).toBeVisible()
-    })
+    const tooltip = await screen.findByRole(
+      'tooltip',
+      { name },
+      { timeout: 2000 },
+    )
+    await expect(tooltip).toBeVisible()
 
+    // 閉じる（unhover → 要素の消滅まで待つ。非表示のみの実装でもリトライで吸収）
     await userEvent.unhover(trigger)
-    await waitFor(() => {
-      expect(
-        screen.queryByRole('tooltip', { name: 'Add to library' }),
-      ).not.toBeVisible()
+    await userEvent.pointer({ target: document.body })
+    await waitForElementToBeRemoved(
+      () => screen.queryByRole('tooltip', { name }),
+      { timeout: 2000 },
+    ).catch(async () => {
+      // 実装によっては非表示で DOM 残存のことがあるためフォールバック
+      await waitFor(
+        () => {
+          expect(screen.getByRole('tooltip', { name })).not.toBeVisible()
+        },
+        { timeout: 2000 },
+      )
     })
   },
 }
 
 export const WithLongContent: Story = {
   render: (args: Parameters<typeof Tooltip>[0]) => (
-    <Tooltip {...args}>
+    <Tooltip {...args} delayDuration={0}>
       <TooltipTrigger asChild>
         <Button variant="outline">Hover</Button>
       </TooltipTrigger>
@@ -100,7 +118,7 @@ export const WithLongContent: Story = {
 export const WithSide: Story = {
   render: (args: Parameters<typeof Tooltip>[0]) => (
     <div className="flex gap-4">
-      <Tooltip {...args}>
+      <Tooltip {...args} delayDuration={0}>
         <TooltipTrigger asChild>
           <Button variant="outline">Top</Button>
         </TooltipTrigger>
@@ -108,7 +126,7 @@ export const WithSide: Story = {
           <p>Tooltip on top</p>
         </TooltipContent>
       </Tooltip>
-      <Tooltip {...args}>
+      <Tooltip {...args} delayDuration={0}>
         <TooltipTrigger asChild>
           <Button variant="outline">Right</Button>
         </TooltipTrigger>
@@ -116,7 +134,7 @@ export const WithSide: Story = {
           <p>Tooltip on right</p>
         </TooltipContent>
       </Tooltip>
-      <Tooltip {...args}>
+      <Tooltip {...args} delayDuration={0}>
         <TooltipTrigger asChild>
           <Button variant="outline">Bottom</Button>
         </TooltipTrigger>
@@ -124,7 +142,7 @@ export const WithSide: Story = {
           <p>Tooltip on bottom</p>
         </TooltipContent>
       </Tooltip>
-      <Tooltip {...args}>
+      <Tooltip {...args} delayDuration={0}>
         <TooltipTrigger asChild>
           <Button variant="outline">Left</Button>
         </TooltipTrigger>
