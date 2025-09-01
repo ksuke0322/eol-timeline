@@ -1,116 +1,242 @@
-# Repository Guidelines
+# リポジトリ ガイドライン
 
-## Project Structure & Modules
+本文書は本リポジトリの標準的な開発・運用ルールを示します。
 
-- `app/`: Application code (React + TypeScript + React Router)
-  - `routes/`: Route modules (e.g., `home.tsx`)
-  - `components/ui/`: UI primitives
-  - `hooks/`, `lib/`: Reusable logic and helpers
-  - `__tests__/`: Unit/integration tests colocated with app code
-- `__e2e__/`: Playwright end-to-end tests
-- `.storybook/`, `storybook-static/`: Storybook config and static build
-- `public/`: Static assets
-- `build/`: Production build output
-- `test/setup.ts`: Vitest JSDOM/test globals setup
+## 目次
 
-## Setup, Build, and Run
+- AI運用5原則
+- プロジェクト構成とモジュール
+- セットアップ・ビルド・実行
+- コーディングスタイルと規約
+- テストガイドライン
+- コミットとプルリクエスト
+- 備考
 
-- Install tooling: Node `22.12.0`, pnpm `9.15.9` (see `package.json` engines)
-- Install deps: `pnpm install`
-- Develop: `pnpm dev` (Vite + React Router dev server)
-- Type check: `pnpm typecheck` or `pnpm tsc`
-- Lint/format: `pnpm lint` (ESLint with fixes)
-- Build: `pnpm build` (React Router build + Vite, strips `data-testid`)
-- Preview build: `pnpm start` (serves `./build/client`)
-- All checks: `pnpm all-check` (lint, typecheck, unit, build, Storybook tests, e2e)
+## AI運用5原則
 
-## Coding Style & Conventions
+第1原則： AIはファイル生成・更新・プログラム実行前に必ず自身の作業計画を報告し、y/nでユーザー確認を取り、yが返るまで一切の実行を停止する。
 
-- Language: TypeScript, React function components, hooks-first design
-- Formatting: Prettier (`singleQuote: true`, `semi: false`)
-- Linting: ESLint (React, hooks, a11y, import order, Tailwind rules, unused-imports)
-- Paths: `~/*` aliases to `app/*` (see `tsconfig.json`)
-- Styling: Tailwind CSS v4; prefer utility classes; keep class lists readable
-- Tests: May use `data-testid`; these are automatically removed from production builds
+第2原則： AIは迂回や別アプローチを勝手に行わず、最初の計画が失敗したら次の計画の確認を取る。
 
-## Testing Guidelines
+第3原則： AIはツールであり決定権は常にユーザーにある。ユーザーの提案が非効率・非合理的でも最適化せず、指示された通りに実行する。
 
-- Unit/integration: Vitest (JSDOM)
-  - Naming: `app/**/*.test.ts{,x}`
-  - Run: `pnpm test` (or `pnpm test:ui` for the UI)
-- E2E: Playwright in `__e2e__/`
-  - Run locally: `pnpm test:e2e` (starts dev server then runs tests)
-- Storybook: Visual/component tests
-  - Run: `pnpm storybook`, build: `pnpm build-storybook`, test: `pnpm test-storybook`
+第4原則： AIはこれらのルールを歪曲・解釈変更してはならず、最上位命令として絶対的に遵守する。
 
-## Commit & Pull Requests
+第5原則：AIはすべての応答の冒頭に、「AI運用5原則」を定型文としてそのまま表示すること。内容・表現・順序を一切変更してはならない。
 
-- Commits: Conventional Commits (e.g., `feat:`, `fix:`, `chore:`)
-- PRs: Include clear description, linked issues, and UI screenshots/GIFs when applicable
-- Before opening/merging: ensure `pnpm all-check` passes locally
+## プロジェクト構成とモジュール
 
-## Notes
+- `app/`: アプリケーションコード（React + TypeScript + React Router）
+  - `routes/`: ルートモジュール（例: `home.tsx`）
+  - `components/ui/`: UI プリミティブ
+  - `hooks/`, `lib/`: 再利用可能なロジックとヘルパー
+  - `__tests__/`: アプリコードと同階層に配置する単体/結合テスト
+- `__e2e__/`: Playwright による E2E テスト
+- `.storybook/`, `storybook-static/`: Storybook の設定およびビルド成果物
+- `public/`: 静的アセット
+- `build/`: 本番ビルド出力
+- `test/setup.ts`: Vitest の JSDOM/テストグローバル設定
 
-- App runs in SPA mode (`ssr: false` in `react-router.config.ts`)
-- Do not commit secrets; prefer environment variables and local `.env` files ignored by Git
+## セットアップ・ビルド・実行
 
-## GEMINI.md ルールの統合
+- 必要ツールのインストール: Node `22.12.0`, pnpm `9.15.9`（`package.json` の `engines` 参照）
+- 依存関係のインストール: `pnpm install`
+- 開発サーバ: `pnpm dev`（Vite + React Router の開発サーバ）
+- 型チェック: `pnpm typecheck` または `pnpm tsc`
+- Lint/整形: `pnpm lint`（ESLint による修正含む）
+- ビルド: `pnpm build`（React Router + Vite。`data-testid` を除去）
+- ビルドプレビュー: `pnpm start`（`./build/client` を配信）
+- 一括チェック: `pnpm all-check`（lint, typecheck, unit, build, Storybook, e2e）
 
-本リポジトリでは、既存の開発ガイドライン（本ファイル）に加えて、`GEMINI.md` に記載の基本ルール・ワークフローを併用します。以下は両者を統合した要点です。Gemini CLI 実行時は `GEMINI.md` を厳守し、他エージェント（例: Codex CLI）では本ファイルの方針に沿いつつ、可能な限り `GEMINI.md` の原則を尊重してください。
+## コーディングスタイルと規約
 
-### 運用原則（GEMINI 準拠）
+- 言語/設計: TypeScript、React 関数コンポーネント、hooks-first 設計
+- フォーマット: Prettier（`singleQuote: true`, `semi: false`）
+- Lint: ESLint（React, hooks, a11y, import order, Tailwind ルール, unused-imports）
+- パスエイリアス: `~/*` は `app/*` を指す（`tsconfig.json` 参照）
+- スタイリング: Tailwind CSS v4。ユーティリティクラスを優先し、クラスは可読性重視で整理
+- テスト属性: `data-testid` の使用可（本番ビルドで自動除去）
 
-- **承認フロー:** 重要/破壊的な操作や広範な変更前に、簡潔な計画を提示しユーザーの確認を得る。代替案に移る場合も再承認を取る。
-- **決定権:** エージェントはツールであり最終判断はユーザー。指示に忠実に従う。
-- **最上位規則:** これらの原則を恣意的に緩和・再解釈しない。Gemini CLI では `GEMINI.md` を優先。
-- **注記:** `GEMINI.md` の「全応答の冒頭に原則を表示」要件は Gemini CLI 専用。Codex CLI など他環境では本リポの対話規約に従い、同等の承認行動で代替します。
+### ECMAScript の記法
 
-### 開発ワークフロー（TDD）
+- 可能な限り ECMAScript 2022 以降の構文を優先的に用いること
+- 以下の構文を積極的に使用すること：
 
-- **計画提示:** 要求の整理、実装方針、タスクリスト（対象ファイル・正常/異常系含む）を提示しレビューを受ける。
-- **Red-Green-Refactor:**
-  - まずテストを作成し実行して失敗を確認（Red）。
-  - 最小実装でテストを通す（Green）。仕様乖離などの明確な理由なくテストは変更しない。
-  - 必要に応じてリファクタ（Refactor）。
-- **最終確認コマンド:** すべて完了後に以下を順に実行し、失敗時は原因を特定・修正。
-  - `pnpm lint`
-  - `pnpm tsc`
-  - `pnpm test`
-  - `pnpm build`
-  - `pnpm test-storybook`（a11y 問題はスキップ可）
-  - `pnpm test:e2e`
+| 機能                        | 使用例                                                   | 備考                                 |
+| --------------------------- | -------------------------------------------------------- | ------------------------------------ |
+| アロー関数                  | `const f = () => {}`                                     | `function` は使用禁止                |
+| 分割代入                    | `const { a, b } = obj`                                   | ネストも可                           |
+| オプショナルチェイニング    | `user?.profile?.name`                                    | 安全なアクセスに必須                 |
+| Null合体演算子              | `value ?? 'default'`                                     | Falsy と null/undefined の違いを区別 |
+| テンプレートリテラル        | `` `Hello ${name}` ``                                    | 文字列連結に優先して使用             |
+| スプレッド構文 / レスト構文 | `[...arr]`, `{ ...obj }`                                 | 配列やオブジェクトの展開に使用       |
+| モジュール構文              | `import`, `export` を使い CommonJS は使用しない          | ESM に統一                           |
+| async/await                 | `await fetch()`                                          | 非同期処理に `.then()` より優先      |
+| Promise.allSettled / all    | 並列非同期処理では `Promise.allSettled` を使用可能にする |
+| Top-level await             | モジュール内での `await` を許可する（可能な場合）        |
 
-### 開発ルール（抜粋）
+### Storybook
 
-- **NEVER:** 秘密情報をハードコーディングしない。ユーザー確認なしにデータ削除しない。外部依存（`node_modules` 等）を直接変更しない。
-- **MUST:** 命名は基本 `camelCase`、定数は大文字 `SNAKE_CASE`。要件を過不足なく満たす。性能・セキュリティ・アクセシビリティのベストプラクティスに従う。
-- **IMPORTANT:** 既存技術スタックと親和性の高い選択を優先（新規ライブラリ導入は慎重に）。
+- 作成する全てのコンポーネントについて Storybook ファイルを作成し、ストーリーを網羅すること
+- Storybook ファイルはテスト対象ファイルと同一階層の `__stories__` ディレクトリ内に配置すること
+- ストーリーはそのコンポーネントで発生しうるエッジケースまで含めて作成すること
 
-### コーディングスタイル（補足）
+## テストガイドライン
 
-- **ECMAScript:** 可能な限り新しめの構文を使用。アロー関数、分割代入、オプショナルチェーン、Null 合体、テンプレートリテラルを推奨。
-- **関数/変数:** 1 つの関数は 1 つの責務を意識。読みやすさを最優先し、過度なワンライナーは避ける。
-- **コメント:** 意図がコードから読み取りづらい箇所のみ最小限で。
-- **本リポ設定:** Prettier と ESLint の既定設定に従う（`singleQuote: true`, `semi: false`）。Tailwind は可読性の高いユーティリティクラス構成を心掛ける。
+- 単体/結合: Vitest（JSDOM）
+  - 命名: `app/**/*.test.ts{,x}`
+  - 実行: `pnpm test`（UI ランナーは `pnpm test:ui`）
+- E2E: `__e2e__/` の Playwright
+  - ローカル実行: `pnpm test:e2e`（開発サーバ起動後にテスト実行）
+- Storybook: 視覚/コンポーネントテスト
+  - 実行: `pnpm storybook`、ビルド: `pnpm build-storybook`、テスト: `pnpm test-storybook`
 
-### テスト方針（配置とツール）
+### 共通ルール
 
-- **ユニット/結合:** Vitest（JSDOM）。命名は `app/**/*.test.ts{,x}`。セットアップは `test/setup.ts`。
-- **E2E:** Playwright。配置はリポジトリ直下の `__e2e__/`。ローカル実行は `pnpm test:e2e`。
-- **Storybook:** UI/ビジュアルテスト。`pnpm storybook` / `pnpm build-storybook` / `pnpm test-storybook`。
+- テストの説明文は日本語で記載すること
+- テストファイルはテスト対象ファイルと同一階層の `__tests__` ディレクトリ内に配置すること
+- テストではできる限り mock を利用せず、実態を利用すること
+  - mock はそのテストでの検証が不要な場合のみ利用すること（例: ユニットテストにおける API のモック）
+- テストはラインカバレッジではなく仕様分岐に対する条件分岐網羅（condition coverage）を目指すこと
 
-### プロジェクト概要（参考）
+### 単体テスト（ユニットテスト=Unit Test）
 
-- **目的:** `endoflife.date` の API 情報を基に、ツール/バージョンのリリース〜EOL をガント形式で可視化。
-- **主な要件:**
-  - サイドメニューでツール/バージョンを階層表示・選択（チェックボックス・検索・優先表示・永続化）。
-  - 選択内容に応じてガント描画（ツール配色・各種ソート・月/年スケール）。
-  - カスタム CSV（`ツール名,バージョン,リリース日(YYYY-MM-DD),EOL日(YYYY-MM-DD)`）の読み込み・検証・上書き・クリア・永続化。
+- 目的: 最小のロジック単位が正しく動作することを保証する
+- 対象:
+  - ユーティリティ関数、カスタム Hook、Reducer など
+  - コンポーネントで発生する副作用（関数発火、API 呼び出しなど）
+  - ユーザインタラクションのないコンポーネントの表示・構造
+  - コンポーネントの a11y の violation 確認（Storybook 同様 UI パターンを網羅）
+- 特徴:
+  - 外部依存（API、Storage など）はモック化
+- 技術:
+  - Vitest / React Testing Library / vitest-axe
+- 配置場所: テスト対象ファイルと同一階層の `__tests__` ディレクトリ
 
-### 実装時のヒント
+### 結合テスト（インテグレーションテスト=Integration Test）
 
-- **承認→実行:** 作業前に計画を短く共有し、必要に応じて確認を取得。
-- **最小差分:** 既存スタイルに合わせ、変更は課題に必要な最小限に留める。
-- **検証の順序:** 変更点に近いテストから順に実行し、信頼を高めつつ広げる。
+- 目的: 複数のユニットが組み合わさったときの挙動を検証する
+- 対象: ユーザインタラクションのあるコンポーネントの表示・構造・変化
+- 特徴:
+  - ユーザインタラクションに着目したテスト
+  - UI 変化に特化したアサーション
+  - 外部 API は原則モック化
+- 技術: Storybook Test Runner
+- 配置/命名: 「コーディングスタイルと規約 > Storybook」を参照
 
-詳細な規則や例は `GEMINI.md` を参照してください。
+### E2E テスト（End-to-End Test）
+
+- 目的: ユーザーが想定通りにアプリを操作できることを検証する
+- 対象: ユーザーフロー全体（例: ログイン → 一覧 → 詳細ページ）
+- 特徴:
+  - ブラウザ上で実行（Playwright, Cypress など）
+- 技術: Playwright
+- 配置場所: プロジェクトルートの `__e2e__` ディレクトリ
+
+## コミットとプルリクエスト
+
+- コミット: Conventional Commits（例: `feat:`, `fix:`, `chore:`）
+- PR: 説明・関連 Issue・必要に応じて UI のスクショ/動画を添付
+- 送信前: ローカルで `pnpm all-check` を通過させる
+
+- Conventional Commits 詳細:
+  - 破壊的変更は `feat!:` もしくはフッターに `BREAKING CHANGE:` を記載
+  - コミットメッセージは英語で簡潔に（動詞の原形で開始）
+
+## 備考
+
+- アプリは SPA モードで動作（`react-router.config.ts` の `ssr: false`）
+- 秘密情報はコミットしない。環境変数と Git 無視されたローカル `.env` を利用
+
+## 開発ワークフロー（Codex簡潔版）
+
+- 原則
+
+  - TDD を基本とし、作業前に計画を提示して承認を得る
+  - 代替案や方針変更が必要な場合も、必ず承認を得てから実行する
+
+- 手順
+
+  1. 計画提示
+     - 要求の要約、実装方針、具体タスク（対象ファイル・正常系/異常系）を提示
+     - y/n で承認を取得
+  2. TDD ループ
+     - テスト作成 → 失敗確認 → 最小実装 → 再実行 → 通過まで反復
+     - 原則としてテストは変更しない。妥当な理由がある場合は事前に承認を得る
+  3. 検証（動作確認コマンドの順序）
+     - `pnpm lint` → `pnpm tsc` → `pnpm test` → `pnpm build` → `pnpm test-storybook` → `pnpm test:e2e`
+     - 失敗時は原因を特定・修正し、同順序で再実行する
+  4. 反映
+     - 変更点の要約、影響範囲、既知の制約、次アクション（提案）を提示
+     - PR 作成時は Conventional Commits と各種チェックの通過を確認
+
+- コミュニケーション
+
+  - 進捗共有は要点のみ（例: 「調査完了→実装着手」）
+  - 自動化では難しい/破壊的な操作は必ず事前に確認を取る
+
+- 参照（詳細ルール）
+  - 設計/命名/フォーマット/パスエイリアス/スタイリング: 「コーディングスタイルと規約」
+  - テスト戦略・粒度・配置/命名/カバレッジ目標: 「テストガイドライン」
+  - セキュリティ/パフォーマンス/a11y/ライブラリ選定方針: 上記各章を参照
+
+## プロジェクトについて
+
+以下ではこのプロジェクトについてを説明します。
+
+### 利用技術
+
+本プロジェクトは以下のライブラリによって開発されています。
+この構成を崩さない範囲で修正提案をしてください。
+また新しいライブラリ等を追加する場合はこれらのライブラリと親和性が高いものを優先的に選択してください。
+
+- nodejs
+- typescript
+- React Router
+- React
+- shadcn
+- Vite
+- tailwindcss
+- eslint
+- prettier
+- husky
+- Vitest
+- Storybook
+- Playwright
+
+### プロジェクト概要
+
+このプロジェクトは[endoflife API](https://endoflife.date/docs/api)から取得した情報をガント形式で表示するためのアプリケーションです。
+
+詳細なアプリケーションの機能は以下の通りです。
+
+#### 要件
+
+ユーザのツール・バージョン選択状態に応じてガントチャート（タイムライン）が表示・更新される
+ガントに対してユーザのカスタムデータを追加でき、他のツール・バージョンと並べて表示ができる
+
+#### 仕様
+
+- サイドメニュー
+  - API から取得したデータをツール -> バージョンの階層構造として表示すること
+  - ツール・バージョンのそれぞれにチェックボックスを設け選択できるようにすること
+  - ツールにチェックを入れた場合はそのツールの全てのバージョンにチェックを入れること
+  - ツール内の全てのバージョンにチェックが入った場合にはツールのチェックを入れること
+  - ツール内の全てのバージョンにチェックが入っていない場合にはツールのチェックを外すこと
+  - ツール最上部には検索窓を設け、検索結果に応じてツールを表示すること。検索は部分一致で行うこと
+  - ツール内のバージョンのうちどれか一つでもチェックが入っている場合、サイドメニューの上部にそのツールを移動し優先表示すること
+  - サイドメニューの選択情報はブラウザ再訪問時にも引き継がれること
+- ガントチャート
+  - サイドメニューで選択されたツール・バージョンのガントチャートが表示されていること
+  - ガントチャートはツール毎に色分けされていること
+  - ガントチャートやツール・リリース日・EOL日でソートが可能であること
+  - ガントチャートの時間軸は月単位と年単位で変更が可能であること
+- カスタムデータ読み込みについて
+  - 読み込みボタンを押下するとユーザが任意のファイル（カスタムデータ）を選択でき、それを読み込むこと
+  - カスタムデータの書式が正常な場合、それをガントチャート・サイドメニューに反映させること
+    - 書式=以下の「ツール名,バージョン,リリース日（YYYY-MM-DD）,EOL日（YYYY-MM-DD）」が含まれたcsvファイル
+  - カスタムデータの書式が異常な場合、エラーメッセージを表示させること
+  - 入力されたユーザデータはサイドメニューに追加され、バージョンが一つも選択されていなくても常に最上段に表示されていること
+  - 入力されたユーザデータはブラウザ再訪問時にも引き継がれること
+  - カスタムデータをクリアするボタンが押下された場合、ユーザデータは全て削除されること
+  - カスタムデータが既に存在する状態で再度カスタムデータが読み込まれた場合、既存のカスタムデータは上書きされ新規データが追加されること
