@@ -10,7 +10,7 @@
   "branchConcurrentLimit": 1,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
-  "ignoreDeps": ["node", "pnpm"],
+  "ignoreDeps": ["node", "@types/node", "pnpm"],
   "packageRules": [
     {
       "matchManagers": ["pnpm"],
