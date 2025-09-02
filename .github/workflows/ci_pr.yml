@@ -1,0 +1,30 @@
+name: CI_PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths: &PATHS
+      - 'app/**'
+      - '__e2e__'
+      - '.storybook'
+      - 'public/**'
+      - 'test'
+      - 'components.json'
+      - 'eslint.config.mjs'
+      - 'playwright.config.ts'
+      - 'react-router.config.ts'
+      - 'tsconfig.json'
+      - 'vite-plugin-remove-data-testid.ts'
+      - 'vite.config.ts'
+      - 'wrangler.jsonc'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci_base.yml'
+      - '.github/workflows/ci_pr.yml'
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  call:
+    uses: ./.github/workflows/ci_base.yml
+    secrets: inherit
