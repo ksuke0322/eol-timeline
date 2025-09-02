@@ -105,6 +105,7 @@ export const WithLongContent: Story = {
     })
 
     await userEvent.unhover(trigger)
+    await userEvent.pointer({ target: document.body })
     await waitFor(() => {
       expect(
         screen.queryByRole('tooltip', {
@@ -176,13 +177,13 @@ export const WithSide: Story = {
       ).toBeVisible()
     })
 
-    // FIX ME: unhover 系は flaky & Default で担保済みのためここでは検証しない
-    // await userEvent.unhover(topTrigger)
-    // await waitFor(() => {
-    //   expect(
-    //     screen.queryByRole('tooltip', { name: 'Tooltip on top' }),
-    //   ).not.toBeVisible()
-    // })
+    await userEvent.unhover(topTrigger)
+    await userEvent.pointer({ target: document.body })
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('tooltip', { name: 'Tooltip on top' }),
+      ).not.toBeVisible()
+    })
 
     const rightTrigger = canvas.getByRole('button', { name: 'Right' })
     await userEvent.hover(rightTrigger)
@@ -192,12 +193,13 @@ export const WithSide: Story = {
       ).toBeVisible()
     })
 
-    // await userEvent.unhover(rightTrigger)
-    // await waitFor(() => {
-    //   expect(
-    //     screen.queryByRole('tooltip', { name: 'Tooltip on right' }),
-    //   ).not.toBeVisible()
-    // })
+    await userEvent.unhover(rightTrigger)
+    await userEvent.pointer({ target: document.body })
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('tooltip', { name: 'Tooltip on right' }),
+      ).not.toBeVisible()
+    })
 
     const bottomTrigger = canvas.getByRole('button', { name: 'Bottom' })
     await userEvent.hover(bottomTrigger)
@@ -207,12 +209,13 @@ export const WithSide: Story = {
       ).toBeVisible()
     })
 
-    // await userEvent.unhover(bottomTrigger)
-    // await waitFor(() => {
-    //   expect(
-    //     screen.queryByRole('tooltip', { name: 'Tooltip on bottom' }),
-    //   ).not.toBeVisible()
-    // })
+    await userEvent.unhover(bottomTrigger)
+    await userEvent.pointer({ target: document.body })
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('tooltip', { name: 'Tooltip on bottom' }),
+      ).not.toBeVisible()
+    })
 
     const leftTrigger = canvas.getByRole('button', { name: 'Left' })
     await userEvent.hover(leftTrigger)
@@ -222,11 +225,12 @@ export const WithSide: Story = {
       ).toBeVisible()
     })
 
-    // await userEvent.unhover(leftTrigger)
-    // await waitFor(() => {
-    //   expect(
-    //     screen.queryByRole('tooltip', { name: 'Tooltip on left' }),
-    //   ).not.toBeVisible()
-    // })
+    await userEvent.unhover(leftTrigger)
+    await userEvent.pointer({ target: document.body })
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('tooltip', { name: 'Tooltip on left' }),
+      ).not.toBeVisible()
+    })
   },
 }
