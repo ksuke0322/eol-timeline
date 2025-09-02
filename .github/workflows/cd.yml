@@ -7,6 +7,17 @@ on:
       - completed
   workflow_dispatch: # 手動実行も可能
 
+env:
+  NODE_VERSION: '22.12.0'
+  PNPM_VERSION: '9.15.9'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   # https://blog.chick-p.work/blog/github-actions-workflow-deploy-cf-wokers
   deploy:
