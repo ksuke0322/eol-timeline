@@ -20,7 +20,7 @@
     "all-check": "pnpm lint && pnpm tsc && pnpm test && pnpm build && pnpm test-storybook && pnpm test:e2e"
   },
   "engines": {
-    "node": "=22.12.0",
+    "node": "=22.19.0",
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
     "pnpm": "=9.15.9"
@@ -65,7 +65,7 @@
     "@testing-library/react": "16.3.0",
     "@tsconfig/node22": "22.0.2",
     "@types/frappe-gantt": "0.9.0",
-    "@types/node": "22.13.1",
+    "@types/node": "22.18.0",
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.9",
     "@types/sinonjs__fake-timers": "8.1.5",
