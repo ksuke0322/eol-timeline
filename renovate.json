@@ -10,6 +10,7 @@
   "branchConcurrentLimit": 1,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
+  "ignoreDeps": ["node"],
   "packageRules": [
     {
       "matchManagers": ["pnpm"],
@@ -34,7 +35,6 @@
       "groupName": "devDeps - storybook (non-major)",
       "automerge": true
     },
-
     {
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["devDependencies"],
@@ -58,7 +58,6 @@
       "groupName": "devDeps - storybook (major)",
       "automerge": false
     },
-
     {
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["dependencies"],
@@ -66,7 +65,6 @@
       "groupName": "deps (non-major)",
       "automerge": true
     },
-
     {
       "matchManagers": ["pnpm"],
       "matchDepTypes": ["dependencies"],
