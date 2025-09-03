@@ -6,7 +6,6 @@
   "dependencyDashboard": false,
   "automerge": true,
   "platformAutomerge": true,
-  "rebaseWhen": "never",
   "branchConcurrentLimit": 1,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
