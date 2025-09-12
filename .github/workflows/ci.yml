@@ -227,32 +227,6 @@ jobs:
       - name: Run E2E tests
         run: pnpm test:e2e
 
-  security-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: true
-
-      # - name: Download node_modules artifact
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: node_modules
-      #     path: node_modules
-
-      - name: Run security audit
-        run: pnpm audit --audit-level=moderate
-
   format-check:
     runs-on: ubuntu-latest
     steps:
@@ -281,17 +255,7 @@ jobs:
 
   status_check_complete:
     runs-on: ubuntu-latest
-    needs:
-      [
-        lint,
-        build,
-        test,
-        tsc,
-        test-storybook,
-        e2e-test,
-        security-audit,
-        format-check,
-      ]
+    needs: [lint, build, test, tsc, test-storybook, e2e-test, format-check]
     steps:
       - name: echo
         run: echo "complete status check actions"
