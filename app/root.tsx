@@ -76,6 +76,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
+        {/* lighthouseエラー & SEO対策のため */}
+        <meta name="viewport" content="width=1024"></meta>
         <script type="application/ld+json">{jsonLdString}</script>
         <Meta />
         <Links />
