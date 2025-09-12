@@ -6,7 +6,7 @@
   "dependencyDashboard": false,
   "automerge": true,
   "platformAutomerge": false,
-  "branchConcurrentLimit": 10,
+  "branchConcurrentLimit": 1,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
   "ignoreDeps": ["node", "@types/node", "pnpm"],
