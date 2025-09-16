@@ -12,7 +12,7 @@
     "tsc": "npx tsc --incremental false --noEmit",
     "test": "vitest --run",
     "test:ui": "vitest --ui",
-    "storybook": "STORYBOOK=true storybook dev -p 6006",
+    "storybook": "STORYBOOK=true storybook dev -p 6006 --no-open",
     "build-storybook": "STORYBOOK=true storybook build",
     "test-storybook": "start-server-and-test storybook http://localhost:6006 \"pnpm test-storybook-runner\"",
     "test-storybook-runner": "test-storybook --testTimeout 120000",
@@ -43,7 +43,6 @@
     "react-dom": "19.1.1",
     "react-router": "7.9.1",
     "react-router-dom": "7.9.1",
-    "start-server-and-test": "2.1.0",
     "tailwind-merge": "3.3.1"
   },
   "devDependencies": {
@@ -95,6 +94,7 @@
     "msw": "2.11.2",
     "msw-storybook-addon": "2.0.5",
     "prettier": "3.6.2",
+    "start-server-and-test": "2.1.0",
     "storybook": "9.1.5",
     "tailwindcss": "4.1.13",
     "ts-node": "10.9.2",
