@@ -89,7 +89,6 @@ export const useProductDetails = ({
     }
 
     init()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const updateProductDetails = async (productName: string) => {

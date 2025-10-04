@@ -6,6 +6,7 @@ import unusedImports from 'eslint-plugin-unused-imports'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import react from 'eslint-plugin-react'
 import jsxA11Y from 'eslint-plugin-jsx-a11y'
+import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
@@ -67,12 +68,9 @@ export default [
   ),
   ...fixupConfigRules(
     compat.extends(
-      'eslint:recommended',
-      'plugin:prettier/recommended',
-      'plugin:react-hooks/recommended',
       'plugin:react/recommended',
       'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
+      // 'plugin:react-hooks/recommended',
       'plugin:jsx-a11y/recommended',
       'plugin:@typescript-eslint/recommended',
       'plugin:import/recommended',
@@ -93,6 +91,7 @@ export default [
       '@typescript-eslint': fixupPluginRules(typescriptEslint),
       import: fixupPluginRules(_import),
       'better-tailwindcss': eslintPluginBetterTailwindcss,
+      'react-hooks': reactHooks,
     },
 
     settings: {
