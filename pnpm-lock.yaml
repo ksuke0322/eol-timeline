@@ -127,8 +127,8 @@ importers:
         specifier: 19.2.2
         version: 19.2.2(@types/react@19.2.2)
       '@types/sinonjs__fake-timers':
-        specifier: 8.1.5
-        version: 8.1.5
+        specifier: 15.0.0
+        version: 15.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: 8.46.2
         version: 8.46.2(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3)
@@ -1914,8 +1914,8 @@ packages:
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
 
-  '@types/sinonjs__fake-timers@8.1.5':
-    resolution: {integrity: sha512-mQkU2jY8jJEF7YHjHvsQO8+3ughTL1mcnn96igfhONmR+fUPSKIkefQYpSe8bsly2Ep7oQbn/6VG5/9/0qcArQ==}
+  '@types/sinonjs__fake-timers@15.0.0':
+    resolution: {integrity: sha512-lqKG4X0fO3aJF7Bz590vuCkFt/inbDyL7FXaVjPEYO+LogMZ2fwSDUiP7bJvdYHaCgCQGNOPxquzSrrnVH3fGw==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -7539,7 +7539,7 @@ snapshots:
 
   '@types/resolve@1.20.6': {}
 
-  '@types/sinonjs__fake-timers@8.1.5': {}
+  '@types/sinonjs__fake-timers@15.0.0': {}
 
   '@types/stack-utils@2.0.3': {}
 
