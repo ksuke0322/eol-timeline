@@ -70,8 +70,8 @@
     "@types/sinonjs__fake-timers": "15.0.1",
     "@typescript-eslint/eslint-plugin": "8.48.1",
     "@typescript-eslint/parser": "8.48.1",
-    "@vitest/coverage-v8": "4.0.14",
-    "@vitest/ui": "4.0.14",
+    "@vitest/coverage-v8": "4.0.15",
+    "@vitest/ui": "4.0.15",
     "constructs": "10.4.3",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
@@ -103,7 +103,7 @@
     "typescript": "5.9.3",
     "vite": "7.2.6",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "4.0.14",
+    "vitest": "4.0.15",
     "vitest-axe": "0.1.0",
     "vitest-dom": "0.1.1"
   }
