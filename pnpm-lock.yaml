@@ -39,8 +39,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       frappe-gantt:
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 1.0.4
+        version: 1.0.4
       isbot:
         specifier: 5.1.32
         version: 5.1.32
@@ -3497,8 +3497,8 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
-  frappe-gantt@1.0.3:
-    resolution: {integrity: sha512-NkwO2MD4JoWJ82ZruK/rQVIAEpI3nXUoo5gG+wQHV18yKXhzZsTehVfCXJ92DLl/foTtut1RVL0dqj7fo6Cfpg==}
+  frappe-gantt@1.0.4:
+    resolution: {integrity: sha512-N94OP9ZiapaG5nzgCeZdxsKP8HD5aLVlH5sEHxSNZQnNKQ4BOn2l46HUD+KIE0LpYIterP7gIrFfkLNRuK0npQ==}
 
   fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -9402,7 +9402,7 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  frappe-gantt@1.0.3: {}
+  frappe-gantt@1.0.4: {}
 
   fresh@0.5.2: {}
 
