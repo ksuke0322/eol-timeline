@@ -1,5 +1,5 @@
-import { within, expect, userEvent, fn } from '@storybook/test'
 import { useState } from 'react'
+import { within, expect, userEvent, fn } from 'storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 

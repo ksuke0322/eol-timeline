@@ -1,6 +1,6 @@
-import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { delay, http, HttpResponse } from 'msw'
 import { useState } from 'react'
+import { within, expect, userEvent, waitFor } from 'storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 

@@ -1,6 +1,6 @@
-import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { http, HttpResponse } from 'msw'
 import { createMemoryRouter, RouterProvider } from 'react-router'
+import { within, expect, userEvent, waitFor } from 'storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 

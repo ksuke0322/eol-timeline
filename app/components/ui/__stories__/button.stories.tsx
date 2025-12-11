@@ -1,4 +1,4 @@
-import { within, expect, fn, userEvent } from '@storybook/test'
+import { within, expect, fn, userEvent } from 'storybook/test'
 
 import type { Meta, StoryContext, StoryObj } from '@storybook/react-vite'
 

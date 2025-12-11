@@ -1,6 +1,6 @@
-import { within, expect, userEvent, waitFor } from '@storybook/test'
 import { HomeIcon, SettingsIcon, UsersIcon } from 'lucide-react'
 import { useState } from 'react'
+import { within, expect, userEvent, waitFor } from 'storybook/test'
 
 import type { Meta, StoryContext, StoryObj } from '@storybook/react-vite'
 
