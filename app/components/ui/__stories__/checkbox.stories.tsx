@@ -1,5 +1,5 @@
-import { within, expect, userEvent, waitFor } from '@storybook/test'
 import * as React from 'react'
+import { within, expect, userEvent, waitFor } from 'storybook/test'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
