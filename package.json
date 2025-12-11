@@ -104,5 +104,8 @@
     "vitest": "4.0.15",
     "vitest-axe": "0.1.0",
     "vitest-dom": "0.1.1"
+  },
+  "peerDependencies": {
+    "playwright-core": "1.57.0"
   }
 }
