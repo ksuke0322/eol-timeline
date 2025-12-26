@@ -9,7 +9,7 @@
   "branchConcurrentLimit": 10,
   "prHourlyLimit": 0,
   "labels": ["dependencies", "renovate"],
-  "ignoreDeps": ["node", "@types/node", "pnpm"],
+  "ignoreDeps": ["node", "@types/node", "pnpm", "@tsconfig/node22"],
   "packageRules": [
     {
       "matchManagers": ["pnpm"],
