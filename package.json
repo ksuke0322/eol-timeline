@@ -89,7 +89,7 @@
     "identity-obj-proxy": "3.0.0",
     "jsdom": "27.4.0",
     "lint-staged": "16.2.7",
-    "msw": "2.12.4",
+    "msw": "2.12.6",
     "msw-storybook-addon": "2.0.6",
     "prettier": "3.7.4",
     "start-server-and-test": "2.1.3",
