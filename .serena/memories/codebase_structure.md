@@ -1,0 +1,12 @@
+# Codebase Structure
+- `app/`: application source
+  - `app/routes/`: route-level screens
+  - `app/components/ui/`: UI components
+  - `app/hooks/`: custom hooks
+  - `app/lib/`: shared logic/types
+  - `app/**/__tests__/`: unit/component tests
+  - `app/**/__stories__/`: Storybook stories
+- `__e2e__/`: Playwright end-to-end tests
+- `docs/`: requirements/architecture/features/testing docs (update on changes)
+- `public/`: static assets
+- `test/`: test setup
