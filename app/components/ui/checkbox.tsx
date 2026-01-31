@@ -12,7 +12,7 @@ const Checkbox = React.forwardRef<
     ref={ref}
     className={cn(
       `
-        peer h-4 w-4 shrink-0 rounded-sm border border-primary
+        peer size-4 shrink-0 rounded-sm border border-primary
         ring-offset-background
         focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
         focus-visible:outline-none
@@ -27,7 +27,7 @@ const Checkbox = React.forwardRef<
     <CheckboxPrimitive.Indicator
       className={cn('flex items-center justify-center text-current')}
     >
-      <CheckIcon className="h-4 w-4" />
+      <CheckIcon className="size-4" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ))

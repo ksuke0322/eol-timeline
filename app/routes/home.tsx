@@ -119,7 +119,7 @@ const Home = () => {
             onChange={(e) =>
               setSortOrder(e.target.value as 'tool' | 'release' | 'eol')
             }
-            className="rounded border p-1"
+            className="rounded-sm border p-1"
           >
             <option value="tool">tool</option>
             <option value="release">release date</option>
