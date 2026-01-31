@@ -1,3 +1,4 @@
+/* eslint-disable better-tailwindcss/no-unknown-classes */
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 import { type GanttTask, type ProductDetails } from '~/lib/types'
