@@ -95,6 +95,12 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Documentation & Traceability Requirements *(mandatory)*
+
+- 各ユーザーストーリーに対応する仕様 ID（例: `FR-SIDEBAR-001`）を MUST 付与する
+- 変更が入る `docs/` ファイルと更新方針を MUST 明記する
+- 仕様 ID をテストケース名（`describe/it` など）へ紐付ける方法を MUST 明記する
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]

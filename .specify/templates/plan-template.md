@@ -3,7 +3,7 @@
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Note**: This template is filled in by the `/speckit.plan` command.
 
 ## Summary
 
@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **Docs Traceability**: 変更対象に対応する `docs/` 更新箇所と仕様 ID を列挙した
+- [ ] **Stack Consistency**: TypeScript + React Router + Vite + Tailwind 構成からの逸脱有無を評価した
+- [ ] **Test Evidence**: Unit/Component/E2E/Storybook のどの層で検証するかを定義した
+- [ ] **Quality Gates**: `pnpm lint` `pnpm tsc` `pnpm test` `pnpm build` の実行計画を明記した
+- [ ] **Dependency Discipline**: 依存変更時の互換性・検証・記録方法を明記した
 
 ## Project Structure
 

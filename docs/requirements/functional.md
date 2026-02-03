@@ -1,6 +1,6 @@
 # 機能要件（Functional Requirements）
 
-- 最終更新: 2025-09-01
+- 最終更新: 2026-02-03
 
 ## 概要
 
@@ -34,8 +34,15 @@
 - FR-DATA-002: ツール展開/選択時に詳細（<tool>.json）を取得し、ローカルに 1 週間キャッシュする。
 - FR-DATA-003: キャッシュが有効な間はネットワーク取得をスキップする。
 - FR-DATA-004: 取得失敗時は該当ツールの配下リストを空にし、再訪問時に再取得可能とする。
+- FR-DATA-005: 期限切れ後の再取得が失敗した場合は、直近キャッシュを暫定表示しつつ失敗を明示する。
 
 参照: app/routes/home.tsx (clientLoader), app/hooks/useProductDetails.ts
+
+## FR-A11Y（アクセシビリティ）
+
+- FR-A11Y-001: キーボードのみで検索・選択・ソート・時間軸切替を操作できる。
+
+参照: app/routes/home.tsx, app/components/ui/productSidebar.tsx, __e2e__/sidebar.spec.ts
 
 ## FR-PERSISTENCE（状態の永続化）
 
@@ -49,4 +56,3 @@
 - FR-FUTURE-CSV-001: カスタムデータ（CSV）の読み込み/検証/表示/クリア/永続化。
   - 書式: ツール名,バージョン,リリース日(YYYY-MM-DD),EOL日(YYYY-MM-DD)
   - 現時点では未実装（home.test.tsx に TODO 記載あり）。
-

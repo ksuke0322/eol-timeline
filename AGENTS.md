@@ -1,5 +1,12 @@
 # Repository Guidelines
 
+## Global Instructions
+
+このプロジェクトは、以下に定義されているユーザ共通指示に従います。
+~/.codex/AGENTS.md
+
+プロジェクト固有のルールを適用する前に、これらの共通指示を**完全に遵守**してください。
+
 ## プロジェクト概要
 
 EOL Timeline は React Router + Vite で構成されたフロントエンドアプリです。依存更新は Renovate が多く、CI はビルド/テスト/リンタを通します。
@@ -48,3 +55,12 @@ EOL Timeline は React Router + Vite で構成されたフロントエンドア�
 
 - Node/Pnpm のバージョンは `package.json` の `engines` に合わせる。
 - ドキュメントの最終更新日を各 md 冒頭に記載する運用を維持する。
+
+## Active Technologies
+
+- TypeScript 5.9, React 19, React Router 7（SPA） + Vite 7, Tailwind CSS 4, Radix UI, frappe-gan (001-document-current-spec)
+- localStorage（選択状態、一覧/詳細キャッシュ） (001-document-current-spec)
+
+## Recent Changes
+
+- 001-document-current-spec: Added TypeScript 5.9, React 19, React Router 7（SPA） + Vite 7, Tailwind CSS 4, Radix UI, frappe-gan
