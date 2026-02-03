@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eol-timeline/specs/001-document-current-spec/contracts/selection-state.schema.json",
+  "title": "SelectionState",
+  "type": "object",
+  "required": ["selectedProducts", "selectedVersions", "updatedAt"],
+  "properties": {
+    "selectedProducts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "selectedVersions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" },
+        "uniqueItems": true
+      }
+    },
+    "updatedAt": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

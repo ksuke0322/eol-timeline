@@ -55,3 +55,12 @@ EOL Timeline は React Router + Vite で構成されたフロントエンドア�
 
 - Node/Pnpm のバージョンは `package.json` の `engines` に合わせる。
 - ドキュメントの最終更新日を各 md 冒頭に記載する運用を維持する。
+
+## Active Technologies
+
+- TypeScript 5.9, React 19, React Router 7（SPA） + Vite 7, Tailwind CSS 4, Radix UI, frappe-gan (001-document-current-spec)
+- localStorage（選択状態、一覧/詳細キャッシュ） (001-document-current-spec)
+
+## Recent Changes
+
+- 001-document-current-spec: Added TypeScript 5.9, React 19, React Router 7（SPA） + Vite 7, Tailwind CSS 4, Radix UI, frappe-gan

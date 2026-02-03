@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: EOL Timeline External Data Contract (As-Is)
+  version: 1.0.0
+  description: Read-only contract consumed by the frontend from endoflife.date.
+servers:
+  - url: https://endoflife.date
+paths:
+  /api/all.json:
+    get:
+      summary: Get product catalog
+      operationId: getProductCatalog
+      responses:
+        '200':
+          description: Product names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '5XX':
+          description: Upstream error
+  /api/{product}.json:
+    get:
+      summary: Get product version details
+      operationId: getProductDetails
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Version lifecycle details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductVersion'
+        '404':
+          description: Product not found
+        '5XX':
+          description: Upstream error
+components:
+  schemas:
+    ProductVersion:
+      type: object
+      required:
+        - cycle
+        - releaseDate
+      properties:
+        cycle:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        support:
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+            - type: 'null'
+        eol:
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+            - type: 'null'
+        latest:
+          oneOf:
+            - type: string
+            - type: 'null'
