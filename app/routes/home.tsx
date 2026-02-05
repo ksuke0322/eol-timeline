@@ -109,8 +109,8 @@ const Home = () => {
         setAllProductDetails={setAllProductDetails}
       />
       <main className="flex-1 justify-stretch p-4">
-        <div className="mb-4">
-          <label htmlFor="sort-order" className="mr-2">
+        <div className="mb-4 flex items-center gap-2">
+          <label htmlFor="sort-order" className="text-sm font-medium">
             Sort by:
           </label>
           <select
@@ -119,7 +119,11 @@ const Home = () => {
             onChange={(e) =>
               setSortOrder(e.target.value as 'tool' | 'release' | 'eol')
             }
-            className="rounded-sm border p-1"
+            className={`
+              h-9 rounded-md border border-input bg-background px-3 text-sm
+              focus-visible:ring-2 focus-visible:ring-ring
+              focus-visible:outline-none
+            `}
           >
             <option value="tool">tool</option>
             <option value="release">release date</option>
