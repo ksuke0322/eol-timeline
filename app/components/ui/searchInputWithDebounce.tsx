@@ -44,9 +44,11 @@ export const SearchInputWithDebounce = ({
           type="button"
           onClick={handleClear}
           className={`
-            absolute top-1/2 right-2 -translate-y-1/2 text-gray-500
-            hover:text-gray-700
-            focus:outline-none
+            absolute top-1/2 right-2 -translate-y-1/2 rounded-sm
+            text-muted-foreground transition-colors
+            hover:text-foreground
+            focus-visible:ring-2 focus-visible:ring-ring
+            focus-visible:outline-none
           `}
           aria-label="Clear search"
         >
