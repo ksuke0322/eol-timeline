@@ -126,8 +126,7 @@ const Home = () => {
             <option value="eol">eol date</option>
           </select>
         </div>
-        {/* 画面幅 - sidemenu幅 - メイン領域左右padding */}
-        <div className="w-[calc(100svw-16rem-32px)] overflow-hidden">
+        <div className="min-w-0 overflow-x-auto">
           <GanttChart
             tasks={ganttTasks}
             aria-label="製品のサポート終了タイムラインチャート"
