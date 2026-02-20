@@ -145,8 +145,8 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(vitest@4.0.18)
       constructs:
-        specifier: 10.4.5
-        version: 10.4.5
+        specifier: 10.5.1
+        version: 10.5.1
       eslint:
         specifier: 10.0.0
         version: 10.0.0(jiti@2.6.1)
@@ -2637,8 +2637,8 @@ packages:
   confbox@0.2.2:
     resolution: {integrity: sha512-1NB+BKqhtNipMsov4xI/NnhCKp9XG9NamYp5PVm9klAT0fsrNPjaFICsCFhNhwZJKNh7zB/3q8qXz0E9oaMNtQ==}
 
-  constructs@10.4.5:
-    resolution: {integrity: sha512-fOoP70YLevMZr5avJHx2DU3LNYmC6wM8OwdrNewMZou1kZnPGOeVzBrRjZNgFDHUlulYUjkpFRSpTE3D+n+ZSg==}
+  constructs@10.5.1:
+    resolution: {integrity: sha512-f/TfFXiS3G/yVIXDjOQn9oTlyu9Wo7Fxyjj7lb8r92iO81jR2uST+9MstxZTmDGx/CgIbxCXkFXgupnLTNxQZg==}
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -8242,7 +8242,7 @@ snapshots:
 
   confbox@0.2.2: {}
 
-  constructs@10.4.5: {}
+  constructs@10.5.1: {}
 
   content-disposition@0.5.4:
     dependencies:
