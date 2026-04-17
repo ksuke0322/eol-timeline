@@ -92,7 +92,7 @@
     "lint-staged": "16.4.0",
     "msw": "2.13.4",
     "msw-storybook-addon": "2.0.7",
-    "prettier": "3.8.2",
+    "prettier": "3.8.3",
     "start-server-and-test": "3.0.2",
     "storybook": "10.3.5",
     "tailwindcss": "4.2.2",
