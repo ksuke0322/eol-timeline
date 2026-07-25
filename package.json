@@ -39,8 +39,8 @@
     "frappe-gantt": "1.0.3",
     "isbot": "5.2.1",
     "lucide-react": "1.25.0",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-router": "8.2.0",
     "react-router-dom": "7.18.1",
     "tailwind-merge": "3.6.0"
