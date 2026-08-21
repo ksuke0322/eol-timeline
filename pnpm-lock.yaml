@@ -181,8 +181,8 @@ importers:
         specifier: 10.5.10
         version: 10.5.10(eslint@10.9.0(jiti@2.7.0))(typescript@5.9.3)
       eslint-plugin-tailwindcss:
-        specifier: 4.3.0
-        version: 4.3.0(eslint@10.9.0(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@5.9.3)
+        specifier: 4.4.0
+        version: 4.4.0(eslint@10.9.0(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@5.9.3)
       eslint-plugin-unused-imports:
         specifier: 4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@10.9.0(jiti@2.7.0))(typescript@5.9.3))(eslint@10.9.0(jiti@2.7.0))(typescript@5.9.3))(eslint@10.9.0(jiti@2.7.0))
@@ -3460,8 +3460,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-tailwindcss@4.3.0:
-    resolution: {integrity: sha512-8YqqinLSyV78zFvCzVemLX3eKpEW2DbpfvPHmQhv/HK7sKuDw+9/GAQPlJLQICDgbqLOB/D0ZH5BUQ+kuwq93Q==}
+  eslint-plugin-tailwindcss@4.4.0:
+    resolution: {integrity: sha512-cPyEIeBTVbPU30oQTm7pOqOYurb5vtGaGhRCajYsSUwpUS9fvswB13dOLDUjGJJ+Rt8ylXf4L0hrhLA7Hf7WTQ==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -9459,7 +9459,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-tailwindcss@4.3.0(eslint@10.9.0(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@5.9.3):
+  eslint-plugin-tailwindcss@4.4.0(eslint@10.9.0(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/utils': 8.67.0(eslint@10.9.0(jiti@2.7.0))(typescript@5.9.3)
       eslint: 10.9.0(jiti@2.7.0)
