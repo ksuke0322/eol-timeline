@@ -726,4 +726,61 @@ describe('useProductDetails', () => {
       previousCache,
     )
   })
+
+  it('詳細更新時は製品IDとcycleを正規化して、消えたバージョンだけ選択解除すること', async () => {
+    vi.useRealTimers()
+
+    const toggleProductMock = vi.fn()
+    const setAllProductDetailsMock = vi.fn()
+    const previousTimestamp = Date.now() - 7 * 24 * 60 * 60 * 1000 - 1
+
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        React: {
+          data: [
+            { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+            {
+              cycle: 'old.selected',
+              releaseDate: '2020-10-20',
+              support: '2023-10-20',
+            },
+          ],
+          timestamp: previousTimestamp,
+        },
+      }),
+    )
+
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve([
+            { cycle: '18', releaseDate: '2022-03-29', support: '2026-03-29' },
+            { cycle: '17', releaseDate: '2020-10-20', support: '2024-10-20' },
+          ]),
+      }),
+    ) as Mock
+
+    renderHook(() =>
+      useProductDetails({
+        products: mockProductList,
+        selectedProducts: [
+          'React',
+          'React_18',
+          'React_old.selected',
+          'Vue',
+          'Vue_3',
+        ],
+        toggleProduct: toggleProductMock,
+        setAllProductDetails: setAllProductDetailsMock,
+      }),
+    )
+
+    await waitFor(() =>
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(2),
+    )
+
+    expect(toggleProductMock.mock.calls).toEqual([['React_old.selected']])
+  })
 })
