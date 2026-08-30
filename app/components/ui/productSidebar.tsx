@@ -19,6 +19,7 @@ import {
   SidebarProvider,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarTrigger,
 } from '~/components/ui/sidebar'
 import { useProductDetails } from '~/hooks/useProductDetails'
 import { type ProductDetails, type ProductVersionDetail } from '~/lib/types'
@@ -118,6 +119,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
   return (
     <SidebarProvider>
+      <SidebarTrigger
+        className={`
+          fixed bottom-4 left-4 z-40
+          md:hidden
+        `}
+        aria-label="Open product sidebar"
+        title="Open product sidebar"
+      />
       <Sidebar data-testid="product-sidebar">
         <SidebarHeader>
           <SearchInputWithDebounce onDebouncedChange={setDebouncedSearchTerm} />

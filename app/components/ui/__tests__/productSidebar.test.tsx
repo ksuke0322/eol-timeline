@@ -65,6 +65,51 @@ describe('ProductSidebar', () => {
     expect(screen.getByText('Angular')).toBeInTheDocument()
   })
 
+  it('モバイルで名前付きトリガーからサイドバーを開閉できること', () => {
+    const originalMatchMedia = window.matchMedia
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: true,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })) as typeof window.matchMedia
+
+    try {
+      render(
+        <ProductSidebar
+          products={mockProductList}
+          selectedProducts={[]}
+          toggleProduct={() => {}}
+          setAllProductDetails={() => {}}
+        />,
+      )
+
+      const openButton = screen.getByRole('button', {
+        name: 'Open product sidebar',
+      })
+      expect(openButton).toHaveAttribute('aria-expanded', 'false')
+      expect(openButton).toHaveAttribute('aria-controls')
+
+      fireEvent.click(openButton)
+
+      expect(openButton).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByPlaceholderText('Search products...')).toBeVisible()
+
+      const closeButton = screen.getByRole('button', { name: '閉じる' })
+      expect(closeButton).toBeInTheDocument()
+      fireEvent.click(closeButton)
+
+      expect(openButton).toHaveAttribute('aria-expanded', 'false')
+      expect(openButton).toHaveFocus()
+    } finally {
+      window.matchMedia = originalMatchMedia
+    }
+  })
+
   it('検索入力で製品リストがフィルタリングされること', async () => {
     render(
       <ProductSidebar
