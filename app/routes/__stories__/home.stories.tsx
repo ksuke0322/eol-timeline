@@ -115,9 +115,16 @@ export const Default: Story = {
     const canvas = within(canvasElement)
 
     // サイドバーの要素が表示されていることを確認
-    await expect(await canvas.findByText('react')).toBeInTheDocument()
-    await expect(await canvas.findByText('vue')).toBeInTheDocument()
-    await expect(await canvas.findByText('angular')).toBeInTheDocument()
+    // ガント詳細表にも同じ製品名が表示されるため、サイドバーのチェックボックスを役割で特定する。
+    await expect(
+      await canvas.findByRole('checkbox', { name: 'react' }),
+    ).toBeInTheDocument()
+    await expect(
+      await canvas.findByRole('checkbox', { name: 'vue' }),
+    ).toBeInTheDocument()
+    await expect(
+      await canvas.findByRole('checkbox', { name: 'angular' }),
+    ).toBeInTheDocument()
 
     // ガントチャートの要素が表示されていることを確認
     await waitFor(() =>
