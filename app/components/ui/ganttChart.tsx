@@ -169,7 +169,10 @@ const GanttChart: React.FC<GanttChartProps> = ({
         ) : (
           <table
             aria-label="Gantt task details"
-            className="min-w-full border-collapse text-sm"
+            className="
+              min-w-full border-collapse text-left text-sm
+              [&_th]:text-left
+            "
           >
             <thead>
               <tr>

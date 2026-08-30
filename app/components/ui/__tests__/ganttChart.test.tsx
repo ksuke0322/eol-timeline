@@ -105,3 +105,24 @@ test('ホバーなしで各タスクの製品、version、日付、状態を取�
   expect(rows[3]).toHaveTextContent('EOL (date unknown)')
   expect(await axe(container)).toHaveNoViolations()
 })
+
+test('Gantt task detailsの見出しと本文を同じ左寄せで表示する', () => {
+  const tasks = [
+    {
+      id: 'React_18',
+      name: 'React 18',
+      start: '2023-01-01',
+      end: '2023-01-10',
+      productName: 'React',
+      eol_status: 0 as const,
+    },
+  ]
+
+  const { container } = render(<GanttChart tasks={tasks} />)
+  const table = container.querySelector(
+    '[data-testid="gantt-task-details"] table',
+  )
+
+  expect(table).toHaveClass('text-left')
+  expect(table).toHaveClass('[&_th]:text-left')
+})
