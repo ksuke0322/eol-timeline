@@ -399,7 +399,11 @@ describe('useProductDetails', () => {
     })
 
     await waitForWithFakeTimers(() => {
-      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+      expect(setAllProductDetailsMock).toHaveBeenCalledWith(
+        expect.any(Function),
+      )
+      const [updateProducts] = setAllProductDetailsMock.mock.calls[0]
+      expect(updateProducts(mockProductList)).toEqual({
         ...mockProductList,
         React: [
           { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
@@ -611,7 +615,12 @@ describe('useProductDetails', () => {
     })
 
     await waitForWithFakeTimers(() => {
-      expect(setAllProductDetailsMock).toHaveBeenLastCalledWith({
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(2)
+      expect(setAllProductDetailsMock).toHaveBeenLastCalledWith(
+        expect.any(Function),
+      )
+      const [updateProducts] = setAllProductDetailsMock.mock.calls[1]
+      expect(updateProducts(mockProductList)).toEqual({
         ...mockProductList,
         React: [
           { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
@@ -923,5 +932,81 @@ describe('useProductDetails', () => {
     )
 
     expect(toggleProductMock.mock.calls).toEqual([['React_old.selected']])
+  })
+
+  it('複数製品の詳細取得が完了順に依存せず state と localStorage に統合されること', async () => {
+    vi.useRealTimers()
+
+    const toggleProductMock = vi.fn()
+    const setAllProductDetailsMock = vi.fn()
+    const reactData = [
+      { cycle: '18', releaseDate: '2022-03-29', support: '2026-03-29' },
+    ]
+    const vueData = [
+      { cycle: '3', releaseDate: '2020-09-18', support: '2026-09-18' },
+    ]
+    let resolveReact!: (value: typeof reactData) => void
+    let resolveVue!: (value: typeof vueData) => void
+    const reactResponse = new Promise<typeof reactData>((resolve) => {
+      resolveReact = resolve
+    })
+    const vueResponse = new Promise<typeof vueData>((resolve) => {
+      resolveVue = resolve
+    })
+
+    global.fetch = vi.fn((url: string) =>
+      Promise.resolve({
+        ok: true,
+        json: () => (url.endsWith('/React.json') ? reactResponse : vueResponse),
+      }),
+    ) as Mock
+
+    const { result } = renderHook(() =>
+      useProductDetails({
+        products: mockProductList,
+        selectedProducts: [],
+        toggleProduct: toggleProductMock,
+        setAllProductDetails: setAllProductDetailsMock,
+      }),
+    )
+
+    act(() => {
+      void result.current.updateProductDetails('React')
+      void result.current.updateProductDetails('Vue')
+    })
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2))
+
+    await act(async () => {
+      resolveVue(vueData)
+      await vueResponse
+    })
+    await act(async () => {
+      resolveReact(reactData)
+      await reactResponse
+    })
+
+    await waitFor(() =>
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(2),
+    )
+
+    const finalProducts = setAllProductDetailsMock.mock.calls.reduce(
+      (state, [update]) =>
+        typeof update === 'function' ? update(state) : update,
+      mockProductList,
+    )
+    expect(finalProducts).toEqual({
+      ...mockProductList,
+      React: reactData,
+      Vue: vueData,
+    })
+    expect(result.current.productDetails).toEqual({
+      React: { data: reactData, timestamp: expect.any(Number) },
+      Vue: { data: vueData, timestamp: expect.any(Number) },
+    })
+    expect(JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')).toEqual({
+      React: { data: reactData, timestamp: expect.any(Number) },
+      Vue: { data: vueData, timestamp: expect.any(Number) },
+    })
   })
 })
