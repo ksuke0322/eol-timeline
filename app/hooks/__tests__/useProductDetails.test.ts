@@ -626,4 +626,104 @@ describe('useProductDetails', () => {
       expect(setItemSpy).not.toHaveBeenCalled()
     })
   })
+
+  it('期限切れの選択済みキャッシュを再取得した成功結果が state と localStorage に反映されること', async () => {
+    vi.useRealTimers()
+
+    const toggleProductMock = vi.fn()
+    const setAllProductDetailsMock = vi.fn()
+    const previousData = [
+      { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
+    ]
+    const refreshedData = [
+      { cycle: '18', releaseDate: '2022-03-29', support: '2026-03-29' },
+    ]
+    const previousTimestamp = Date.now() - 7 * 24 * 60 * 60 * 1000 - 1
+
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        React: { data: previousData, timestamp: previousTimestamp },
+      }),
+    )
+
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(refreshedData),
+      }),
+    ) as Mock
+
+    const { result } = renderHook(() =>
+      useProductDetails({
+        products: mockProductList,
+        selectedProducts: ['React'],
+        toggleProduct: toggleProductMock,
+        setAllProductDetails: setAllProductDetailsMock,
+      }),
+    )
+
+    await waitFor(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(2)
+      expect(result.current.productDetails.React?.data).toEqual(refreshedData)
+      expect(setAllProductDetailsMock).toHaveBeenLastCalledWith({
+        React: refreshedData,
+        Vue: null,
+        Angular: null,
+      })
+    })
+
+    expect(JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')).toEqual({
+      React: {
+        data: refreshedData,
+        timestamp: expect.any(Number),
+      },
+    })
+
+    const updatedTimestamp = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')
+      .React.timestamp
+    expect(updatedTimestamp).toBeGreaterThan(previousTimestamp)
+    expect(updatedTimestamp).toBeLessThanOrEqual(Date.now())
+  })
+
+  it('期限切れキャッシュの再取得に失敗した場合は、既存データと timestamp を保持すること', async () => {
+    vi.useRealTimers()
+
+    const toggleProductMock = vi.fn()
+    const setAllProductDetailsMock = vi.fn()
+    const previousData = [
+      { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
+    ]
+    const previousTimestamp = Date.now() - 7 * 24 * 60 * 60 * 1000 - 1
+    const previousCache = {
+      React: { data: previousData, timestamp: previousTimestamp },
+    }
+
+    localStorage.setItem(CACHE_KEY, JSON.stringify(previousCache))
+    global.fetch = vi.fn(() =>
+      Promise.reject(new Error('network failure')),
+    ) as Mock
+
+    renderHook(() =>
+      useProductDetails({
+        products: mockProductList,
+        selectedProducts: ['React'],
+        toggleProduct: toggleProductMock,
+        setAllProductDetails: setAllProductDetailsMock,
+      }),
+    )
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1))
+    await waitFor(() =>
+      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+        React: previousData,
+        Vue: null,
+        Angular: null,
+      }),
+    )
+
+    expect(JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')).toEqual(
+      previousCache,
+    )
+  })
 })

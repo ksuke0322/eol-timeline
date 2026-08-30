@@ -22,7 +22,9 @@ export const useProductDetails = ({
   // 基本的には products だけで処理のすべてを賄えるが、productDetails のキャッシュの更新のために値を保持している
   const [productDetails, setProductDetails] = useState<ProductDetailCache>({})
 
-  const updateObsoleteProductDetails = async (productName: string) => {
+  const updateObsoleteProductDetails = async (
+    productName: string,
+  ): Promise<ProductVersionDetail[]> => {
     const response = await fetch(
       `https://endoflife.date/api/${productName}.json`,
     )
@@ -33,7 +35,7 @@ export const useProductDetails = ({
       )
     }
 
-    return await response.json()
+    return (await response.json()) as ProductVersionDetail[]
   }
 
   useEffect(() => {
@@ -42,50 +44,79 @@ export const useProductDetails = ({
 
       if (Object.keys(cacheData).length === 0) return
 
-      const newAllProducts = { ...products }
-      const newProductDetails = { ...cacheData }
+      const cachedProducts = { ...products }
+      const cachedProductDetails = { ...cacheData }
 
-      for (const name of Object.keys(newProductDetails)) {
-        newAllProducts[name] = newProductDetails[name].data
+      for (const name of Object.keys(cachedProductDetails)) {
+        cachedProducts[name] = cachedProductDetails[name].data
       }
+
+      // stale-while-revalidate: まず既存キャッシュを表示し、再取得完了後に
+      // 新しいオブジェクトで state と localStorage を更新する。
+      setAllProductDetails(cachedProducts)
+      setProductDetails(cachedProductDetails)
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cachedProductDetails))
 
       const selectedProductNames = Array.from(
         new Set(selectedProducts.map((p) => p.split('_')[0])),
       )
 
-      for (const productName of Object.keys(newProductDetails)) {
-        const isSelected = selectedProductNames.includes(productName)
-        const isObsolete =
-          Date.now() - newProductDetails[productName].timestamp >= CACHE_MAX_AGE
+      const obsoleteProductNames = Object.keys(cachedProductDetails).filter(
+        (productName) => {
+          const isSelected = selectedProductNames.includes(productName)
+          const isObsolete =
+            Date.now() - cachedProductDetails[productName].timestamp >=
+            CACHE_MAX_AGE
 
-        if (productName in newAllProducts && isSelected && isObsolete) {
-          updateObsoleteProductDetails(productName)
-            .then((productDetailsResponse: ProductVersionDetail[]) => {
-              newAllProducts[productName] = productDetailsResponse
-              newProductDetails[productName] = {
-                data: productDetailsResponse,
-                timestamp: Date.now(),
-              }
+          return productName in products && isSelected && isObsolete
+        },
+      )
 
-              const productCycles = productDetailsResponse.map(
-                (detail) => detail.cycle,
-              )
+      const refreshResults = await Promise.allSettled(
+        obsoleteProductNames.map(async (productName) => ({
+          productName,
+          data: await updateObsoleteProductDetails(productName),
+        })),
+      )
 
-              selectedProducts.forEach((p) => {
-                if (!productCycles.includes(p)) {
-                  toggleProduct(p)
-                }
-              })
-            })
-            .catch((e) => {
-              console.error(e.message)
-            })
+      const refreshedProducts = { ...cachedProducts }
+      const refreshedProductDetails = { ...cachedProductDetails }
+      let hasSuccessfulRefresh = false
+
+      for (const result of refreshResults) {
+        if (result.status === 'rejected') {
+          const message =
+            result.reason instanceof Error
+              ? result.reason.message
+              : String(result.reason)
+          console.error(message)
+          continue
         }
+
+        const { productName, data: productDetailsResponse } = result.value
+        hasSuccessfulRefresh = true
+        refreshedProducts[productName] = productDetailsResponse
+        refreshedProductDetails[productName] = {
+          data: productDetailsResponse,
+          timestamp: Date.now(),
+        }
+
+        const productCycles = productDetailsResponse.map(
+          (detail) => detail.cycle,
+        )
+
+        selectedProducts.forEach((p) => {
+          if (!productCycles.includes(p)) {
+            toggleProduct(p)
+          }
+        })
       }
 
-      setAllProductDetails(newAllProducts)
-      setProductDetails(newProductDetails)
-      localStorage.setItem(CACHE_KEY, JSON.stringify(newProductDetails))
+      if (!hasSuccessfulRefresh) return
+
+      setAllProductDetails(refreshedProducts)
+      setProductDetails(refreshedProductDetails)
+      localStorage.setItem(CACHE_KEY, JSON.stringify(refreshedProductDetails))
     }
 
     init()
