@@ -96,7 +96,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
     expect(tasks).toHaveLength(2)
     expect(tasks[0]).toEqual({
-      id: '18',
+      id: 'react_18',
       name: 'react 18',
       productName: 'react',
       start: '2022-03-29',
@@ -106,7 +106,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       eol_status: 0,
     })
     expect(tasks[1]).toEqual({
-      id: '17',
+      id: 'react_17',
       name: 'react 17',
       productName: 'react',
       start: '2020-10-20',
@@ -126,7 +126,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
     expect(tasks).toHaveLength(1)
     expect(tasks[0]).toEqual({
-      id: '3',
+      id: 'vue_3',
       name: 'vue 3',
       productName: 'vue',
       start: '2020-09-18',
@@ -135,6 +135,29 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       color: expect.any(String),
       eol_status: 0,
     })
+  })
+
+  it('製品名とcycleを組み合わせた一意で安定したIDを親選択と子選択の両方に使うこと', () => {
+    const productDetails: ProductDetails = {
+      react: [
+        { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+      ],
+      vue: [{ cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' }],
+    }
+    const selectedProductsSet = new Set(['react', 'vue_18'])
+
+    const firstTasks = convertProductVersionDetailsToGanttTasks(
+      productDetails,
+      selectedProductsSet,
+    )
+    const secondTasks = convertProductVersionDetailsToGanttTasks(
+      productDetails,
+      selectedProductsSet,
+    )
+
+    expect(firstTasks.map(({ id }) => id)).toEqual(['react_18', 'vue_18'])
+    expect(new Set(firstTasks.map(({ id }) => id)).size).toBe(2)
+    expect(secondTasks.map(({ id }) => id)).toEqual(['react_18', 'vue_18'])
   })
 
   it.each([
@@ -439,8 +462,8 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
       selectedProductsSet,
     )
 
-    const react18Color = tasks.find((t) => t.id === '18')?.color
-    const react17Color = tasks.find((t) => t.id === '17')?.color
+    const react18Color = tasks.find((t) => t.id === 'react_18')?.color
+    const react17Color = tasks.find((t) => t.id === 'react_17')?.color
 
     expect(react18Color).toBeDefined()
     expect(react17Color).toBeDefined()
@@ -461,7 +484,7 @@ describe('convertProductVersionDetailsToGanttTasks', () => {
 
     expect(tasks).toHaveLength(1)
     expect(tasks[0]).toEqual({
-      id: '1.0',
+      id: 'custom_1.0',
       name: 'custom 1.0',
       productName: 'custom',
       start: '2023-01-01',

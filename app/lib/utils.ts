@@ -76,7 +76,7 @@ export const convertProductVersionDetailsToGanttTasks = (
         const taskName = `${productName} ${detail.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
 
         tasks.push({
-          id: detail.cycle,
+          id: `${productName}_${detail.cycle}`,
           name: taskName,
           productName: productName,
           start: detail.releaseDate,
@@ -123,7 +123,7 @@ export const convertProductVersionDetailsToGanttTasks = (
           const taskName = `${productName} ${version.cycle}${eol_status === 0 ? '' : eol_status === 1 ? ' |----------> Support' : ' | EOL'}`
 
           tasks.push({
-            id: version.cycle,
+            id: `${productName}_${version.cycle}`,
             name: taskName,
             productName: productName,
             start: version.releaseDate,
