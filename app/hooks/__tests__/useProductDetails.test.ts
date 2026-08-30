@@ -13,6 +13,14 @@ const mockProductList: ProductDetails = {
 
 const CACHE_KEY = 'eol_products_details_cache'
 
+const waitForWithFakeTimers = async (callback: () => void) => {
+  const assertion = waitFor(callback)
+  await act(async () => {
+    await vi.runAllTimersAsync()
+  })
+  await assertion
+}
+
 describe('useProductDetails', () => {
   // localStorage.setItem に setItemSpy をスパイする
   const setItemSpy = vi.spyOn(Storage.prototype, 'setItem')
@@ -129,7 +137,7 @@ describe('useProductDetails', () => {
     expect(setAllProductDetailsMock).not.toHaveBeenCalled()
   })
 
-  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュが有効期限切れの場合は API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', () => {
+  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュが有効期限切れの場合は API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -184,6 +192,7 @@ describe('useProductDetails', () => {
         },
       }),
     )
+    setItemSpy.mockClear()
 
     renderHook(() =>
       useProductDetails({
@@ -195,8 +204,8 @@ describe('useProductDetails', () => {
     )
 
     // 同期処理を待つために待機
-    waitFor(() => {
-      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(1)
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(2)
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
         React: [
           { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
@@ -253,7 +262,7 @@ describe('useProductDetails', () => {
 
   // 新レスポンスからバージョンが消えた場合、そのバージョンが localStorage に残り続けてしまうため fetch のタイミングで明示的に消してあげる。
   // toggleProduct 内で localStorage からの削除等を行なっている
-  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュが有効期限切れで更新された時、選択バージョンがなくなっていた場合、その選択バージョンを引数として toggleProduct が呼ばれること。', () => {
+  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュが有効期限切れで更新された時、選択バージョンがなくなっていた場合、その選択バージョンを引数として toggleProduct が呼ばれること。', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -275,22 +284,23 @@ describe('useProductDetails', () => {
         },
       }),
     )
+    setItemSpy.mockClear()
 
     renderHook(() =>
       useProductDetails({
         products: mockProductList,
-        selectedProducts: ['18', 'old.selected'],
+        selectedProducts: ['React_18', 'React_old.selected'],
         toggleProduct: toggleProductMock,
         setAllProductDetails: setAllProductDetailsMock,
       }),
     )
 
-    waitFor(() => {
-      expect(toggleProductMock).toHaveBeenCalledWith('old.selected')
+    await waitForWithFakeTimers(() => {
+      expect(toggleProductMock).toHaveBeenCalledWith('React_old.selected')
     })
   })
 
-  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュを更新するための API 通信に失敗した場合、指定プロダクトが旧データのままであること。またキャッシュが更新されないこと', () => {
+  it('初期値としてキャッシュデータが返ること。ただし、選択バージョンのキャッシュを更新するための API 通信に失敗した場合、指定プロダクトが旧データのままであること。またキャッシュが更新されないこと', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -321,6 +331,7 @@ describe('useProductDetails', () => {
         },
       }),
     )
+    setItemSpy.mockClear()
 
     renderHook(() =>
       useProductDetails({
@@ -331,8 +342,10 @@ describe('useProductDetails', () => {
       }),
     )
 
-    waitFor(() => {
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(1)
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+        ...mockProductList,
         React: [
           { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
           { cycle: 'old.17', releaseDate: '2020-10-20', support: '2023-10-20' },
@@ -344,11 +357,31 @@ describe('useProductDetails', () => {
         'https://endoflife.date/api/React.json',
       )
 
-      expect(setItemSpy).not.toHaveBeenCalled()
+      expect(setItemSpy).toHaveBeenCalledTimes(1)
+      expect(setItemSpy).toHaveBeenCalledWith(
+        CACHE_KEY,
+        JSON.stringify({
+          React: {
+            data: [
+              {
+                cycle: 'old.18',
+                releaseDate: '2022-03-29',
+                support: '2025-03-29',
+              },
+              {
+                cycle: 'old.17',
+                releaseDate: '2020-10-20',
+                support: '2023-10-20',
+              },
+            ],
+            timestamp: new Date('2025/03/21 09:00:00').getTime(),
+          },
+        }),
+      )
     })
   })
 
-  it('指定プロダクトのキャッシュ無しの時、API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', () => {
+  it('指定プロダクトのキャッシュ無しの時、API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -365,8 +398,9 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
+    await waitForWithFakeTimers(() => {
       expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+        ...mockProductList,
         React: [
           { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
           { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
@@ -386,14 +420,14 @@ describe('useProductDetails', () => {
               { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
               { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
             ],
-            timestamp: new Date('2025/03/22 09:00:00').getTime(),
+            timestamp: new Date('2025/03/28 09:00:00').getTime(),
           },
         }),
       )
     })
   })
 
-  it('指定プロダクトのキャッシュ無しの時、API 通信が失敗した場合、指定プロダクトが空配列になること。またキャッシュが更新されないこと', () => {
+  it('指定プロダクトのキャッシュ無しの時、API 通信が失敗した場合、指定プロダクトが空配列になること。またキャッシュが更新されないこと', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -416,8 +450,13 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
-      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledWith(
+        expect.any(Function),
+      )
+      const [updateProducts] = setAllProductDetailsMock.mock.calls[0]
+      expect(updateProducts(mockProductList)).toEqual({
+        ...mockProductList,
         React: [],
       })
 
@@ -430,7 +469,7 @@ describe('useProductDetails', () => {
     })
   })
 
-  it('指定プロダクトのキャッシュが有効期限内の時、なにも起こらないこと', () => {
+  it('指定プロダクトのキャッシュが有効期限内の時、なにも起こらないこと', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -451,14 +490,29 @@ describe('useProductDetails', () => {
             },
           ],
           // システム時刻の23時間59分59秒前
-          timestamp: new Date('2025/03/21 09:00:01').getTime(),
+          timestamp: new Date('2025/03/27 09:00:01').getTime(),
         },
       }),
     )
+    setItemSpy.mockClear()
 
     const { result } = renderHook(() =>
       useProductDetails({
-        products: mockProductList,
+        products: {
+          ...mockProductList,
+          React: [
+            {
+              cycle: 'old.18',
+              releaseDate: '2022-03-29',
+              support: '2025-03-29',
+            },
+            {
+              cycle: 'old.17',
+              releaseDate: '2020-10-20',
+              support: '2023-10-20',
+            },
+          ],
+        },
         selectedProducts: [],
         toggleProduct: toggleProductMock,
         setAllProductDetails: setAllProductDetailsMock,
@@ -469,14 +523,40 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
-      expect(setAllProductDetailsMock).not.toHaveBeenCalled()
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(1)
+      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+        ...mockProductList,
+        React: [
+          { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: 'old.17', releaseDate: '2020-10-20', support: '2023-10-20' },
+        ],
+      })
       expect(global.fetch).not.toHaveBeenCalled()
-      expect(setItemSpy).not.toHaveBeenCalled()
+      expect(setItemSpy).toHaveBeenCalledWith(
+        CACHE_KEY,
+        JSON.stringify({
+          React: {
+            data: [
+              {
+                cycle: 'old.18',
+                releaseDate: '2022-03-29',
+                support: '2025-03-29',
+              },
+              {
+                cycle: 'old.17',
+                releaseDate: '2020-10-20',
+                support: '2023-10-20',
+              },
+            ],
+            timestamp: new Date('2025/03/27 09:00:01').getTime(),
+          },
+        }),
+      )
     })
   })
 
-  it('指定プロダクトのキャッシュが有効期限外の時、API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', () => {
+  it('指定プロダクトのキャッシュが有効期限外の時、API 通信によってデータ取得・更新が行われること。またキャッシュが想定通りの値で更新されること', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -501,10 +581,25 @@ describe('useProductDetails', () => {
         },
       }),
     )
+    setItemSpy.mockClear()
 
     const { result } = renderHook(() =>
       useProductDetails({
-        products: mockProductList,
+        products: {
+          ...mockProductList,
+          React: [
+            {
+              cycle: 'old.18',
+              releaseDate: '2022-03-29',
+              support: '2025-03-29',
+            },
+            {
+              cycle: 'old.17',
+              releaseDate: '2020-10-20',
+              support: '2023-10-20',
+            },
+          ],
+        },
         selectedProducts: [],
         toggleProduct: toggleProductMock,
         setAllProductDetails: setAllProductDetailsMock,
@@ -515,8 +610,9 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
-      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenLastCalledWith({
+        ...mockProductList,
         React: [
           { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
           { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
@@ -528,19 +624,22 @@ describe('useProductDetails', () => {
         'https://endoflife.date/api/React.json',
       )
 
-      expect(setItemSpy).toEqual({
-        React: {
-          data: [
-            { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
-            { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
-          ],
-          timestamp: new Date('2025/03/22 09:00:00').getTime(),
-        },
-      })
+      expect(setItemSpy).toHaveBeenCalledWith(
+        CACHE_KEY,
+        JSON.stringify({
+          React: {
+            data: [
+              { cycle: '18', releaseDate: '2022-03-29', support: '2025-03-29' },
+              { cycle: '17', releaseDate: '2020-10-20', support: '2023-10-20' },
+            ],
+            timestamp: new Date('2025/03/28 09:00:00').getTime(),
+          },
+        }),
+      )
     })
   })
 
-  it('指定プロダクトのキャッシュが有効期限外で API 通信が失敗した場合、指定プロダクトが旧データのままであること。またキャッシュが更新されないこと', () => {
+  it('指定プロダクトのキャッシュが有効期限外で API 通信が失敗した場合、指定プロダクトが旧データのままであること。またキャッシュが更新されないこと', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -571,10 +670,25 @@ describe('useProductDetails', () => {
         },
       }),
     )
+    setItemSpy.mockClear()
 
     const { result } = renderHook(() =>
       useProductDetails({
-        products: mockProductList,
+        products: {
+          ...mockProductList,
+          React: [
+            {
+              cycle: 'old.18',
+              releaseDate: '2022-03-29',
+              support: '2025-03-29',
+            },
+            {
+              cycle: 'old.17',
+              releaseDate: '2020-10-20',
+              support: '2023-10-20',
+            },
+          ],
+        },
         selectedProducts: [],
         toggleProduct: toggleProductMock,
         setAllProductDetails: setAllProductDetailsMock,
@@ -585,20 +699,47 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
-      expect(setAllProductDetailsMock).not.toHaveBeenCalled()
+    await waitForWithFakeTimers(() => {
+      expect(setAllProductDetailsMock).toHaveBeenCalledTimes(1)
+      expect(setAllProductDetailsMock).toHaveBeenCalledWith({
+        ...mockProductList,
+        React: [
+          { cycle: 'old.18', releaseDate: '2022-03-29', support: '2025-03-29' },
+          { cycle: 'old.17', releaseDate: '2020-10-20', support: '2023-10-20' },
+        ],
+      })
 
       expect(global.fetch).toHaveBeenCalledTimes(1)
       expect(global.fetch).toHaveBeenCalledWith(
         'https://endoflife.date/api/React.json',
       )
 
-      expect(setItemSpy).not.toHaveBeenCalled()
+      expect(setItemSpy).toHaveBeenCalledTimes(1)
+      expect(setItemSpy).toHaveBeenCalledWith(
+        CACHE_KEY,
+        JSON.stringify({
+          React: {
+            data: [
+              {
+                cycle: 'old.18',
+                releaseDate: '2022-03-29',
+                support: '2025-03-29',
+              },
+              {
+                cycle: 'old.17',
+                releaseDate: '2020-10-20',
+                support: '2023-10-20',
+              },
+            ],
+            timestamp: new Date('2025/03/21 09:00:00').getTime(),
+          },
+        }),
+      )
     })
   })
 
   // 空配列=通信失敗時の値（ or レスポンスが空だった時もそうだがあんまないはず）なので再通信しない
-  it('指定プロダクトの値が空配列だった時、通信が発生しないこと', () => {
+  it('指定プロダクトの値が空配列だった時、通信が発生しないこと', async () => {
     const toggleProductMock = vi.fn()
     const setAllProductDetailsMock = vi.fn()
 
@@ -618,7 +759,7 @@ describe('useProductDetails', () => {
       result.current.updateProductDetails('React')
     })
 
-    waitFor(() => {
+    await waitForWithFakeTimers(() => {
       expect(setAllProductDetailsMock).not.toHaveBeenCalled()
 
       expect(global.fetch).not.toHaveBeenCalled()
