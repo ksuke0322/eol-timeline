@@ -37,6 +37,7 @@ type SidebarContextProps = {
   openMobile: boolean
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
+  mobileContentId: string
   toggleSidebar: () => void
 }
 
@@ -65,6 +66,7 @@ const SidebarProvider = ({
   onOpenChange?: (open: boolean) => void
 }) => {
   const isMobile = useIsMobile()
+  const mobileContentId = React.useId()
   const [openMobile, setOpenMobile] = React.useState(false)
 
   // これはサイドバーの内部状態です。
@@ -119,9 +121,19 @@ const SidebarProvider = ({
       isMobile,
       openMobile,
       setOpenMobile,
+      mobileContentId,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    [
+      state,
+      open,
+      setOpen,
+      isMobile,
+      openMobile,
+      setOpenMobile,
+      mobileContentId,
+      toggleSidebar,
+    ],
   )
 
   return (
@@ -164,7 +176,8 @@ const Sidebar = ({
   variant?: 'sidebar' | 'floating' | 'inset'
   collapsible?: 'offcanvas' | 'icon' | 'none'
 }) => {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, state, openMobile, setOpenMobile, mobileContentId } =
+    useSidebar()
 
   if (collapsible === 'none') {
     return (
@@ -189,9 +202,9 @@ const Sidebar = ({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
+          id={mobileContentId}
           className={`
             w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground
-            [&>button]:hidden
           `}
           style={
             {
@@ -253,11 +266,11 @@ const Sidebar = ({
           side === 'left'
             ? `
               left-0
-              group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]
+              group-data-[collapsible=offcanvas]:-left-(--sidebar-width)
             `
             : `
               right-0
-              group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]
+              group-data-[collapsible=offcanvas]:-right-(--sidebar-width)
             `,
           // フローティングおよびインセットバリアントのパディングを調整します。
           variant === 'floating' || variant === 'inset'
@@ -297,15 +310,28 @@ const SidebarTrigger = ({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, open, openMobile, isMobile, mobileContentId } =
+    useSidebar()
+  const triggerRef = React.useRef<HTMLButtonElement>(null)
+  const wasMobileOpen = React.useRef(openMobile)
+
+  React.useEffect(() => {
+    if (isMobile && wasMobileOpen.current && !openMobile) {
+      triggerRef.current?.focus()
+    }
+    wasMobileOpen.current = openMobile
+  }, [isMobile, openMobile])
 
   return (
     <Button
+      ref={triggerRef}
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
       className={cn('size-7', className)}
+      aria-expanded={isMobile ? openMobile : open}
+      aria-controls={isMobile ? mobileContentId : undefined}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()

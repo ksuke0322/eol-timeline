@@ -83,4 +83,32 @@ test.describe('Sidebar Interactions', () => {
     await expect(productListThird.nth(1)).toContainText('beta')
     await expect(productListThird.nth(2)).toContainText('gamma')
   })
+
+  test('should open and operate the product sidebar on mobile', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.reload()
+
+    const trigger = page.locator(
+      '[data-slot="sidebar-trigger"][aria-label="Open product sidebar"]',
+    )
+    await expect(trigger).toBeVisible()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await expect(trigger).toHaveAttribute('aria-controls', /.+/)
+
+    await trigger.click()
+
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    await expect(page.getByPlaceholder('Search products...')).toBeVisible()
+
+    await page.getByRole('button', { name: 'Toggle details for alpha' }).click()
+    await expect(page.locator('label[for="alpha_1.0"]')).toBeVisible()
+    await page.locator('label[for="alpha_1.0"]').click()
+    await expect(page.locator('[id="alpha_1.0"]')).toBeChecked()
+
+    await page.keyboard.press('Escape')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await expect(trigger).toBeFocused()
+  })
 })
