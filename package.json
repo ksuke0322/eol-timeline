@@ -25,6 +25,11 @@
     "yarn": "use pnpm please!",
     "pnpm": "=9.15.9"
   },
+  "pnpm": {
+    "overrides": {
+      "morgan": "1.12.0"
+    }
+  },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.20",
     "@radix-ui/react-checkbox": "1.3.11",
