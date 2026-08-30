@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { ProductSidebarProps } from '~/components/ui/productSidebar'
 import type { ProductVersionDetail } from '~/lib/types'
@@ -21,6 +21,7 @@ export const useProductDetails = ({
 }: ProductSidebarProps) => {
   // 基本的には products だけで処理のすべてを賄えるが、productDetails のキャッシュの更新のために値を保持している
   const [productDetails, setProductDetails] = useState<ProductDetailCache>({})
+  const productDetailsRef = useRef<ProductDetailCache>({})
 
   const updateObsoleteProductDetails = async (
     productName: string,
@@ -53,6 +54,7 @@ export const useProductDetails = ({
 
       // stale-while-revalidate: まず既存キャッシュを表示し、再取得完了後に
       // 新しいオブジェクトで state と localStorage を更新する。
+      productDetailsRef.current = cachedProductDetails
       setAllProductDetails(cachedProducts)
       setProductDetails(cachedProductDetails)
       localStorage.setItem(CACHE_KEY, JSON.stringify(cachedProductDetails))
@@ -120,9 +122,13 @@ export const useProductDetails = ({
 
       if (!hasSuccessfulRefresh) return
 
+      productDetailsRef.current = {
+        ...productDetailsRef.current,
+        ...refreshedProductDetails,
+      }
       setAllProductDetails(refreshedProducts)
-      setProductDetails(refreshedProductDetails)
-      localStorage.setItem(CACHE_KEY, JSON.stringify(refreshedProductDetails))
+      setProductDetails(productDetailsRef.current)
+      localStorage.setItem(CACHE_KEY, JSON.stringify(productDetailsRef.current))
     }
 
     init()
@@ -140,27 +146,28 @@ export const useProductDetails = ({
 
     if (
       products[productName] === null ||
-      (productDetails[productName] &&
-        Date.now() - productDetails[productName].timestamp >= CACHE_MAX_AGE)
+      (productDetailsRef.current[productName] &&
+        Date.now() - productDetailsRef.current[productName].timestamp >=
+          CACHE_MAX_AGE)
     ) {
       updateObsoleteProductDetails(productName)
         .then((productDetailsResponse) => {
-          setAllProductDetails({
-            ...products,
-            [productName]: productDetailsResponse,
-          })
-
           const newData = {
-            ...productDetails,
+            ...productDetailsRef.current,
             [productName]: {
               data: productDetailsResponse,
               timestamp: Date.now(),
             },
           }
 
+          productDetailsRef.current = newData
           setProductDetails(newData)
 
           localStorage.setItem(CACHE_KEY, JSON.stringify(newData))
+          setAllProductDetails((prev) => ({
+            ...prev,
+            [productName]: productDetailsResponse,
+          }))
         })
         .catch((e) => {
           if (products[productName] === null) {
