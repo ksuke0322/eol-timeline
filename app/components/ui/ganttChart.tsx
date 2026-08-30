@@ -154,6 +154,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
         role="figure"
         aria-label={ariaLabel}
         aria-describedby={detailsHeadingId}
+        className="min-h-20"
       />
       <section
         data-testid="gantt-task-details"
