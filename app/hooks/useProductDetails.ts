@@ -101,15 +101,21 @@ export const useProductDetails = ({
           timestamp: Date.now(),
         }
 
-        const productCycles = productDetailsResponse.map(
-          (detail) => detail.cycle,
+        const availableVersionIds = new Set(
+          productDetailsResponse.map(
+            (detail) => `${productName}_${detail.cycle}`,
+          ),
         )
 
-        selectedProducts.forEach((p) => {
-          if (!productCycles.includes(p)) {
-            toggleProduct(p)
-          }
-        })
+        selectedProducts
+          .filter(
+            (id) => id === productName || id.startsWith(`${productName}_`),
+          )
+          .forEach((id) => {
+            if (id !== productName && !availableVersionIds.has(id)) {
+              toggleProduct(id)
+            }
+          })
       }
 
       if (!hasSuccessfulRefresh) return
