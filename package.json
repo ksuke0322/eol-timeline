@@ -63,7 +63,7 @@
     "@storybook/addon-onboarding": "10.5.10",
     "@storybook/react": "10.5.10",
     "@storybook/react-vite": "10.5.10",
-    "@storybook/test-runner": "0.24.4",
+    "@storybook/test-runner": "0.24.5",
     "@tailwindcss/vite": "4.3.3",
     "@testing-library/react": "16.3.3",
     "@tsconfig/node22": "22.0.5",
