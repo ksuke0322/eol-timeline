@@ -53,6 +53,6 @@ jobs:
         uses: cloudflare/wrangler-action@v4
         with:
           # default の 3.90.0 だと wrangler.toml しか受け付けないため明示指定
-          wranglerVersion: '4.135.0'
+          wranglerVersion: '4.141.0'
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           apiToken: ${{ secrets.CF_API_TOKEN }}
