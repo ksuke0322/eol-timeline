@@ -98,7 +98,7 @@
     "msw": "3.0.2",
     "msw-storybook-addon": "2.0.7",
     "prettier": "3.9.9",
-    "start-server-and-test": "3.0.12",
+    "start-server-and-test": "3.0.13",
     "storybook": "10.6.1",
     "tailwindcss": "4.3.3",
     "ts-node": "10.9.2",
